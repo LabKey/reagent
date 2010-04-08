@@ -1,0 +1,506 @@
+<div id='loading'>Loading initial data...</div>
+<script type="text/javascript">
+  var loadingDiv = Ext.get('loading');
+
+  var antigenMap = null;
+  var antigens = [
+    { name: 'AVDLSHFLK' },
+    { name: 'CCL3/MIP-1a', description: 'Chemokine (C-C motif) ligand 3', aliases: 'G0S19-1; LD78ALPHA; MIP-1-alpha; MIP1A; SCYA3' },
+    { name: 'CCL4/MIP-1b', description: 'Chemokine (C-C motif) ligand 4', aliases: 'SCYA2; ACT2; AT744.1; G-26; LAG1; MGC104418; MGC126025; MGC126026; MIP-1-beta; MIP1B; SCYA4' },
+    { name: 'CCL5/RANTES', description: 'Chemokine (C-C motif) ligand 5', aliases: 'D17S136E; MGC17164; RANTES; SCYA5; SISd; TCP228' },
+    { name: 'CCR5', description: 'Chemokine (C-C motif) receptor 5', aliases: 'CC-CKR-5; CCCKR5; CD195; CKR-5; CKR5; CMKBR5' },
+    { name: 'CCR7', description: 'Chemokine (C-C motif) receptor 7', aliases: 'BLR2; CD197; CDw197; CMKBR7; EBI1' },
+    { name: 'CD107a', description: 'Lysosomal-associated membrane protein 1', aliases: 'LAMP1; LAMPA; LGP120' },
+    { name: 'CD107b', description: 'Lysosomal-associated membrane protein 2', aliases: 'LAMP2; LAMPB; LGP96; LGP110' },
+    { name: 'CD127 IL-7R', description: 'Interleukin 7 receptor', aliases: 'IL7R; CD127; CDW127; IL-7R-alpha' },
+    { name: 'CD13', description: 'Alanine membrane aminopeptidase', aliases: 'ANPEP; APN; LAP1; PEPN; gp150' },
+    { name: 'CD134', description: 'Tumor necrosis factor receptor superfamily, member 4', aliases: 'TNFRSF4; ACT35; OX40; TXGP1L' },
+    { name: 'CD14' },
+    { name: 'CD152', description: 'Cytotoxic T-lymphocyte-associated protein 4', aliases: 'CTLA4; CELIAC3; CTLA-4; GSE; IDDM12' },
+    { name: 'CD154', description: 'CD40 ligand (TNF superfamily, member 5, hyper-IgM syndrome)', aliases: 'CD40LG; TRAP; CD40L; HIGM1; IGM; IMD3; T-BAM; TNFSF5; gp39; hCD40' },
+    { name: 'CD184', description: 'Chemokine (C-X-C motif) receptor 4', aliases: 'CXCR4; NPYR; D2S201E; FB22; HM89; HSY3RR; LAP3; LCR1; LESTR; NPY3R; NPYRL; NPYY3R; WHIM' },
+    { name: 'CD19', aliases: 'B4; MGC12802' },
+    { name: 'CD25', description: 'Interleukin 2 receptor alpha chain', aliases: 'IDDM10; IL2R; IL2RA' },
+    { name: 'CD27', aliases: 'MGC20393; S152; T14; TNFRSF7; Tp55' },
+    { name: 'CD28', aliases: 'MGC138290; Tp44' },
+    { name: 'CD28/CD49d' },
+    { name: 'CD3' },
+    { name: 'CD3/CD8' },
+    { name: 'CD33', aliases: 'FLJ00391; SIGLEC-3; SIGLEC3; gp67; p67' },
+    { name: 'CD38', description: 'Cyclic ADP-ribose hydrolase', aliases: 'T10' },
+    { name: 'CD4', aliases: 'p55' },
+    { name: 'CD4 Leu-3a' },
+    { name: 'CD45', description: 'Protein tyrosine phosphatase, receptor type, C', aliases: 'PTPRC; LCA; B220; GP180; LY5; T200' },
+    { name: 'CD45RA' },
+    { name: 'CD45RO' },
+    { name: 'CD49d-pure' },
+    { name: 'CD56', description: 'Neural cell adhesion molecule 1', aliases: 'NCAM1; MSK39; NCAM' },
+    { name: 'CD57', description: 'Beta-1,3-glucuronyltransferase 1 (glucuronosyltransferase P)', aliases: 'B3GAT1; GLCATP; GlcAT-P; GlcUAT-P; HNK-1; LEU7; NK-1' },
+    { name: 'CD62P', description: 'Selectin P (granule membrane protein 140kDa, antigen CD62)', aliases: 'SELP; CD62; FLJ45155; GMP140; GRMP; PADGEM; PSEL' },
+    { name: 'CD69', aliases: 'CLEC2C' },
+    { name: 'CD8' },
+    { name: 'CD8 Leu-2a' },
+    { name: 'CD94', description: 'Killer cell lectin-like receptor subfamily D, member 1', aliases: 'KLRD1' },
+    { name: 'CD95', description: 'Fas death domain (TNF receptor superfamily, member 6)', aliases: 'FAS; ALPS1A; APO-1; APT1; FAS1; FASTM; TNFRSF6' },
+    { name: 'DRFYKTLRA' },
+    { name: 'ERYLKDQQL' },
+    { name: 'GrA', description: 'Granzyme A (granzyme 1, cytotoxic T-lymphocyte-associated serine esterase 3)', aliases: 'GZMA; CTL tryptase; Hanukah factor serine protease; HFSP, CTLA3' },
+    { name: 'GrB', description: 'Granzyme B (granzyme 2, cytotoxic T-lymphocyte-associated serine esterase 1)', aliases: 'GZMB; HLP; CTLA1; CCPI; CGL-1; CGL1; CSP-B; CSPB; CTSGL1; SECT; fragmentin 2' },
+    { name: 'HLA-DR' },
+    { name: 'IFN', description: 'Interferon' },
+    { name: 'IFNg', description: 'Interferon-gamma', aliases: 'IFG; IFI' },
+    { name: 'IFNg/CD69/CD3/CD8' },
+    { name: 'IgG1' },
+    { name: 'IgG1-mouse' },
+    { name: 'IgG2a' },
+    { name: 'IgG2a/IgG1/CD8/CD3' },
+    { name: 'IgG2a/IgG2b/CD8/CD3' },
+    { name: 'IgG2a-mouse' },
+    { name: 'IgG2b-mouse' },
+    { name: 'IL-10', description: 'Interleukin 10', aliases: 'IL10; CSIF; IL10A; MGC126450; MGC126451; TGIF' },
+    { name: 'IL-2', description: 'Interleukin 2', aliases: 'IL2; TCGF; lymphokine' },
+    { name: 'IL-4', description: 'Interleukin 4', aliases: 'IL4; BSF1; MGC79402' },
+    { name: 'ILKEPVHGV' },
+    { name: 'IRLRPGGKK' },
+    { name: 'ISPRTLNAW' },
+    { name: 'KAFSPEVIPMF' },
+    { name: 'Ki67', description: 'Antigen identified by monoclonal antibody Ki-67', aliases: 'MKI67; KIA; Ki-67' },
+    { name: 'Ki67 Control' },
+    { name: 'KRWIILGLNK' },
+    { name: 'NLVPMVATV' },
+    { name: 'Perforin', description: 'Perforin 1 (pore forming protein)', aliases: 'PRF1; FLH2; HPLH2; MGC65093; P1; PFP' },
+    { name: 'QVPLRPMTYK' },
+    { name: 'RYLKDQQLL' },
+    { name: 'SLYNTVATL' },
+    { name: 'T8' },
+    { name: 'TNFa', description: 'Tumor necrosis factor (TNF superfamily, member 2)', aliases: 'TNF; DIF; TNF-alpha; TNFA; TNFSF2' },
+    { name: 'VBeta12' },
+    { name: 'VBeta13.6' },
+    { name: 'VBeta17' },
+    { name: 'VBeta2' },
+    { name: 'VBeta20' },
+    { name: 'Via-Probe' }
+  ];
+
+  var labelMap = null;
+  var labels = [
+    { name: '7-AAD' },
+    { name: 'Alexa 405' },
+    { name: 'Alexa 488' },
+    { name: 'Alexa 680' },
+    { name: 'Alexa 700' },
+    { name: 'Alexa 750' },
+    { name: 'APC' },
+    { name: 'APC-Alexa 750' },
+    { name: 'APC-Cy5.5' },
+    { name: 'APC-Cy7' },
+    { name: 'Biotin' },
+    { name: 'CyChrome' },
+    { name: 'FITC' },
+    { name: 'Pacific Blue' },
+    { name: 'PC5' },
+    { name: 'PE' },
+    { name: 'PE-Alexa 610' },
+    { name: 'PE-Alexa 700' },
+    { name: 'PE-Cy5' },
+    { name: 'PE-Cy5.5' },
+    { name: 'PE-Cy7' },
+    { name: 'PerCP' },
+    { name: 'PerCP-Cy5.5' },
+    { name: 'PE-Texas Red' },
+    { name: 'Qdot 565' },
+    { name: 'Qdot 605' },
+    { name: 'Qdot 655' },
+    { name: 'Qdot 705' }
+  ];
+
+  var manufacturerMap = null;
+  var manufacturers = [
+    { name: 'Amersham' },
+    { name: 'Beckman Coulter' },
+    { name: 'Becton Dickenson' },
+    { name: 'Becton Dickenson - custom' },
+    { name: 'Bender Lifesystems' },
+    { name: 'Caltag' },
+    { name: 'eBioscience' },
+    { name: 'FH' },
+    { name: 'Immunotech' },
+    { name: 'Mabtech' },
+    { name: 'Miltenyi Biotec' },
+    { name: 'Pharmingen' },
+    { name: 'Qdot' },
+    { name: 'R&D Systems' },
+    { name: 'RDI' },
+    { name: 'SBA' },
+    { name: 'VRC' }
+  ];
+
+  var reagnetMap = null;
+  var reagents = [
+    { antigen: 'CCR7', label: 'PE-Cy7', clone: '3D12' },
+    { antigen: 'CD107a', label: 'PE', clone: 'H4A3' },
+    { antigen: 'CD107a', label: 'PE-Cy5', clone: 'H4A3' },
+    { antigen: 'CD127 IL-7R', label: 'Biotin', clone: 'B12-1' },
+    { antigen: 'CD127 IL-7R', label: 'PE', clone: 'hIL-7R-M21' },
+    { antigen: 'CD127 IL-7R', label: 'PE', clone: 'R34.34' },
+    { antigen: 'CD13', label: 'PC5', clone: 'Immu103.44' },
+    { antigen: 'CD14', label: 'APC-Cy7', clone: 'MfP9' },
+    { antigen: 'CD19', label: 'Alexa 488', clone: 'HIB19' },
+    { antigen: 'CD19', label: 'PC5', clone: 'J4.119' },
+    { antigen: 'CD27', label: 'PE', clone: 'M-T271' },
+    { antigen: 'CD28', label: 'PE-Cy5', clone: 'CD28.2' },
+    { antigen: 'CD3', label: 'Alexa 405', clone: 'S4.1' },
+    { antigen: 'CD3', label: 'Alexa 405', clone: 'Sk7' },
+    { antigen: 'CD3', label: 'Alexa 700', clone: 'UCHT1' },
+    { antigen: 'CD3', label: 'APC-Cy7', clone: 'SK7' },
+    { antigen: 'CD3', label: 'ECD', clone: 'UCHT1' },
+    { antigen: 'CD3', label: 'FITC', clone: 'BC3' },
+    { antigen: 'CD3', label: 'FITC', clone: 'UCHT1' },
+    { antigen: 'CD3', label: 'PE-Alexa 700', clone: 'S4.1' },
+    { antigen: 'CD3', label: 'PE-Cy7', clone: 'SK7' },
+    { antigen: 'CD3', label: 'PerCP-Cy5.5', clone: 'SK7' },
+    { antigen: 'CD3', label: 'PE-Texas Red', clone: 'UCHT1' },
+    { antigen: 'CD38', label: 'APC-Cy5.5', clone: 'HIT2' },
+    { antigen: 'CD4', label: 'Alexa 405', clone: 'S3.5' },
+    { antigen: 'CD4', label: 'Alexa 700', clone: 'RPA-T4' },
+    { antigen: 'CD4', label: 'APC', clone: 'RPA-T4' },
+    { antigen: 'CD4', label: 'APC-Cy7', clone: 'RPA-T4' },
+    { antigen: 'CD4', label: 'Pacific Blue', clone: 'RPA-T4' },
+    { antigen: 'CD4', label: 'PerCP-Cy5.5', clone: 'SK3' },
+    { antigen: 'CD4', label: 'PE-Texas Red', clone: 'T4' },
+    { antigen: 'CD45', label: 'APC', clone: 'HI30' },
+    { antigen: 'CD45RA', label: 'Biotin', clone: 'HI100' },
+    { antigen: 'CD45RO', label: 'ECD', clone: 'UCHL1' },
+    { antigen: 'CD45RO', label: 'FITC', clone: 'UCHL1' },
+    { antigen: 'CD57', label: 'Qdot 565', clone: 'NK-1' },
+    { antigen: 'CD8', label: 'Alexa 750', clone: 'RPA-T8' },
+    { antigen: 'CD8', label: 'APC', clone: 'RPA-T8' },
+    { antigen: 'CD8', label: 'APC-Alexa 750', clone: '3B5' },
+    { antigen: 'CD8', label: 'Alexa 405', clone: '3B5' },
+    { antigen: 'CD8', label: 'FITC', clone: 'OKT8' },
+    { antigen: 'CD8', label: 'PE-Texas Red', clone: 'SFCI21ThyD3' },
+    { antigen: 'CD95', label: 'PE-Cy5', clone: 'DX2' },
+    { antigen: 'GrA', label: 'PE', clone: 'CB9' },
+    { antigen: 'GrB', label: 'Alexa 700', clone: 'GB11' },
+    { antigen: 'GrB', label: 'PE', clone: 'GB11' },
+    { antigen: 'IFN', label: 'Alexa 488', clone: '4S.B3' },
+    { antigen: 'IFNg', label: 'Alexa 700', clone: 'B27' },
+    { antigen: 'IFNg', label: 'APC', clone: 'B27' },
+    { antigen: 'IFNg', label: 'PE-Cy7', clone: '4S.B3' },
+    { antigen: 'IFNg', label: 'PE-Cy7', clone: 'B27' },
+    { antigen: 'IgG1', label: 'PE', clone: 'MOPC-21' },
+    { antigen: 'IL-10', label: 'PE', clone: 'JES3-19F1' },
+    { antigen: 'IL-2', label: 'FITC', clone: 'MQ1-17H12' },
+    { antigen: 'IL-2', label: 'PE', clone: 'MQ1-17H12' },
+    { antigen: 'IL-4', label: 'APC', clone: 'MP4-25D2' },
+    { antigen: 'IL-4', label: 'PE', clone: 'MP4-25D2' },
+    { antigen: 'IL-4', label: 'PE-Cy7', clone: '8D4-8' },
+    { antigen: 'Ki67', label: 'FITC', clone: 'B56' },
+    { antigen: 'Ki67 Control', label: 'FITC', clone: 'MOPC-21' },
+    { antigen: 'MIP-1a', label: 'PE', clone: '11A3' },
+    { antigen: 'Perforin', label: 'FITC', clone: 'MAb Pf-344' },
+    { antigen: 'TNFa', label: 'Alexa 700', clone: 'MAb11' },
+    { antigen: 'TNFa', label: 'APC', clone: '6401.1111' },
+    { antigen: 'TNFa', label: 'APC', clone: 'MAb11' },
+    { antigen: 'TNFa', label: 'FITC', clone: 'MAb11' },
+    { antigen: 'TNFa', label: 'PE-Cy7', clone: 'MAb11' },
+    { antigen: 'VBeta12', label: 'PE', clone: 'VER2.32.1' },
+    { antigen: 'VBeta13.6', label: 'FITC', clone: 'JU-74' },
+    { antigen: 'VBeta17', label: 'FITC', clone: 'E17.5F3' },
+    { antigen: 'VBeta17', label: 'PE', clone: 'E17.5F3' },
+    { antigen: 'VBeta2', label: 'FITC', clone: 'MPB2D5' },
+    { antigen: 'VBeta20', label: 'PE', clone: 'ELL 1.4' }
+  ];
+
+  var queryCount = 0;
+  var errors = 0;
+
+  function createLookupMap(rows)
+  {
+    var map = {};
+    var len = rows.length;
+    for (var i = 0; i < len; i++)
+    {
+      var row = rows[i];
+      var props = {Name:"name", Description:"description", Aliases:"aliases", RowId:"rowid"};
+      for (var p in props)
+      {
+        var lower = props[p];
+        row[lower] = row[p] || row[lower];
+        delete row[p];
+      }
+
+      map[row.name] = row;
+    }
+    return map;
+  }
+
+  // Like Ext.applyIf() but returns true if the object has changed.
+  function applyIf(o, c)
+  {
+    var modified = false;
+    if (o && c) {
+        for (var p in c) {
+          if (typeof o[p] == "undefined" && typeof c[p] != "undefined") {
+            modified = true;
+            o[p] = c[p];
+          }
+        }
+    }
+    return modified;
+  }
+
+  function _log(msg)
+  {
+    loadingDiv.insertHtml('beforeEnd', '<br><span>' + msg + '</span>');
+  }
+
+  function _err(msg)
+  {
+    loadingDiv.insertHtml('beforeEnd', '<br><span class="labkey-error">' + msg + '</span>');
+  }
+
+  function insertReagents() {
+    if (queryCount != 0)
+      return;
+
+    if (errors > 0)
+      throw new Error("Can't insert reagents with previously reported errors.");
+
+    if (antigens == null || labels == null)
+      throw new Error("lookup maps not created");
+
+    var len = reagents.length;
+    for (var i = 0; i < len; i++)
+    {
+      var row = reagents[i];
+      var antigenRow = antigenMap[row.antigen];
+      var labelRow = labelMap[row.label];
+      if (antigenRow == undefined)
+        throw new Error("Couldn't find antigen '" + row.antigen + "'");
+      if (labelRow == undefined)
+        throw new Error("Couldn't find label '" + row.label + "'");
+
+      row.antigenid = antigenRow.rowid;
+      row.labelid = labelRow.rowid;
+    }
+
+    insertTable('Reagents', reagents, false, function (rowMap) { _log("Done."); });
+  }
+
+  function insertTable(tableName, rows, insertReagentsWhenDone, callbackFn)
+  {
+    _log('Querying for previously inserted ' + tableName + '...');
+    queryCount++;
+    LABKEY.Query.selectRows({
+      schemaName: 'reagent',
+      queryName: tableName,
+      successCallback: function (results, options) {
+        queryCount--;
+        if (results.rows.length == 0)
+        {
+          _log('No rows found. Inserting ' + tableName + '...');
+          queryCount++;
+          LABKEY.Query.insertRows({
+            schemaName: 'reagent',
+            queryName: tableName,
+            rowDataArray: rows,
+            successCallback: function (results, options) {
+              _log('Inserted ' + tableName + ': ' + results.rowsAffected + ' rows');
+              var rowMap = createLookupMap(results.rows);
+              callbackFn(rowMap);
+              queryCount--;
+              if (insertReagentsWhenDone)
+                insertReagents();
+            },
+            failureCallback: function (errorInfo, options) {
+              _err('Failed to insert ' + tableName + ': ' + exception);
+              queryCount--;
+              errors++;
+            }
+          });
+        }
+        else
+        {
+          var rowMap = createLookupMap(results.rows);
+
+          // update description and aliases
+          var modifiedRows = [];
+          for (var i = 0; i < rows.length; i++) {
+            var row = rows[i];
+            var existingRow = rowMap[row.name];
+            if (applyIf(existingRow, row))
+              modifiedRows.push(existingRow);
+          }
+
+          if (modifiedRows.length == 0)
+          {
+            _log('Found previously inserted ' + tableName + ' up to date: ' + results.rows.length + ' rows.');
+          }
+          else
+          {
+            _log('Updating previously inserted ' + tableName + ' not up to date: ' + modifiedRows.length + ' rows...');
+
+            queryCount++;
+            LABKEY.Query.updateRows({
+              schemaName: 'reagent',
+              queryName: tableName,
+              rowDataArray: modifiedRows,
+              successCallback: function (results, options) {
+                _log('Updated ' + tableName + ': ' + results.rowsAffected + ' rows');
+                var rowMap = createLookupMap(results.rows);
+                callbackFn(rowMap);
+                queryCount--;
+                if (insertReagentsWhenDone)
+                  insertReagents();
+              },
+              failureCallback: function (errorInfo, options) {
+                _err('Failed to update ' + tableName + ': ' + exception);
+                queryCount--;
+                errors++;
+              }
+            });
+          }
+
+        }
+      },
+      failureCallback: function (errorInfo, options) {
+        _err('Failed to query ' + tableName +': ' + exception);
+        queryCount--;
+        errors++;
+      }
+    });
+  }
+
+  function getViewInfo(schemaName, tableName, viewName, foundCallback, notFoundCallback)
+  {
+    _log('Checking if view exists for ' + schemaName + ', ' + tableName + ', ' + (viewName || "<i>default</i>") + '...');
+    LABKEY.Query.getQueryViews({
+      schemaName: schemaName,
+      queryName: tableName,
+      successCallback: function (viewInfo) {
+        var len = viewInfo.views.length;
+        for (var i = 0; i < len; i++) {
+          var v = viewInfo.views[i];
+          if (viewName == v.name) {
+            foundCallback(v);
+            return;
+          }
+        }
+
+        notFoundCallback();
+      },
+      errorCallback: function (errorInfo) {
+        _err("Error getting view infos: " + errorInfo);
+      }
+    });
+  }
+
+  function setViewColumns(id, columns, sort)
+  {
+    _log('Updating view columns/sort: ' + id + ' ' + columns + ' ' + sort);
+    var c = '';
+    for (var i = 0; i < columns.length; i++)
+      c += (i > 0 ? '&' : '') + encodeURIComponent(columns[i]);
+
+    var params = {
+      customViewId: id,
+      ff_columnList: c
+    };
+
+    Ext.Ajax.request({
+      url: LABKEY.ActionURL.buildURL('query', 'internalSourceView'),
+      method: 'POST',
+      params: params,
+      successCallback: function () {
+        _log('Updated view columns/sort: ' + id);
+      },
+      failureCallback: function () {
+        _err('Error updating view columns/sort: ' + id);
+      }
+    });
+  }
+
+  function deleteCustomView(schemaName, tableName, viewName, successCallback, failureCallback)
+  {
+    var params = { schemaName: schemaName, queryName: tableName };
+    if (viewName)
+      params.viewName = viewName;
+
+    Ext.Ajax.request({
+      url: LABKEY.ActionURL.buildURL('query', 'deleteView'),
+      method: 'POST',
+      params: params,
+      success: successCallback,
+      error: failureCallback
+    });
+  }
+
+  function createCustomView(tableName, viewName, share, inherit, columns, sort, update)
+  {
+    var schemaName = 'reagent';
+    var logViewName = schemaName + ', ' + tableName + ', ' + (viewName || "<i>default</i>");
+    getViewInfo(schemaName, tableName, viewName,
+      function (v) {
+        if (update) {
+          _log('View exists, updating: ' + logViewName);
+          deleteCustomView(schemaName, tableName, viewName,
+            function () {
+              _log('Successfully deleted view: ' + logViewName);
+              createCustomView(tableName, viewName, share, inherit, columns, sort, false);
+            },
+            function () {
+              _err('Failed to delete existing view: ' + logViewName);
+            });
+        }
+        else {
+          _log('View exists, not updating: ' + logViewName);
+        }
+      },
+      function () {
+        _log("View doesn't exist; creating new view: " + logViewName);
+        var params = { ff_schemaName: schemaName, ff_queryName: tableName, ff_share: share, ff_inherit: inherit };
+        if (viewName)
+          params.ff_viewName = viewName;
+
+        Ext.Ajax.request({
+          url: LABKEY.ActionURL.buildURL('query', 'internalNewView'),
+          method: 'POST',
+          params: params,
+          success: function (response, options) {
+            if (response) {
+              var re = /<div class="labkey-error">([^<]*)/g;
+              var errors = re.exec(response.responseText);
+              if (errors && errors.length > 1) {
+                _log('Error creating new view: ' + logViewName);
+                for (var i = 1; i < errors.length; i++)
+                  _err('  >> ' + errors[i]);
+              }
+              else {
+                var re = /internalSourceView.view\?customViewId=(\d+)/;
+                var idmatch = re.exec(response.responseText)
+                if (idmatch && idmatch.length > 1) {
+                  var id = idmatch[1];
+                  _log('Created new view (' + id + '): ' + logViewName);
+                  setViewColumns(id, columns, sort);
+                }
+              }
+            }
+          },
+          error: function (response, options) {
+            _err('Error creating new view: ' + logViewName);
+          }
+        });
+      }
+    );
+  }
+
+  insertTable('Antigens', antigens, true, function (rowMap) { antigensMap = rowMap; });
+  insertTable('Labels', labels, true, function (rows) { labelMap = createLookupMap(rows); });
+  insertTable('Manufacturers', manufacturers, true, function (rows) { manufacturerMap = createLookupMap(rows); });
+
+  createCustomView('Lots', null, true, true, ['RowId', 'ManufacturerId', 'LotNumber', 'CatalogNumber', 'ReagentId/AntigenId', 'ReagentId/LabelId', 'ReagentId/Clone', 'Description']);
+  createCustomView('Vials', null, true, true, ['OwnedBy', 'Location', 'Box', 'Row', 'Col', 'Used', 'LotId', 'LotId/ManufacturerId', 'LotId/ReagentId/AntigenId', 'LotId/ReagentId/LabelId', 'LotId/ReagentId/Clone'], null, true);
+  createCustomView('Titrations', null, true, true, ['ExperimentId', 'PerformedBy', 'Type', 'Result', 'Description', 'LotId', 'LotId/ManufacturerId', 'LotId/ReagentId/AntigenId', 'LotId/ReagentId/LabelId', 'LotId/ReagentId/Clone'], null, true);
+
+</script>

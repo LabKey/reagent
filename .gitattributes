@@ -1,0 +1,15 @@
+* text=auto !eol
+/build.xml -text
+/module.properties -text
+/module.template.xml -text
+src/schemas/dbscripts/postgresql/reagent-0.00-0.10.sql -text
+src/schemas/dbscripts/postgresql/reagent-0.00-10.10.sql -text
+src/schemas/dbscripts/postgresql/reagent-0.10-0.20.sql -text
+src/schemas/dbscripts/postgresql/reagent-0.20-0.30.sql -text
+src/schemas/dbscripts/postgresql/reagent-0.30-0.40.sql -text
+src/schemas/dbscripts/postgresql/reagent-0.40-0.50.sql -text
+src/schemas/reagent.xml -text
+src/views/initialize.html -text
+src/views/insert.html -text
+src/views/update.html -text
+src/web/reagent/util.js -text

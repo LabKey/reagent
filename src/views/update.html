@@ -1,0 +1,26 @@
+<script type="text/javascript">
+LABKEY.requiresScript('reagent/util.js');
+</script>
+
+<div id='formDiv'></div>
+<script type="text/javascript">
+  var schemaName = LABKEY.ActionURL.getParameter('schemaName');
+  var queryName = LABKEY.ActionURL.getParameter('queryName') || LABKEY.ActionURL.getParameter('query.queryName');
+  var rowId = LABKEY.ActionURL.getParameter('RowId');
+
+  if (queryName)
+  {
+    if (queryName.charAt(queryName.length-1) == 's')
+    {
+      var navTrailEl = document.getElementById('labkey-nav-trail-current-page');
+      var tableTitle = queryName.substring(0, queryName.length-1);
+      navTrailEl.innerHTML = "Update " + tableTitle;
+    }
+
+    Ext.onReady(function () {
+        initForm(rowId, schemaName, queryName);
+    });
+  }
+
+</script>
+
