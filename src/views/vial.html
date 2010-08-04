@@ -1,0 +1,101 @@
+<script type="text/javascript">
+LABKEY.requiresScript('reagent/util.js');
+</script>
+
+<table id="vialDetails">
+    <tr>
+        <td class="labkey-form-label">Lot:</td>
+        <td><span id="Lot"></span></td>
+    </tr>
+    <tr>
+        <td class="labkey-form-label">Owned By:</td>
+        <td><span id="OwnedBy"></span></td>
+    </tr>
+    <tr>
+        <td class="labkey-form-label">Location:</td>
+        <td>
+            <span id="Location"></span>
+        </td>
+    </tr>
+    <tr>
+        <td class="labkey-form-label">Used:</td>
+        <td><span id="Used"></span></td>
+    </tr>
+</table>
+<a id="edit" class="labkey-button">Edit</a>
+<a id="viewGrid" class="labkey-button">View Grid</a>
+
+<p>
+<div id="vialTitrations"></div>
+
+<script type="text/javascript">
+    var rowId = LABKEY.ActionURL.getParameter('RowId');
+
+    document.getElementById('edit').href = LABKEY.ActionURL.buildURL('reagent', 'update.view', LABKEY.ActionURL.getContainer(), {
+        schemaName: 'reagent',
+        queryName: 'Vials',
+        RowId: rowId
+    });
+
+    document.getElementById('viewGrid').href = LABKEY.ActionURL.buildURL('query', 'executeQuery.view', LABKEY.ActionURL.getContainer(), {
+        schemaName: 'reagent',
+        "query.queryName": 'Vials'
+    });
+
+
+    Ext.onReady(function () {
+        /*
+        var url = LABKEY.ActionURL.buildURL('query', 'detailsQueryRow', LABKEY.ActionURL.getContainer(), {
+            schemaName: 'reagent',
+            "query.queryName": "Vials",
+            RowId: rowId,
+            _print: true
+        });
+        Ext.get('vialDetails').getUpdater().update({
+            url: url
+        });
+        */
+
+        LABKEY.Query.selectRows({
+            schemaName: 'reagent',
+            queryName: 'Vials',
+            filterArray: [ LABKEY.Filter.create("RowId", rowId) ],
+            columns: [
+                "LotId/LotNumber",
+                "LotId/ReagentId/AntigenId/Name", "LotId/ReagentId/LabelId/Name", "LotId/ReagentId/Clone",
+                "LotId/ManufacturerId/Name",
+                "Location", "Box", "Row", "Col", "Used"
+            ].join(","),
+            successCallback: function (data) {
+                if (data.rows.length == 1)
+                {
+                    var row = data.rows[0];
+                    Ext.get('Lot').update(row['LotId/LotNumber'] + ': ' + row['LotId/ReagentId/AntigenId/Name'] + ', ' + row['LotId/ReagentId/LabelId/Name'] + ' (' + row['LotId/ReagentId/Clone'] + ') ' + row['LotId/ManufacturerId/Name']);
+                    Ext.get('OwnedBy').update(row['OwnedBy']);
+
+                    var loc = [ ];
+                    if (row['Location'])
+                        loc.push(row['Location']);
+                    if (row['Box'])
+                        loc.push("<span class='labkey-form-label'>Box:</span> " + row['Box']);
+                    if (row['Row'])
+                        loc.push("<span class='labkey-form-label'>Row:</span> " + row['Row']);
+                    if (row['Col'])
+                        loc.push("<span class='labkey-form-label'>Col:</span> " + row['Col']);
+
+                    Ext.get('Location').update(loc.join("&nbsp;&nbsp;"));
+                    Ext.get('Used').update(row['Used']);
+                }
+            }
+        });
+
+        var titrationsGrid = new LABKEY.QueryWebPart({
+            renderTo: 'vialTitrations',
+            schemaName: 'reagent',
+            queryName: 'Titrations',
+            allowChooseQuery: false,
+            filterArray: [ LABKEY.Filter.create("LotId", rowId) ]
+        });
+    });
+</script>
+

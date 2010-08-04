@@ -195,6 +195,7 @@
     <ns:insertUrl>/reagent/insert.view?schemaName=reagent&amp;queryName=Lots</ns:insertUrl>
     <ns:updateUrl>/reagent/update.view?schemaName=reagent&amp;queryName=Lots&amp;RowId=${RowId}</ns:updateUrl>
     <!--<ns:tableUrl>/reagent/details.view?</ns:tableUrl>-->
+    <ns:tableUrl>/reagent/lot.view?RowId=${RowId}</ns:tableUrl>
     <ns:pkColumnName>RowId</ns:pkColumnName>
     <!-- so details link shows up on RowId column not LotNumber -->
     <ns:titleColumn>RowId</ns:titleColumn>
@@ -205,7 +206,9 @@
         <ns:scale>10</ns:scale>
         <ns:nullable>false</ns:nullable>
         <ns:isReadOnly>true</ns:isReadOnly>
+        <ns:isUserEditable>false</ns:isUserEditable>
         <ns:isKeyField>true</ns:isKeyField>
+        <ns:isHidden>true</ns:isHidden>
         <ns:columnTitle>Lot Id</ns:columnTitle>
       </ns:column>
       <ns:column columnName="Container">
@@ -276,6 +279,7 @@
   <ns:table tableName="Vials" tableDbType="TABLE">
     <ns:insertUrl>/reagent/insert.view?schemaName=reagent&amp;queryName=Vials</ns:insertUrl>
     <ns:updateUrl>/reagent/update.view?schemaName=reagent&amp;queryName=Vials&amp;RowId=${RowId}</ns:updateUrl>
+    <ns:tableUrl>/reagent/vial.view?RowId=${RowId}</ns:tableUrl>
     <ns:pkColumnName>RowId</ns:pkColumnName>
     <ns:titleColumn>RowId</ns:titleColumn>
     <ns:columns>
@@ -286,6 +290,7 @@
         <ns:nullable>false</ns:nullable>
         <ns:isReadOnly>true</ns:isReadOnly>
         <ns:isKeyField>true</ns:isKeyField>
+        <ns:isHidden>true</ns:isHidden>
         <ns:columnTitle>Vial Id</ns:columnTitle>
       </ns:column>
       <ns:column columnName="Container">

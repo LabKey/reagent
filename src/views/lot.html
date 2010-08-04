@@ -1,0 +1,103 @@
+<script type="text/javascript">
+LABKEY.requiresScript('reagent/util.js');
+</script>
+
+<table id="lotDetails">
+    <tr>
+        <td class="labkey-form-label">Lot Number:</td>
+        <td><span id="LotNumber"></span></td>
+    </tr>
+    <tr>
+        <td class="labkey-form-label">Manufacturer:</td>
+        <td><span id="Manufacturer"></span></td>
+    </tr>
+    <tr>
+        <td class="labkey-form-label">Catalog Number:</td>
+        <td><span id="CatalogNumber"></span></td>
+    </tr>
+    <tr>
+        <td class="labkey-form-label">Reagent:</td>
+        <td><span id="Reagent"></span></td>
+    </tr>
+    <tr>
+        <td class="labkey-form-label">Description:</td>
+        <td><span id="Description"></span></td>
+    </tr>
+</table>
+<a id="edit" class="labkey-button">Edit</a>
+<a id="viewGrid" class="labkey-button">View Grid</a>
+
+<p>
+<div id="lotVials"></div>
+
+<p>
+<div id="lotTitrations"></div>
+
+<script type="text/javascript">
+    var rowId = LABKEY.ActionURL.getParameter('RowId');
+
+    document.getElementById('edit').href = LABKEY.ActionURL.buildURL('reagent', 'update.view', LABKEY.ActionURL.getContainer(), {
+        schemaName: 'reagent',
+        queryName: 'Lots',
+        RowId: rowId
+    });
+
+    document.getElementById('viewGrid').href = LABKEY.ActionURL.buildURL('query', 'executeQuery.view', LABKEY.ActionURL.getContainer(), {
+        schemaName: 'reagent',
+        "query.queryName": 'Lots'
+    });
+
+    Ext.onReady(function () {
+        /*
+        var url = LABKEY.ActionURL.buildURL('query', 'detailsQueryRow', LABKEY.ActionURL.getContainer(), {
+            schemaName: 'reagent',
+            "query.queryName": "Lots",
+            RowId: rowId,
+            _print: true
+        });
+        Ext.get('lotDetails').getUpdater().update({
+            url: url
+        });
+        */
+
+        LABKEY.Query.selectRows({
+            schemaName: 'reagent',
+            queryName: 'Lots',
+            filterArray: [ LABKEY.Filter.create("RowId", rowId) ],
+            columns: [
+                "ReagentId/AntigenId/Name", "ReagentId/LabelId/Name", "ReagentId/Clone",
+                "ManufacturerId/Name",
+                "CatalogNumber", "LotNumber", "Description"
+            ].join(","),
+            successCallback: function (data) {
+                if (data.rows.length == 1)
+                {
+                    var row = data.rows[0];
+                    Ext.get('LotNumber').update(row.LotNumber);
+                    Ext.get('CatalogNumber').update(row.CatalogNumber);
+                    Ext.get('Description').update(row.Description);
+                    Ext.get('Manufacturer').update(row["ManufacturerId/Name"]);
+                    Ext.get('Reagent').update(row['ReagentId/AntigenId/Name'] + ', ' + row['ReagentId/LabelId/Name'] + ' (' + row['ReagentId/Clone'] + ')');
+                }
+            }
+        });
+        
+
+        var vialsGrid = new LABKEY.QueryWebPart({
+            renderTo: 'lotVials',
+            schemaName: 'reagent',
+            queryName: 'Vials',
+            allowChooseQuery: false,
+            filterArray: [ LABKEY.Filter.create("LotId", rowId) ]
+        });
+
+        var titrationsGrid = new LABKEY.QueryWebPart({
+            renderTo: 'lotTitrations',
+            schemaName: 'reagent',
+            queryName: 'Titrations',
+            allowChooseQuery: false,
+            filterArray: [ LABKEY.Filter.create("LotId", rowId) ]
+        });
+    });
+</script>
+

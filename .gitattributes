@@ -11,5 +11,7 @@ src/schemas/dbscripts/postgresql/reagent-0.40-0.50.sql -text
 src/schemas/reagent.xml -text
 src/views/initialize.html -text
 src/views/insert.html -text
+src/views/lot.html -text
 src/views/update.html -text
+src/views/vial.html -text
 src/web/reagent/util.js -text

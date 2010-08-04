@@ -499,8 +499,8 @@
   insertTable('Labels', labels, true, function (rows) { labelMap = createLookupMap(rows); });
   insertTable('Manufacturers', manufacturers, true, function (rows) { manufacturerMap = createLookupMap(rows); });
 
-  createCustomView('Lots', null, true, true, ['RowId', 'ManufacturerId', 'LotNumber', 'CatalogNumber', 'ReagentId/AntigenId', 'ReagentId/LabelId', 'ReagentId/Clone', 'Description']);
-  createCustomView('Vials', null, true, true, ['OwnedBy', 'Location', 'Box', 'Row', 'Col', 'Used', 'LotId', 'LotId/ManufacturerId', 'LotId/ReagentId/AntigenId', 'LotId/ReagentId/LabelId', 'LotId/ReagentId/Clone'], null, true);
-  createCustomView('Titrations', null, true, true, ['ExperimentId', 'PerformedBy', 'Type', 'Result', 'Description', 'LotId', 'LotId/ManufacturerId', 'LotId/ReagentId/AntigenId', 'LotId/ReagentId/LabelId', 'LotId/ReagentId/Clone'], null, true);
+  createCustomView('Lots', null, true, true, ['LotNumber', 'ManufacturerId', 'CatalogNumber', 'ReagentId/AntigenId', 'ReagentId/LabelId', 'ReagentId/Clone', 'Description'], null, true);
+  createCustomView('Vials', null, true, true, ['OwnedBy', 'Location', 'Box', 'Row', 'Col', 'Used', 'LotId/LotNumber', 'LotId/ManufacturerId', 'LotId/ReagentId/AntigenId', 'LotId/ReagentId/LabelId', 'LotId/ReagentId/Clone'], null, true);
+  createCustomView('Titrations', null, true, true, ['ExperimentId', 'PerformedBy', 'Type', 'Result', 'Description', 'LotId/LotNumber', 'LotId/ManufacturerId', 'LotId/ReagentId/AntigenId', 'LotId/ReagentId/LabelId', 'LotId/ReagentId/Clone'], null, true);
 
 </script>

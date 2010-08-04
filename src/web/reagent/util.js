@@ -114,9 +114,13 @@ function initForm(updateRowId, schemaName, queryName)
                     break;
 
                 case 'OwnedBy':
-                case 'PerformedBy':
                     // XXX: on update, the userid combo shows the userid value rather than the displayName
                     item = createUserCombo(meta, queryName, value || LABKEY.user.displayName);
+                    break;
+
+                case 'PerformedBy':
+                    // XXX: on update, the userid combo shows the userid value rather than the displayName
+                    item = createUserCombo(meta, queryName, value /*|| LABKEY.user.displayName*/);
                     break;
 
                 case 'Clone':
@@ -247,7 +251,7 @@ function createLotCombo(meta, value)
         var len = records.length;
         for (var i = 0; i < len; i++) {
             var r = records[i];
-            var display = 'Lot ' + r.data['LotNumber'] + ': ' + r.data['ReagentId/AntigenId/Name'] + ', ' + r.data['ReagentId/LabelId/Name'] + ' (' + r.data['ReagentId/Clone'] + ') ' + r.data['ManufacturerId/Name'];
+            var display = r.data['LotNumber'] + ': ' + r.data['ReagentId/AntigenId/Name'] + ', ' + r.data['ReagentId/LabelId/Name'] + ' (' + r.data['ReagentId/Clone'] + ') ' + r.data['ManufacturerId/Name'];
             r.data['LotDisplay'] = display;
         }
     });
@@ -258,7 +262,7 @@ function createLotCombo(meta, value)
     field.minChars = 0;
     field.mode = 'local';
     field.displayField = 'LotDisplay';
-    field.tpl = '<tpl for="."><div class="x-combo-list-item">Lot {[values["LotNumber"]]}: <b>{[values["ReagentId/AntigenId/Name"]]}</b>, {[values["ReagentId/LabelId/Name"]]} <i>({[values["ReagentId/Clone"]]})</i> &nbsp;{[values["ManufacturerId/Name"]]}</div></tpl>',
+    field.tpl = '<tpl for="."><div class="x-combo-list-item">{[values["LotNumber"]]}: <b>{[values["ReagentId/AntigenId/Name"]]}</b>, {[values["ReagentId/LabelId/Name"]]} <i>({[values["ReagentId/Clone"]]})</i> &nbsp;{[values["ManufacturerId/Name"]]}</div></tpl>',
 
     // set 'name' property so LABKEY.ext.FormPanel.initComponents will filter out the existing items
     field.name = field.name || field.hiddenName;
@@ -355,10 +359,10 @@ function createUserCombo(meta, queryName, value)
 '   T.' + h(meta.name) + ',' +
 '   (CASE WHEN U.DisplayName IS NULL THEN T.' + h(meta.name) + ' ELSE U.DisplayName END) AS DisplayName' +
 ' FROM ' + h(queryName) + ' T' +
-' LEFT OUTER JOIN core.Users U ON CONVERT(U.UserId AS varchar) = T.' + h(meta.name) +
+' LEFT OUTER JOIN core.Users U ON CONVERT(U.UserId, varchar) = T.' + h(meta.name) +
 ' WHERE T.' + h(meta.name) + ' IS NOT NULL' +
 ' UNION' +
-' SELECT CONVERT(U.UserId AS varchar) AS ' + h(meta.name) + ', U.DisplayName' +
+' SELECT CONVERT(U.UserId, varchar) AS ' + h(meta.name) + ', U.DisplayName' +
 ' FROM core.Users U' +
 ') X';
 
