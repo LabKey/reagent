@@ -52,6 +52,11 @@
         <ns:datatype>text</ns:datatype>
       </ns:column>
     </ns:columns>
+    <ns:buttonBarOptions includeStandardButtons="true">
+      <ns:item text="Bulk Edit" requiresSelection="true" permission="UPDATE">
+         <ns:target>/reagent/update.view?schemaName=reagent&amp;queryName=Antigens&amp;selected=true</ns:target>
+      </ns:item>
+    </ns:buttonBarOptions>
   </ns:table>
 
   <ns:table tableName="Labels" tableDbType="TABLE">
@@ -88,6 +93,11 @@
         <ns:datatype>text</ns:datatype>
       </ns:column>
     </ns:columns>
+    <ns:buttonBarOptions includeStandardButtons="true">
+      <ns:item text="Bulk Edit" requiresSelection="true" permission="UPDATE">
+        <ns:target>/reagent/update.view?schemaName=reagent&amp;queryName=Labels&amp;selected=true</ns:target>
+      </ns:item>
+    </ns:buttonBarOptions>
   </ns:table>
 
   <ns:table tableName="Manufacturers" tableDbType="TABLE">
@@ -116,6 +126,11 @@
         <ns:scale>255</ns:scale>
       </ns:column>
     </ns:columns>
+    <ns:buttonBarOptions includeStandardButtons="true">
+      <ns:item text="Bulk Edit" requiresSelection="true" permission="UPDATE">
+        <ns:target>/reagent/update.view?schemaName=reagent&amp;queryName=Manufacturers&amp;selected=true</ns:target>
+      </ns:item>
+    </ns:buttonBarOptions>
   </ns:table>
 
   <ns:table tableName="Reagents" tableDbType="TABLE">
@@ -189,6 +204,11 @@
         <ns:datatype>text</ns:datatype>
       </ns:column>
     </ns:columns>
+    <ns:buttonBarOptions includeStandardButtons="true">
+      <ns:item text="Bulk Edit" requiresSelection="true" permission="UPDATE">
+        <ns:target>/reagent/update.view?schemaName=reagent&amp;queryName=Reagents&amp;selected=true</ns:target>
+      </ns:item>
+    </ns:buttonBarOptions>
   </ns:table>
 
   <ns:table tableName="Lots" tableDbType="TABLE">
@@ -274,6 +294,11 @@
         <ns:datatype>text</ns:datatype>
       </ns:column>
     </ns:columns>
+    <ns:buttonBarOptions includeStandardButtons="true">
+      <ns:item text="Bulk Edit" requiresSelection="true" permission="UPDATE">
+        <ns:target>/reagent/update.view?schemaName=reagent&amp;queryName=Lots&amp;selected=true</ns:target>
+      </ns:item>
+    </ns:buttonBarOptions>
   </ns:table>
 
   <ns:table tableName="Vials" tableDbType="TABLE">
@@ -362,6 +387,11 @@
         <ns:scale>30</ns:scale>
       </ns:column>
     </ns:columns>
+    <ns:buttonBarOptions includeStandardButtons="true">
+      <ns:item text="Bulk Edit" requiresSelection="true" permission="UPDATE">
+        <ns:target>/reagent/update.view?schemaName=reagent&amp;queryName=Vials&amp;selected=true</ns:target>
+      </ns:item>
+    </ns:buttonBarOptions>
   </ns:table>
 
   <ns:table tableName="Titrations" tableDbType="TABLE">
@@ -446,6 +476,11 @@
         <ns:datatype>text</ns:datatype>
       </ns:column>
     </ns:columns>
+    <ns:buttonBarOptions includeStandardButtons="true">
+      <ns:item text="Bulk Edit" requiresSelection="true" permission="UPDATE">
+        <ns:target>/reagent/update.view?schemaName=reagent&amp;queryName=Titrations&amp;selected=true</ns:target>
+      </ns:item>
+    </ns:buttonBarOptions>
   </ns:table>
 
 </ns:tables>

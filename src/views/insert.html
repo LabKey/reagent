@@ -2,6 +2,7 @@
 LABKEY.requiresScript('reagent/util.js');
 </script>
 
+<div id="msgDiv"></div>
 <div id='formDiv'></div>
 <script type="text/javascript">
   var schemaName = LABKEY.ActionURL.getParameter('schemaName');
@@ -17,7 +18,7 @@ LABKEY.requiresScript('reagent/util.js');
     }
 
     Ext.onReady(function () {
-        initForm(0, schemaName, queryName);
+        initForm(false, 0, schemaName, queryName);
     });
   }
 

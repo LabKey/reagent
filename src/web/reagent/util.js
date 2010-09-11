@@ -31,25 +31,19 @@ function navSrcURL()
     window.location = srcURL;
 }
 
-function save(updateRowId, schemaName, queryName, values)
+function save(selected, updateRowId, schemaName, queryName, values)
 {
     Ext.MessageBox.wait("Saving...", "Saving...");
 
-    for (var key in values) {
-        if (typeof values[key] == "string")
-            values[key] = values[key].trim();
-    }
-
     var fn = LABKEY.Query.insertRows;
-    if (updateRowId) {
-        values["RowId"] = +updateRowId;
+    if (selected || updateRowId) {
         fn = LABKEY.Query.updateRows;
     }
 
     fn({
         schemaName: schemaName,
         queryName: queryName,
-        rowDataArray: [ values ],
+        rowDataArray: values,
         successCallback: function (data) {
             Ext.MessageBox.updateProgress(1, "Saved.");
             Ext.MessageBox.hide();
@@ -63,64 +57,62 @@ function save(updateRowId, schemaName, queryName, values)
     });
 }
 
-// updateRowId is 0 when inserting a new item
-function initForm(updateRowId, schemaName, queryName)
+/**
+ * Initializes the FormPanel.
+ * @param selected {Boolean} true when updating multiple records that have been checked on the grid.
+ * @param updateRowId {Integer} The row id of the record to update.
+ * @param schemaName
+ * @param queryName
+ */
+function initForm(selected, updateRowId, schemaName, queryName)
 {
     initSrcURL(schemaName, queryName);
 
-    columns = ColumnSets[queryName] || [];
+    var columns = ColumnSets[queryName] || [];
 
     function createForm(data)
     {
-        // clear out any selected values if we're creating an empty insert form.
-        if (!updateRowId && data.rows && data.rows.length > 0)
-            data.rows = [];
-
-        // create column->metadata map
-        var metaData = { };
-        for (var i = 0; i < data.metaData.fields.length; i++)
+        if (selected || updateRowId)
         {
-            var field = data.metaData.fields[i];
-            var cm = data.columnModel[i];
-
-            var meta = {};
-            Ext.applyIf(meta, field);
-            Ext.applyIf(meta, cm);
-
-            metaData[field.name] = meta;
+            if (data.rows.length == 0)
+            {
+                Ext.fly("msgDiv").update("<span class='labkey-error'>No rows were selected to update!</span>");
+                return;
+            }
+        }
+        else
+        {
+            // clear out any values if we're creating an empty insert form.
+            data.rows = [];
         }
 
-        var items = [ { name: 'RowId', xtype: 'hidden' } ];
-        for (var i = 0; i < columns.length; i++)
+        function augmentItem(c)
         {
-            var column = columns[i];
-            var meta = metaData[column];
-            var value = updateRowId ? data.rows[0][column] : undefined;
-            var item = null;
-
-            switch (column) {
+            var name = c.name;
+            switch (name) {
                 case 'ReagentId':
-                    item = createReagentCombo(meta, value);
+                    augmentReagentCombo(c);
                     break;
 
                 case 'LotId':
-                    item = createLotCombo(meta, value);
+                    augmentLotCombo(c);
                     break;
 
                 case 'AntigenId':
                 case 'LabelId':
                 case 'ManufacturerId':
-                    item = createCombo(meta, value);
+                    augmentCombo(c);
                     break;
 
                 case 'OwnedBy':
                     // XXX: on update, the userid combo shows the userid value rather than the displayName
-                    item = createUserCombo(meta, queryName, value || LABKEY.user.displayName);
+                    augmentUserCombo(c, queryName);
+                    c.value = c.value || LABKEY.user.displayName;
                     break;
 
                 case 'PerformedBy':
                     // XXX: on update, the userid combo shows the userid value rather than the displayName
-                    item = createUserCombo(meta, queryName, value /*|| LABKEY.user.displayName*/);
+                    augmentUserCombo(c, queryName);
                     break;
 
                 case 'Clone':
@@ -130,24 +122,22 @@ function initForm(updateRowId, schemaName, queryName)
                 case 'Row':
                 case 'Col':
                 case 'Type':
-                    item = createTextCombo(meta, queryName, value);
+                    augmentTextCombo(c, queryName);
                     break;
             }
 
-            if (item)
-            {
-                items.push(item);
-            }
+            return c;
         }
 
         var recordCtor = Ext.data.Record.create(data.metaData.fields);
 
         var f = new LABKEY.ext.FormPanel({
+            id: 'reagentForm',
             border: false,
             bodyStyle:'padding:5px 5px',
             selectRowsResults: data,
             defaults: { width: 350 },
-            items: items,
+            //items: items,
             addAllFields: true,
             buttonAlign: 'left',
             buttons: [{
@@ -155,9 +145,8 @@ function initForm(updateRowId, schemaName, queryName)
                 handler: function () {
                     var form = f.getForm();
                     if (form.isValid()) {
-                        var record = new recordCtor({});
-                        form.updateRecord(record);
-                        save(updateRowId, schemaName, queryName, record.data);
+                        var values = f.getFormValues();
+                        save(selected, updateRowId, schemaName, queryName, values);
                     }
                     else {
                         Ext.MessageBox.alert('Error saving', 'There are errors on the form.');
@@ -166,22 +155,32 @@ function initForm(updateRowId, schemaName, queryName)
             },{
                 text: 'Cancel',
                 handler: navSrcURL
-            }]
+            }],
+            listeners : {
+                applydefaults: function (fp, c) {
+                    augmentItem(c);
+                }
+            }
         });
 
         f.render('formDiv');
     }
 
-    // get the update row or no rows
-    var filterRowId = updateRowId || 0;
-    var filters = [ LABKEY.Filter.create('RowId', filterRowId) ];
+    // If not getting the selected rows, either get the update row by id or no row (id=0)
+    var filters = [ ];
+    if (!selected)
+    {
+        var filterRowId = updateRowId || 0;
+        filters.push(LABKEY.Filter.create('RowId', filterRowId));
+    }
 
     LABKEY.Query.selectRows({
+        requiredVersion: 9.1,
         schemaName: schemaName,
         queryName: queryName,
         columns: columns.join(','),
         filterArray: filters,
-        maxRows: 1,
+        showRows: selected ? "selected" : "all",
         successCallback: createForm,
         errorCallback: function (errorInfo) {
             alert(errorInfo);
@@ -189,163 +188,111 @@ function initForm(updateRowId, schemaName, queryName)
     });
 }
 
-var tm = null;
-function measureList(records)
+
+function augmentReagentCombo(field)
 {
-    if (!tm)
-    {
-        var span = Ext.DomHelper.append(document.body,{tag:'span', id:'_hiddenSpan', style:{display:'none'}});
-        tm = Ext.util.TextMetrics.createInstance(span);
-    }
-
-    var maxWidth = 350;
-    for (var i = 0; i < records.length; i++)
-    {
-        var record = records[i];
-        var row = record.data;
-        var w = Math.max(tm.getWidth(row["Name"] + " " + row["Aliases"]),
-                         tm.getWidth(row["Description"]));
-        maxWidth = Math.max(maxWidth, Math.ceil(w));
-    }
-
-    return maxWidth;
-}
-
-function createReagentCombo(meta, value)
-{
-    var field = LABKEY.ext.FormHelper.getFieldEditorConfig(meta);
-    field.store.baseParams['query.columns'] = ['RowId', 'AntigenId/Name', 'LabelId/Name', 'Clone'].join(',');
-    field.store.baseParams['query.sort'] = 'AntigenId/Name,LabelId/Name,Clone';
-    field.store.on('load', function (store, records, options) {
-        var len = records.length;
-        for (var i = 0; i < len; i++) {
-            var r = records[i];
-            var display = r.data['AntigenId/Name'] + ', ' + r.data['LabelId/Name'] + ' (' + r.data['Clone'] + ')';
-            r.data['ReagentDisplay'] = display;
+    field.store.columns = ['RowId', 'AntigenId/Name', 'LabelId/Name', 'Clone'].join(',');
+    field.store.sort = 'AntigenId/Name,LabelId/Name,Clone';
+    field.store.listeners = {
+        load: function (store, records, options) {
+            var len = records.length;
+            for (var i = 0; i < len; i++) {
+                var r = records[i];
+                var display = r.data['AntigenId/Name'] + ', ' + r.data['LabelId/Name'] + ' (' + r.data['Clone'] + ')';
+                r.data['ReagentDisplay'] = display;
+            }
         }
-    });
+    };
 
-    field.value = value;
-    field.initialValue = value;
     field.typeAhead = true;
     field.minChars = 0;
     field.mode = 'local';
     field.displayField = 'ReagentDisplay';
     field.tpl = '<tpl for="."><div class="x-combo-list-item"><b>{[values["AntigenId/Name"]]}</b> {[values["LabelId/Name"]]} <i>({[values["Clone"]]})</i></div></tpl>';
-
-    // set 'name' property so LABKEY.ext.FormPanel.initComponents will filter out the existing items
-    field.name = field.name || field.hiddenName;
-
-    var combo = Ext.ComponentMgr.create(field);
-    combo.store.on('load', combo.initialLoad, combo);
-    combo.store.load();
-    return combo;
 }
 
-function createLotCombo(meta, value)
+function augmentLotCombo(field)
 {
-    var field = LABKEY.ext.FormHelper.getFieldEditorConfig(meta);
-    field.store.baseParams['query.columns'] = ['RowId', 'LotNumber', 'CatalogNumber', 'ManufacturerId/Name', 'ReagentId/AntigenId/Name', 'ReagentId/LabelId/Name', 'ReagentId/Clone'].join(',');
-    field.store.baseParams['query.sort'] = 'ReagentId/AntigenId/Name,ReagentId/LabelId/Name,ReagentId/Clone,ManufacturerId';
-    field.store.on('load', function (store, records, options) {
-        var len = records.length;
-        for (var i = 0; i < len; i++) {
-            var r = records[i];
-            var display = r.data['LotNumber'] + ': ' + r.data['ReagentId/AntigenId/Name'] + ', ' + r.data['ReagentId/LabelId/Name'] + ' (' + r.data['ReagentId/Clone'] + ') ' + r.data['ManufacturerId/Name'];
-            r.data['LotDisplay'] = display;
+    field.store.columns = ['RowId', 'LotNumber', 'CatalogNumber', 'ManufacturerId/Name', 'ReagentId/AntigenId/Name', 'ReagentId/LabelId/Name', 'ReagentId/Clone'].join(',');
+    field.store.sort = 'ReagentId/AntigenId/Name,ReagentId/LabelId/Name,ReagentId/Clone,ManufacturerId';
+    field.store.listeners = {
+        load: function (store, records, options) {
+            var len = records.length;
+            for (var i = 0; i < len; i++) {
+                var r = records[i];
+                var display = r.data['LotNumber'] + ': ' + r.data['ReagentId/AntigenId/Name'] + ', ' + r.data['ReagentId/LabelId/Name'] + ' (' + r.data['ReagentId/Clone'] + ') ' + r.data['ManufacturerId/Name'];
+                r.data['LotDisplay'] = display;
+            }
         }
-    });
+    };
 
-    field.value = value;
-    field.initialValue = value;
     field.typeAhead = true;
     field.minChars = 0;
     field.mode = 'local';
     field.displayField = 'LotDisplay';
-    field.tpl = '<tpl for="."><div class="x-combo-list-item">{[values["LotNumber"]]}: <b>{[values["ReagentId/AntigenId/Name"]]}</b>, {[values["ReagentId/LabelId/Name"]]} <i>({[values["ReagentId/Clone"]]})</i> &nbsp;{[values["ManufacturerId/Name"]]}</div></tpl>',
-
-    // set 'name' property so LABKEY.ext.FormPanel.initComponents will filter out the existing items
-    field.name = field.name || field.hiddenName;
-
-    var combo = Ext.ComponentMgr.create(field);
-    combo.store.on('load', combo.initialLoad, combo);
-    combo.store.load();
-    return combo;
+    field.tpl = '<tpl for="."><div class="x-combo-list-item">{[values["LotNumber"]]}: <b>{[values["ReagentId/AntigenId/Name"]]}</b>, {[values["ReagentId/LabelId/Name"]]} <i>({[values["ReagentId/Clone"]]})</i> &nbsp;{[values["ManufacturerId/Name"]]}</div></tpl>';
 }
 
-function createCombo(meta, value)
+function augmentCombo(field)
 {
-    var field = LABKEY.ext.FormHelper.getFieldEditorConfig(meta);
-    field.store.baseParams['query.columns'] = ['RowId', 'Name', 'Aliases', 'Description'].join(',');
-    field.store.baseParams['query.sort'] = 'Name';
-    field.value = value;
-    field.initialValue = value;
+    field.store.columns = ['RowId', 'Name', 'Aliases', 'Description'].join(',');
+    field.store.sort = 'Name';
+    if (field.allowBlank && field.store.nullRecord)
+        field.store.nullRecord.nullCaption = "[Keep original values]";
     field.typeAhead = true;
     field.minChars = 0;
     field.mode = 'local';
-    if (meta.name == 'ManufacturerId')
-        field.tpl = '<tpl for="."><div class="x-combo-list-item">{[values["Name"]]}</div></tpl>';
+    if (field.name == 'ManufacturerId')
+        field.tpl = '<tpl for="."><div class="x-combo-list-item">{Name}</div></tpl>';
     else
-        field.tpl = '<tpl for="."><div class="x-combo-list-item" style="color:#555"><div style="color:#222"><i style="font-size:0.9em;display:block;float:right;clear:none;">{[values["Aliases"]]}</i><b>{[values["Name"]]}</b></div>{[values["Description"]]}</div></tpl>';
-
-    // set 'name' property so LABKEY.ext.FormPanel.initComponents will filter out the existing items
-    field.name = field.name || field.hiddenName;
-
-    var combo = Ext.ComponentMgr.create(field);
-    combo.store.on('load', combo.initialLoad, combo);
-    combo.store.on('load', function (s, records) {
-        var w = measureList(records);
-        combo.listWidth = w;
-    });
-    combo.store.load();
-    return combo;
+        field.tpl = '<tpl for=".">' +
+                    '<div class="x-combo-list-item" style="color:#555">' +
+                    '<div style="color:#222">' +
+                    '<i style="font-size:0.9em;display:block;float:right;clear:both;">{[values["Aliases"] ? values["Aliases"] : ""]}</i>' +
+                    '<b>{[values["Name"] ? values["Name"] : ""]}</b>' +
+                    '</div>' +
+                    '{[values["Description"] ? values["Description"] : ""]}' +
+                    '</div>' +
+                    '</tpl>';
 }
 
-function createTextCombo(meta, queryName, value)
+function augmentTextCombo(field, queryName)
 {
     var h = Ext.util.Format.htmlEncode;
+    var table_column = h(queryName + "." + field.name);
 
-    var table_column = h(queryName + "." + meta.name);
-    var store = new LABKEY.ext.Store({
+    field.xtype = 'combo';
+    field.fieldLabel = field.name;
+    field.forceSelection = true;
+    field.typeAhead = true;
+    field.minChars = 0;
+    field.mode = 'local';
+    field.hiddenName = field.name;
+    field.hiddenId = (new Ext.Component()).getId();
+    field.triggerAction ='all';
+    //field.valueField = field.name; // valueField shouldn't be set since we're not mapping to row ids.
+    field.displayField = field.name;
+    field.tpl = '<tpl for="."><div class="x-combo-list-item">{[values["' + field.name + '"]]}</div></tpl>';
+    field.listClass = 'labkey-grid-editor';
+    field.store = {
         schemaName: 'reagent',
         containerPath: LABKEY.container.path,
         sql: 'SELECT DISTINCT ' + table_column + ' FROM ' + h(queryName) + ' WHERE ' + table_column + ' IS NOT NULL ORDER BY ' + table_column,
-        updateable: false
-    });
-
-    var combo = new LABKEY.ext.ComboBox({
-        name: meta.name,
-        fieldLabel: h(meta.label) || meta.header || h(meta.name),
-        helpPopup: { html: meta.tooltip },
-        store: store,
-        value: value,
-        initialValue: value,
-        allowBlank: !meta.required,
-        forceSelection: false, /* don't restrict to just values previously entered. */
-        typeAhead: true,
-        minChars: 0,
-        mode: 'local',
-        hiddenName: meta.name,
-        hiddenId: (new Ext.Component()).getId(),
-        triggerAction: 'all',
-        //valueField: meta.name, // valueField isn't necessary since we're not mapping to row ids.
-        displayField: meta.name,
-        tpl: '<tpl for="."><div class="x-combo-list-item">{[values["' + meta.name + '"]]}</div></tpl>',
-        listClass: 'labkey-grid-editor'
-    });
-
-    if (meta.tooltip)
-        combo.helpPopup = { html: meta.tooltip };
-
-    combo.store.load();
-    return combo;
+        updateable: false,
+        autoLoad: true
+    };
+//    if (field.allowBlank)
+//        field.store.nullRecord = {
+//            displayColumn: field.displayField,
+//            nullCaption: "[Keep original values]"
+//        };
 }
 
-function createUserCombo(meta, queryName, value)
+function augmentUserCombo(field, queryName)
 {
     var h = Ext.util.Format.htmlEncode;
 
-    var table_column = h(queryName + "." + meta.name);
+    var table_column = h(queryName + "." + field.name);
     /*
     var sql = 'SELECT DISTINCT X.' + h(meta.name) + ', U.DisplayName ' +
               'FROM reagent.' + h(queryName) + ' X ' +
@@ -354,49 +301,37 @@ function createUserCombo(meta, queryName, value)
     */
 
     var sql =
-'SELECT DISTINCT X.' + h(meta.name) + ', X.DisplayName FROM (' +
+'SELECT DISTINCT X.' + h(field.name) + ', X.DisplayName FROM (' +
 'SELECT' +
-'   T.' + h(meta.name) + ',' +
-'   (CASE WHEN U.DisplayName IS NULL THEN T.' + h(meta.name) + ' ELSE U.DisplayName END) AS DisplayName' +
+'   T.' + h(field.name) + ',' +
+'   (CASE WHEN U.DisplayName IS NULL THEN T.' + h(field.name) + ' ELSE U.DisplayName END) AS DisplayName' +
 ' FROM ' + h(queryName) + ' T' +
-' LEFT OUTER JOIN core.Users U ON CONVERT(U.UserId, varchar) = T.' + h(meta.name) +
-' WHERE T.' + h(meta.name) + ' IS NOT NULL' +
+' LEFT OUTER JOIN core.Users U ON CONVERT(U.UserId, varchar) = T.' + h(field.name) +
+' WHERE T.' + h(field.name) + ' IS NOT NULL' +
 ' UNION' +
-' SELECT CONVERT(U.UserId, varchar) AS ' + h(meta.name) + ', U.DisplayName' +
+' SELECT CONVERT(U.UserId, varchar) AS ' + h(field.name) + ', U.DisplayName' +
 ' FROM core.Users U' +
 ') X';
 
-
-    var store = new LABKEY.ext.Store({
+    
+    field.xtype = 'combo';
+    field.fieldLabel = field.name;
+    field.forceSelection = true;
+    field.typeAhead = true;
+    field.minChars = 0;
+    field.mode = 'local';
+    field.hiddenName = field.name;
+    field.hiddenId = (new Ext.Component()).getId();
+    field.triggerAction ='all';
+    field.valueField = field.name; // valueField shouldn't be set since we're not mapping to row ids.
+    field.displayField = "DisplayName";
+    field.tpl = '<tpl for="."><div class="x-combo-list-item">{[values["DisplayName"]]}</div></tpl>';
+    field.listClass = 'labkey-grid-editor';
+    field.store = {
         schemaName: 'reagent',
         containerPath: LABKEY.container.path,
         sql: sql,
-        updateable: false
-    });
-
-    var combo = new LABKEY.ext.ComboBox({
-        name: meta.name,
-        fieldLabel: h(meta.label) || meta.header || h(meta.name),
-        store: store,
-        value: value,
-        initialValue: value,
-        allowBlank: !meta.required,
-        forceSelection: false, /* don't restrict to just values previously entered. */
-        typeAhead: true,
-        minChars: 0,
-        mode: 'local',
-        hiddenName: meta.name,
-        hiddenId: (new Ext.Component()).getId(),
-        triggerAction: 'all',
-        valueField: meta.name,
-        displayField: "DisplayName",
-        tpl: '<tpl for="."><div class="x-combo-list-item">{[values["DisplayName"]]}</div></tpl>',
-        listClass: 'labkey-grid-editor'
-    });
-
-    if (meta.tooltip)
-        combo.helpPopup = { html: meta.tooltip };
-
-    combo.store.load();
-    return combo;
+        updateable: false,
+        autoLoad: true
+    };
 }
