@@ -119,7 +119,6 @@
     { name: 'Amersham' },
     { name: 'Beckman Coulter' },
     { name: 'Becton Dickenson' },
-    { name: 'Becton Dickenson - custom' },
     { name: 'Bender Lifesystems' },
     { name: 'Caltag' },
     { name: 'eBioscience' },
@@ -478,7 +477,7 @@
               }
               else {
                 var re = /internalSourceView.view\?customViewId=(\d+)/;
-                var idmatch = re.exec(response.responseText)
+                var idmatch = re.exec(response.responseText);
                 if (idmatch && idmatch.length > 1) {
                   var id = idmatch[1];
                   _log('Created new view (' + id + '): ' + logViewName);
