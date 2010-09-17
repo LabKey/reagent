@@ -148,6 +148,7 @@ function initForm(selected, updateRowId, schemaName, queryName)
             defaults: { width: 350 },
             //items: items,
             addAllFields: true,
+            lazyCreateStore: true,
             buttonAlign: 'left',
             buttons: [{
                 text: 'Save',
@@ -284,6 +285,7 @@ function augmentTextCombo(field, queryName)
     field.tpl = '<tpl for="."><div class="x-combo-list-item">{[values["' + field.name + '"]]}</div></tpl>';
     field.listClass = 'labkey-grid-editor';
     field.store = {
+        xtype: 'labkey-store',
         schemaName: 'reagent',
         containerPath: LABKEY.container.path,
         sql: 'SELECT DISTINCT ' + table_column + ' FROM ' + h(queryName) + ' WHERE ' + table_column + ' IS NOT NULL ORDER BY ' + table_column + ' LIMIT 1000',
@@ -337,6 +339,7 @@ function augmentUserCombo(field, queryName)
     field.tpl = '<tpl for="."><div class="x-combo-list-item">{[values["DisplayName"]]}</div></tpl>';
     field.listClass = 'labkey-grid-editor';
     field.store = {
+        xtype: 'labkey-store',
         schemaName: 'reagent',
         containerPath: LABKEY.container.path,
         sql: sql,
