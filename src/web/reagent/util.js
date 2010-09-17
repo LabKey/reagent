@@ -7,7 +7,7 @@ var ColumnSets = {
     Antigens: [ 'Name', 'Aliases', 'Description' ],
     Labels: [ 'Name', 'Aliases', 'Description' ],
     Manufacturers: [ 'Name' ],
-    Reagents: [ 'AntigenId', 'LabelId', 'Clone', 'Description' ],
+    Reagents: [ 'AntigenId', 'LabelId', 'Clone', 'Description'/*, 'Species'*/ ],
     Lots: [ 'ReagentId', 'ManufacturerId', 'CatalogNumber', 'LotNumber', 'Description' ],
     Vials: [ 'LotId', 'OwnedBy', 'Location', 'Box', 'Row', 'Col', 'Used' ],
     Titrations: [ 'LotId', 'PerformedBy', 'ExperimentId', 'Type', 'Result', 'Description' ],
@@ -86,6 +86,17 @@ function initForm(selected, updateRowId, schemaName, queryName)
             data.rows = [];
         }
 
+        var items = [];
+        for (var i = 0; i < columns.length; i++)
+        {
+            var column = columns[i];
+            switch (column) {
+                case 'Species':
+                    //createSpeciesField();
+                    break;
+            }
+        }
+
         function augmentItem(c)
         {
             var name = c.name;
@@ -128,8 +139,6 @@ function initForm(selected, updateRowId, schemaName, queryName)
 
             return c;
         }
-
-        var recordCtor = Ext.data.Record.create(data.metaData.fields);
 
         var f = new LABKEY.ext.FormPanel({
             id: 'reagentForm',
@@ -277,7 +286,7 @@ function augmentTextCombo(field, queryName)
     field.store = {
         schemaName: 'reagent',
         containerPath: LABKEY.container.path,
-        sql: 'SELECT DISTINCT ' + table_column + ' FROM ' + h(queryName) + ' WHERE ' + table_column + ' IS NOT NULL ORDER BY ' + table_column,
+        sql: 'SELECT DISTINCT ' + table_column + ' FROM ' + h(queryName) + ' WHERE ' + table_column + ' IS NOT NULL ORDER BY ' + table_column + ' LIMIT 1000',
         updateable: false,
         autoLoad: true
     };
