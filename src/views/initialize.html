@@ -134,6 +134,76 @@
     { name: 'VRC' }
   ];
 
+  var speciesMap = null;
+  var species = [
+    { name: "Amphibia" },
+    { name: "Baboon" },
+    { name: "Bacteria" },
+    { name: "Bat" },
+    { name: "Bird" },
+    { name: "Caiman" },
+    { name: "Camel" },
+    { name: "Cat" },
+    { name: "Chicken" },
+    { name: "Chimpanzee" },
+    { name: "Chlamydia" },
+    { name: "Cow" },
+    { name: "Cytomegalovirus" },
+    { name: "Deer" },
+    { name: "Dog" },
+    { name: "Dolphin" },
+    { name: "Donkey" },
+    { name: "Drosophila" },
+    { name: "E. coli" },
+    { name: "Elk" },
+    { name: "Ferret" },
+    { name: "Fish" },
+    { name: "Frog" },
+    { name: "Gerbil" },
+    { name: "Goat" },
+    { name: "Guinea Pig" },
+    { name: "Hamster" },
+    { name: "Helicobacter" },
+    { name: "Horse" },
+    { name: "Human" },
+    { name: "Influenza" },
+    { name: "Insect" },
+    { name: "Kangaroo" },
+    { name: "Killifish" },
+    { name: "Leech" },
+    { name: "Listeria" },
+    { name: "Lizard" },
+    { name: "Llama" },
+    { name: "Macaw" },
+    { name: "Mammal" },
+    { name: "Mink" },
+    { name: "Monkey" },
+    { name: "Mouse" },
+    { name: "Opossum" },
+    { name: "Orangutan" },
+    { name: "Pig" },
+    { name: "Pigeon" },
+    { name: "Plant" },
+    { name: "Pseudomonas" },
+    { name: "Quail" },
+    { name: "Rabbit" },
+    { name: "Rat" },
+    { name: "Reindeer" },
+    { name: "Reptile" },
+    { name: "Rhesus" },
+    { name: "Salmonella" },
+    { name: "Sheep" },
+    { name: "Torpedo" },
+    { name: "Trout" },
+    { name: "Turkey" },
+    { name: "Vertebrate" },
+    { name: "Virus" },
+    { name: "Whale" },
+    { name: "Xenopus" },
+    { name: "Yeast" },
+    { name: "Zebrafish" }
+  ];
+
   var reagnetMap = null;
   var reagents = [
     { antigen: 'CCR7', label: 'PE-Cy7', clone: '3D12' },
@@ -152,7 +222,6 @@
     { antigen: 'CD3', label: 'Alexa 405', clone: 'Sk7' },
     { antigen: 'CD3', label: 'Alexa 700', clone: 'UCHT1' },
     { antigen: 'CD3', label: 'APC-Cy7', clone: 'SK7' },
-    { antigen: 'CD3', label: 'ECD', clone: 'UCHT1' },
     { antigen: 'CD3', label: 'FITC', clone: 'BC3' },
     { antigen: 'CD3', label: 'FITC', clone: 'UCHT1' },
     { antigen: 'CD3', label: 'PE-Alexa 700', clone: 'S4.1' },
@@ -169,7 +238,6 @@
     { antigen: 'CD4', label: 'PE-Texas Red', clone: 'T4' },
     { antigen: 'CD45', label: 'APC', clone: 'HI30' },
     { antigen: 'CD45RA', label: 'Biotin', clone: 'HI100' },
-    { antigen: 'CD45RO', label: 'ECD', clone: 'UCHL1' },
     { antigen: 'CD45RO', label: 'FITC', clone: 'UCHL1' },
     { antigen: 'CD57', label: 'Qdot 565', clone: 'NK-1' },
     { antigen: 'CD8', label: 'Alexa 750', clone: 'RPA-T8' },
@@ -196,7 +264,7 @@
     { antigen: 'IL-4', label: 'PE-Cy7', clone: '8D4-8' },
     { antigen: 'Ki67', label: 'FITC', clone: 'B56' },
     { antigen: 'Ki67 Control', label: 'FITC', clone: 'MOPC-21' },
-    { antigen: 'MIP-1a', label: 'PE', clone: '11A3' },
+    { antigen: 'CCL3/MIP-1a', label: 'PE', clone: '11A3' },
     { antigen: 'Perforin', label: 'FITC', clone: 'MAb Pf-344' },
     { antigen: 'TNFa', label: 'Alexa 700', clone: 'MAb11' },
     { antigen: 'TNFa', label: 'APC', clone: '6401.1111' },
@@ -263,11 +331,15 @@
     if (queryCount != 0)
       return;
 
-    if (errors > 0)
-      throw new Error("Can't insert reagents with previously reported errors.");
+    if (errors > 0) {
+      _err("Can't insert reagents with previously reported errors.");
+      return;
+    }
 
-    if (antigens == null || labels == null)
-      throw new Error("lookup maps not created");
+    if (antigenMap == null || labelMap == null) {
+      _err("lookup maps not created");
+      return;
+    }
 
     var len = reagents.length;
     for (var i = 0; i < len; i++)
@@ -275,10 +347,14 @@
       var row = reagents[i];
       var antigenRow = antigenMap[row.antigen];
       var labelRow = labelMap[row.label];
-      if (antigenRow == undefined)
-        throw new Error("Couldn't find antigen '" + row.antigen + "'");
-      if (labelRow == undefined)
-        throw new Error("Couldn't find label '" + row.label + "'");
+      if (antigenRow == undefined) {
+        _err("Couldn't find antigen '" + row.antigen + "'");
+        return;
+      }
+      if (labelRow == undefined) {
+        _err("Couldn't find label '" + row.label + "'");
+        return;
+      }
 
       row.antigenid = antigenRow.rowid;
       row.labelid = labelRow.rowid;
@@ -335,6 +411,9 @@
           if (modifiedRows.length == 0)
           {
             _log('Found previously inserted ' + tableName + ' up to date: ' + results.rows.length + ' rows.');
+            callbackFn(rowMap);
+            if (insertReagentsWhenDone)
+              insertReagents();
           }
           else
           {
@@ -381,7 +460,7 @@
         var len = viewInfo.views.length;
         for (var i = 0; i < len; i++) {
           var v = viewInfo.views[i];
-          if (viewName == v.name) {
+          if ((viewName == null && v['default']) || (viewName == v.name)) {
             foundCallback(v);
             return;
           }
@@ -391,31 +470,6 @@
       },
       errorCallback: function (errorInfo) {
         _err("Error getting view infos: " + errorInfo);
-      }
-    });
-  }
-
-  function setViewColumns(id, columns, sort)
-  {
-    _log('Updating view columns/sort: ' + id + ' ' + columns + ' ' + sort);
-    var c = '';
-    for (var i = 0; i < columns.length; i++)
-      c += (i > 0 ? '&' : '') + encodeURIComponent(columns[i]);
-
-    var params = {
-      customViewId: id,
-      ff_columnList: c
-    };
-
-    Ext.Ajax.request({
-      url: LABKEY.ActionURL.buildURL('query', 'internalSourceView'),
-      method: 'POST',
-      params: params,
-      successCallback: function () {
-        _log('Updated view columns/sort: ' + id);
-      },
-      failureCallback: function () {
-        _err('Error updating view columns/sort: ' + id);
       }
     });
   }
@@ -458,45 +512,47 @@
       },
       function () {
         _log("View doesn't exist; creating new view: " + logViewName);
-        var params = { ff_schemaName: schemaName, ff_queryName: tableName, ff_share: share, ff_inherit: inherit };
-        if (viewName)
-          params.ff_viewName = viewName;
 
-        Ext.Ajax.request({
-          url: LABKEY.ActionURL.buildURL('query', 'internalNewView'),
-          method: 'POST',
-          params: params,
-          success: function (response, options) {
-            if (response) {
-              var re = /<div class="labkey-error">([^<]*)/g;
-              var errors = re.exec(response.responseText);
-              if (errors && errors.length > 1) {
-                _log('Error creating new view: ' + logViewName);
-                for (var i = 1; i < errors.length; i++)
-                  _err('  >> ' + errors[i]);
-              }
-              else {
-                var re = /internalSourceView.view\?customViewId=(\d+)/;
-                var idmatch = re.exec(response.responseText);
-                if (idmatch && idmatch.length > 1) {
-                  var id = idmatch[1];
-                  _log('Created new view (' + id + '): ' + logViewName);
-                  setViewColumns(id, columns, sort);
-                }
-              }
-            }
+        var view = {
+          shared: share,
+          inherit: inherit,
+          columns: [],
+          filter: [],
+          sort: []
+        };
+        if (viewName)
+          view.name = viewName;
+
+        for (var i = 0; i < columns.length; i++) {
+          view.columns.push({ fieldKey: columns[i] });
+        }
+
+        if (sort) {
+          for (var i = 0; i < sort.length; i++) {
+            view.sort.push({ fieldKey: sort[i] });
+          }
+        }
+
+        LABKEY.Query.saveQueryViews({
+          schemaName: 'reagent',
+          queryName: tableName,
+          views: [ view ],
+          successCallback: function (json) {
+            _log('Created new view: ' + logViewName);
           },
-          error: function (response, options) {
+          errorCallback: function (json) {
             _err('Error creating new view: ' + logViewName);
+            _err(json.exception);
           }
         });
       }
     );
   }
 
-  insertTable('Antigens', antigens, true, function (rowMap) { antigensMap = rowMap; });
-  insertTable('Labels', labels, true, function (rows) { labelMap = createLookupMap(rows); });
-  insertTable('Manufacturers', manufacturers, true, function (rows) { manufacturerMap = createLookupMap(rows); });
+  insertTable('Antigens', antigens, true, function (lookupMap) { antigenMap = lookupMap; });
+  insertTable('Labels', labels, true, function (lookupMap) { labelMap = lookupMap; });
+  insertTable('Manufacturers', manufacturers, true, function (lookupMap) { manufacturerMap = lookupMap; });
+  insertTable('Species', species, true, function (lookupMap) { speciesMap = lookupMap; });
 
   createCustomView('Lots', null, true, true, ['LotNumber', 'ManufacturerId', 'CatalogNumber', 'ReagentId/AntigenId', 'ReagentId/LabelId', 'ReagentId/Clone', 'Description'], null, true);
   createCustomView('Vials', null, true, true, ['OwnedBy', 'Location', 'Box', 'Row', 'Col', 'Used', 'LotId/LotNumber', 'LotId/ManufacturerId', 'LotId/ReagentId/AntigenId', 'LotId/ReagentId/LabelId', 'LotId/ReagentId/Clone'], null, true);
