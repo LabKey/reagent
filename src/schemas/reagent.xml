@@ -26,7 +26,7 @@
     <ns:columns>
       <ns:column columnName="RowId">
         <ns:columnTitle>Antigen Id</ns:columnTitle>
-        <ns:datatype>serial</ns:datatype>
+        <ns:datatype>int</ns:datatype>
         <ns:isAutoInc>true</ns:isAutoInc>
         <ns:scale>10</ns:scale>
         <ns:nullable>false</ns:nullable>
@@ -67,7 +67,7 @@
     <ns:columns>
       <ns:column columnName="RowId">
         <ns:columnTitle>Label Id</ns:columnTitle>
-        <ns:datatype>serial</ns:datatype>
+        <ns:datatype>int</ns:datatype>
         <ns:isAutoInc>true</ns:isAutoInc>
         <ns:scale>10</ns:scale>
         <ns:nullable>false</ns:nullable>
@@ -108,7 +108,7 @@
     <ns:columns>
       <ns:column columnName="RowId">
         <ns:columnTitle>Manufacturer Id</ns:columnTitle>
-        <ns:datatype>serial</ns:datatype>
+        <ns:datatype>int</ns:datatype>
         <ns:isAutoInc>true</ns:isAutoInc>
         <ns:scale>10</ns:scale>
         <ns:nullable>false</ns:nullable>
@@ -141,7 +141,7 @@
     <ns:columns>
       <ns:column columnName="RowId">
         <ns:columnTitle>Species Id</ns:columnTitle>
-        <ns:datatype>serial</ns:datatype>
+        <ns:datatype>int</ns:datatype>
         <ns:isAutoInc>true</ns:isAutoInc>
         <ns:scale>10</ns:scale>
         <ns:nullable>false</ns:nullable>
@@ -205,7 +205,7 @@
     <ns:columns>
       <ns:column columnName="RowId">
         <ns:columnTitle>Reagent Id</ns:columnTitle>
-        <ns:datatype>serial</ns:datatype>
+        <ns:datatype>int</ns:datatype>
         <ns:isAutoInc>true</ns:isAutoInc>
         <ns:scale>10</ns:scale>
         <ns:nullable>false</ns:nullable>
@@ -292,7 +292,7 @@
     <ns:titleColumn>RowId</ns:titleColumn>
     <ns:columns>
       <ns:column columnName="RowId">
-        <ns:datatype>serial</ns:datatype>
+        <ns:datatype>int</ns:datatype>
         <ns:isAutoInc>true</ns:isAutoInc>
         <ns:scale>10</ns:scale>
         <ns:nullable>false</ns:nullable>
@@ -380,7 +380,7 @@
     <ns:titleColumn>RowId</ns:titleColumn>
     <ns:columns>
       <ns:column columnName="RowId">
-        <ns:datatype>serial</ns:datatype>
+        <ns:datatype>int</ns:datatype>
         <ns:isAutoInc>true</ns:isAutoInc>
         <ns:scale>10</ns:scale>
         <ns:nullable>false</ns:nullable>
@@ -472,7 +472,7 @@
     <ns:titleColumn>RowId</ns:titleColumn>
     <ns:columns>
       <ns:column columnName="RowId">
-        <ns:datatype>serial</ns:datatype>
+        <ns:datatype>int</ns:datatype>
         <ns:isAutoInc>true</ns:isAutoInc>
         <ns:scale>10</ns:scale>
         <ns:nullable>false</ns:nullable>
