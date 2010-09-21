@@ -7,7 +7,7 @@ var ColumnSets = {
     Antigens: [ 'Name', 'Aliases', 'Description' ],
     Labels: [ 'Name', 'Aliases', 'Description' ],
     Manufacturers: [ 'Name' ],
-    Reagents: [ 'AntigenId', 'LabelId', 'Clone', 'Description'/*, 'Species'*/ ],
+    Reagents: [ 'AntigenId', 'LabelId', 'Clone', 'Species/RowId', 'Description' ],
     Lots: [ 'ReagentId', 'ManufacturerId', 'CatalogNumber', 'LotNumber', 'Description' ],
     Vials: [ 'LotId', 'OwnedBy', 'Location', 'Box', 'Row', 'Col', 'Used' ],
     Titrations: [ 'LotId', 'PerformedBy', 'ExperimentId', 'Type', 'Result', 'Description' ],
@@ -31,29 +31,124 @@ function navSrcURL()
     window.location = srcURL;
 }
 
-function save(selected, updateRowId, schemaName, queryName, values)
+// UNDONE: insert/update of Reagent and ReagentSpecies should be part of the same transaction
+function saveReagentSpecies(schemaName, queryName, initialValues, updatedRows, modifiedSpecies, successCb, errorCb)
+{
+    var deleteCommand = {
+        schemaName: schemaName,
+        queryName: "ReagentSpecies",
+        command: "delete",
+        rows: []
+    };
+    var insertCommand = {
+        schemaName: schemaName,
+        queryName: "ReagentSpecies",
+        command: "insert",
+        rows: []
+    };
+
+    for (var i = 0; i < updatedRows.length; i++)
+    {
+        var updatedRow = updatedRows[i];
+        var rowid = updatedRow.rowid || updatedRow.RowId;
+
+        // delete the original values in the ReagentSpecies table if found
+        for (var j = 0; j < initialValues.length; j++)
+        {
+            var initialValue = initialValues[j];
+            var initialValueRowId = initialValue.rowid ? initialValue.rowid.value :
+                                    initialValue.RowId ? initialValue.RowId.value : -1;
+            if (initialValueRowId == rowid || initialValueRowId == rowid)
+            {
+                var initialSpecies = initialValue["Species/RowId"].value;
+                for (var k = 0; k < initialSpecies.length; k++)
+                {
+                    var speciesId = +initialSpecies[k];
+                    deleteCommand.rows.push({ReagentId: rowid, SpeciesId: speciesId});
+                }
+                break;
+            }
+        }
+
+        // insert new values into the ReagentSpecies table
+        var species = modifiedSpecies[i];
+        if (species)
+        {
+            if (Ext.isString(species))
+                species = species.split(","); // ugh
+            for (var m = 0; m < species.length; m++)
+            {
+                var speciesId = +species[m];
+                insertCommand.rows.push({ReagentId: rowid, SpeciesId: speciesId});
+            }
+        }
+    }
+
+    var commands = [];
+    if (deleteCommand.rows.length > 0)
+        commands.push(deleteCommand);
+    commands.push(insertCommand);
+
+    LABKEY.Query.saveRows({
+        commands: commands,
+        successCallback: successCb,
+        errorCallback: errorCb,
+        transacted: true
+    })
+}
+
+function save(selected, updateRowId, schemaName, queryName, initialValues, values)
 {
     Ext.MessageBox.wait("Saving...", "Saving...");
+
+    // stash away the species for insertion later
+    var species = null;
+    if (queryName == "Reagents")
+    {
+        species = [];
+        for (var i = 0; i < values.length; i++)
+        {
+            species.push(values[i]["Species/RowId"]);
+            delete values[i]["Species/RowId"];
+        }
+    }
 
     var fn = LABKEY.Query.insertRows;
     if (selected || updateRowId) {
         fn = LABKEY.Query.updateRows;
     }
 
+    function successCallback() {
+        Ext.MessageBox.updateProgress(1, "Saved.");
+        Ext.MessageBox.hide();
+        navSrcURL();
+    }
+    
+    function errorCallback(errorInfo) {
+        Ext.MessageBox.updateProgress(1);
+        Ext.MessageBox.hide();
+        Ext.MessageBox.alert("Error Saving", errorInfo.exception || errorInfo.statusText);
+    }
+
+    // insert or update the row, possibly updating the ReagentSpecies junction table.
     fn({
         schemaName: schemaName,
         queryName: queryName,
         rowDataArray: values,
         successCallback: function (data) {
-            Ext.MessageBox.updateProgress(1, "Saved.");
-            Ext.MessageBox.hide();
-            navSrcURL();
+            if (data.rows.length != values.length)
+            {
+                errorCallback({statusText: "Expected to save " + values.length + " rows, but received only " + data.rows.length + " rows."});
+            }
+            else
+            {
+                if (species)
+                    saveReagentSpecies(schemaName, queryName, initialValues, data.rows, species, successCallback, errorCallback);
+                else
+                    successCallback();
+            }
         },
-        errorCallback: function (errorInfo) {
-            Ext.MessageBox.updateProgress(1);
-            Ext.MessageBox.hide();
-            Ext.MessageBox.alert("Error Saving", errorInfo.exception || errorInfo.statusText);
-        }
+        errorCallback: errorCallback
     });
 }
 
@@ -86,17 +181,6 @@ function initForm(selected, updateRowId, schemaName, queryName)
             data.rows = [];
         }
 
-        var items = [];
-        for (var i = 0; i < columns.length; i++)
-        {
-            var column = columns[i];
-            switch (column) {
-                case 'Species':
-                    //createSpeciesField();
-                    break;
-            }
-        }
-
         function augmentItem(c)
         {
             var name = c.name;
@@ -113,6 +197,10 @@ function initForm(selected, updateRowId, schemaName, queryName)
                 case 'LabelId':
                 case 'ManufacturerId':
                     augmentCombo(c);
+                    break;
+
+                case 'Species/RowId':
+                    augmentSpeciesCombo(c);
                     break;
 
                 case 'OwnedBy':
@@ -156,7 +244,7 @@ function initForm(selected, updateRowId, schemaName, queryName)
                     var form = f.getForm();
                     if (form.isValid()) {
                         var values = f.getFormValues();
-                        save(selected, updateRowId, schemaName, queryName, values);
+                        save(selected, updateRowId, schemaName, queryName, f.initialConfig.values || [], values);
                     }
                     else {
                         Ext.MessageBox.alert('Error saving', 'There are errors on the form.');
@@ -264,6 +352,40 @@ function augmentCombo(field)
                     '{[values["Description"] ? values["Description"] : ""]}' +
                     '</div>' +
                     '</tpl>';
+}
+
+function augmentSpeciesCombo(field)
+{
+    field.fieldLabel = 'Species';
+    field.xtype = 'lovcombo';
+    field.forceSelection = true;
+    field.typeAhead = true;
+    field.minChars = 0;
+    field.mode = 'local';
+    field.hiddenId = (new Ext.Component()).getId();
+    field.triggerAction ='all';
+    field.disabled = false;
+    field.displayField = "Name";
+    field.valueField = "RowId";
+    field.store = {
+        xtype: 'labkey-store',
+        schemaName: 'reagent',
+        queryName: 'Species',
+        columns: ['RowId', 'Name'],
+        containerPath: LABKEY.container.path,
+        updatable: false,
+        autoLoad: true,
+        listeners: {
+            metachange: function (store, meta) {
+                // Add a 'checked' field for the LovCombo to store it's state.
+                meta.fields.push({name: "checked", type: "boolean", mvEnabled: false});
+                var rtype = Ext.data.Record.create(meta.fields);
+                store.fields = rtype.prototype.fields;
+                store.columns = store.fields.keys;
+                store.recordType = store.reader.recordType = rtype;
+            }
+        }
+    };
 }
 
 function augmentTextCombo(field, queryName)
