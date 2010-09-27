@@ -31,6 +31,17 @@ function navSrcURL()
     window.location = srcURL;
 }
 
+function editDomain(queryName)
+{
+    var url = LABKEY.ActionURL.buildURL("property", "editDomain", null, {
+        domainKind: "ExtensibleTable",
+        createOrEdit: true,
+        schemaName: "reagent",
+        queryName: queryName
+    });
+    window.location = url;
+}
+
 // UNDONE: insert/update of Reagent and ReagentSpecies should be part of the same transaction
 function saveReagentSpecies(schemaName, queryName, initialValues, updatedRows, modifiedSpecies, successCb, errorCb)
 {
