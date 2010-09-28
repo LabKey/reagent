@@ -53,7 +53,7 @@
       </ns:column>
     </ns:columns>
     <ns:buttonBarOptions includeStandardButtons="true">
-      <ns:item text="Bulk Edit" requiresSelection="true" permission="UPDATE">
+      <ns:item text="Bulk Edit" requiresSelection="true" permission="UPDATE" insertAfter="Insert New">
          <ns:target>/reagent/update.view?schemaName=reagent&amp;queryName=Antigens&amp;selected=true</ns:target>
       </ns:item>
     </ns:buttonBarOptions>
@@ -94,7 +94,7 @@
       </ns:column>
     </ns:columns>
     <ns:buttonBarOptions includeStandardButtons="true">
-      <ns:item text="Bulk Edit" requiresSelection="true" permission="UPDATE">
+      <ns:item text="Bulk Edit" requiresSelection="true" permission="UPDATE" insertAfter="Insert New">
         <ns:target>/reagent/update.view?schemaName=reagent&amp;queryName=Labels&amp;selected=true</ns:target>
       </ns:item>
     </ns:buttonBarOptions>
@@ -127,7 +127,7 @@
       </ns:column>
     </ns:columns>
     <ns:buttonBarOptions includeStandardButtons="true">
-      <ns:item text="Bulk Edit" requiresSelection="true" permission="UPDATE">
+      <ns:item text="Bulk Edit" requiresSelection="true" permission="UPDATE" insertAfter="Insert New">
         <ns:target>/reagent/update.view?schemaName=reagent&amp;queryName=Manufacturers&amp;selected=true</ns:target>
       </ns:item>
     </ns:buttonBarOptions>
@@ -160,7 +160,7 @@
       </ns:column>
     </ns:columns>
     <ns:buttonBarOptions includeStandardButtons="true">
-      <ns:item text="Bulk Edit" requiresSelection="true" permission="UPDATE">
+      <ns:item text="Bulk Edit" requiresSelection="true" permission="UPDATE" insertAfter="Insert New">
         <ns:target>/reagent/update.view?schemaName=reagent&amp;queryName=Manufacturers&amp;selected=true</ns:target>
       </ns:item>
     </ns:buttonBarOptions>
@@ -288,10 +288,10 @@
       </ns:column>
     </ns:columns>
     <ns:buttonBarOptions includeStandardButtons="true">
-      <ns:item text="Bulk Edit" requiresSelection="true" permission="UPDATE">
+      <ns:item text="Bulk Edit" requiresSelection="true" permission="UPDATE" insertAfter="Insert New">
         <ns:target>/reagent/update.view?schemaName=reagent&amp;queryName=Reagents&amp;selected=true</ns:target>
       </ns:item>
-      <ns:item text="Edit Fields" permission="ADMIN">
+      <ns:item text="Edit Fields" permission="ADMIN" insertPosition="end">
         <ns:onClick>
             LABKEY.requiresScript('/reagent/util.js', true, function () { editDomain('Reagents'); });
         </ns:onClick>
@@ -395,10 +395,10 @@
       </ns:column>
     </ns:columns>
     <ns:buttonBarOptions includeStandardButtons="true">
-      <ns:item text="Bulk Edit" requiresSelection="true" permission="UPDATE">
+      <ns:item text="Bulk Edit" requiresSelection="true" permission="UPDATE" insertAfter="Insert New">
         <ns:target>/reagent/update.view?schemaName=reagent&amp;queryName=Lots&amp;selected=true</ns:target>
       </ns:item>
-      <ns:item text="Edit Fields" permission="ADMIN">
+      <ns:item text="Edit Fields" permission="ADMIN" insertPosition="end">
         <ns:onClick>
           LABKEY.requiresScript('/reagent/util.js', true, function () { editDomain('Lots'); });
         </ns:onClick>
@@ -505,10 +505,10 @@
       </ns:column>
     </ns:columns>
     <ns:buttonBarOptions includeStandardButtons="true">
-      <ns:item text="Bulk Edit" requiresSelection="true" permission="UPDATE">
+      <ns:item text="Bulk Edit" requiresSelection="true" permission="UPDATE" insertAfter="Insert New">
         <ns:target>/reagent/update.view?schemaName=reagent&amp;queryName=Vials&amp;selected=true</ns:target>
       </ns:item>
-      <ns:item text="Edit Fields" permission="ADMIN">
+      <ns:item text="Edit Fields" permission="ADMIN" insertPosition="end">
         <ns:onClick>
           LABKEY.requiresScript('/reagent/util.js', true, function () { editDomain('Vials'); });
         </ns:onClick>
@@ -611,10 +611,10 @@
       </ns:column>
     </ns:columns>
     <ns:buttonBarOptions includeStandardButtons="true">
-      <ns:item text="Bulk Edit" requiresSelection="true" permission="UPDATE">
+      <ns:item text="Bulk Edit" requiresSelection="true" permission="UPDATE" insertAfter="Insert New">
         <ns:target>/reagent/update.view?schemaName=reagent&amp;queryName=Titrations&amp;selected=true</ns:target>
       </ns:item>
-      <ns:item text="Edit Fields" permission="ADMIN">
+      <ns:item text="Edit Fields" permission="ADMIN" insertPosition="end">
         <ns:onClick>
           LABKEY.requiresScript('/reagent/util.js', true, function () { editDomain('Titrations'); });
         </ns:onClick>
