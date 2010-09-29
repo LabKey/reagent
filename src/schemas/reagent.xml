@@ -216,7 +216,6 @@
       <ns:column columnName="Lsid">
         <ns:datatype>lsidtype</ns:datatype>
         <ns:isReadOnly>true</ns:isReadOnly>
-        <ns:isUserEditable>false</ns:isUserEditable>
         <ns:isHidden>true</ns:isHidden>
         <ns:isUnselectabe>true</ns:isUnselectabe>
         <ns:fk>
@@ -322,7 +321,6 @@
       <ns:column columnName="Lsid">
         <ns:datatype>lsidtype</ns:datatype>
         <ns:isReadOnly>true</ns:isReadOnly>
-        <ns:isUserEditable>false</ns:isUserEditable>
         <ns:isHidden>true</ns:isHidden>
         <ns:isUnselectabe>true</ns:isUnselectabe>
         <ns:fk>
@@ -426,7 +424,6 @@
       <ns:column columnName="Lsid">
         <ns:datatype>lsidtype</ns:datatype>
         <ns:isReadOnly>true</ns:isReadOnly>
-        <ns:isUserEditable>false</ns:isUserEditable>
         <ns:isHidden>true</ns:isHidden>
         <ns:isUnselectabe>true</ns:isUnselectabe>
         <ns:fk>
@@ -535,7 +532,6 @@
       <ns:column columnName="Lsid">
         <ns:datatype>lsidtype</ns:datatype>
         <ns:isReadOnly>true</ns:isReadOnly>
-        <ns:isUserEditable>false</ns:isUserEditable>
         <ns:isHidden>true</ns:isHidden>
         <ns:isUnselectabe>true</ns:isUnselectabe>
         <ns:fk>
