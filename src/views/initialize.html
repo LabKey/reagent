@@ -289,12 +289,24 @@
     for (var i = 0; i < len; i++)
     {
       var row = rows[i];
-      var props = {Name:"name", Description:"description", Aliases:"aliases", RowId:"rowid"};
+        
+      // normalize casing for both Postgres and SQLServer
+      var props = {name: "Name", description: "Description", aliases: "Aliases", rowid: ["RowId", "rowId"]};
       for (var p in props)
       {
-        var lower = props[p];
-        row[lower] = row[p] || row[lower];
-        delete row[p];
+        var synonyms = props[p];
+        if (!Ext.isArray(synonyms))
+          synonyms = [synonyms];
+
+        var value = row[p];
+        for (var j = 0; j < synonyms.length; j++)
+        {
+          var synonym = synonyms[j];
+          value = value || row[synonym];
+          delete row[synonym];
+        }
+        if (value)
+          row[p] = value;
       }
 
       map[row.name] = row;

@@ -61,15 +61,16 @@ function saveReagentSpecies(schemaName, queryName, initialValues, updatedRows, m
     for (var i = 0; i < updatedRows.length; i++)
     {
         var updatedRow = updatedRows[i];
-        var rowid = updatedRow.rowid || updatedRow.RowId;
+        var rowid = updatedRow.rowid || updatedRow.RowId || updatedRow.rowId;
 
         // delete the original values in the ReagentSpecies table if found
         for (var j = 0; j < initialValues.length; j++)
         {
             var initialValue = initialValues[j];
             var initialValueRowId = initialValue.rowid ? initialValue.rowid.value :
-                                    initialValue.RowId ? initialValue.RowId.value : -1;
-            if (initialValueRowId == rowid || initialValueRowId == rowid)
+                                    initialValue.RowId ? initialValue.RowId.value :
+                                    initialValue.rowId ? initialValue.rowId.value : -1;
+            if (initialValueRowId == rowid)
             {
                 var initialSpecies = initialValue["Species/RowId"].value;
                 for (var k = 0; k < initialSpecies.length; k++)
@@ -98,7 +99,12 @@ function saveReagentSpecies(schemaName, queryName, initialValues, updatedRows, m
     var commands = [];
     if (deleteCommand.rows.length > 0)
         commands.push(deleteCommand);
-    commands.push(insertCommand);
+    if (insertCommand.rows.length > 0)
+        commands.push(insertCommand);
+
+    // nothing to delete or insert
+    if (commands.length == 0)
+        successCb();
 
     LABKEY.Query.saveRows({
         commands: commands,
@@ -378,6 +384,7 @@ function augmentSpeciesCombo(field)
     field.disabled = false;
     field.displayField = "Name";
     field.valueField = "RowId";
+    field.allowBlank = true;
     field.store = {
         xtype: 'labkey-store',
         schemaName: 'reagent',

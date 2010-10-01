@@ -168,6 +168,11 @@
 
   <ns:table tableName="ReagentSpecies" tableDbType="TABLE">
     <ns:columns>
+      <ns:column columnName="Container">
+        <ns:isUserEditable>false</ns:isUserEditable>
+        <ns:datatype>entityid</ns:datatype>
+        <ns:isHidden>true</ns:isHidden>
+      </ns:column>
       <ns:column columnName="ReagentId">
         <ns:columnTitle>Reagent</ns:columnTitle>
         <ns:fk>
@@ -268,6 +273,7 @@
         <ns:datatype>int4</ns:datatype>
       </ns:column>
       <ns:column columnName="Species" wrappedColumnName="RowId">
+        <ns:nullable>true</ns:nullable>
         <ns:fk>
           <ns:fkDbSchema>reagent</ns:fkDbSchema>
           <ns:fkTable>ReagentSpecies</ns:fkTable>
