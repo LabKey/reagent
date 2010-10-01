@@ -34,27 +34,27 @@ ALTER TABLE reagent.ReagentSpecies ADD CONSTRAINT
 GO
 
 -- Clean up any data in a deleted Containers
-DELETE FROM reagent.Vials WHERE Container NOT IN (select entityid from core.Containers)
 DELETE FROM reagent.Titrations WHERE Container NOT IN (select entityid from core.Containers)
+DELETE FROM reagent.Vials WHERE Container NOT IN (select entityid from core.Containers)
 DELETE FROM reagent.Lots WHERE Container NOT IN (select entityid from core.Containers)
+DELETE FROM reagent.Manufacturers WHERE Container NOT IN (select entityid from core.Containers)
 DELETE FROM reagent.ReagentSpecies WHERE Container NOT IN (select entityid from core.Containers)
 DELETE FROM reagent.Species WHERE Container NOT IN (select entityid from core.Containers)
-DELETE FROM reagent.Manufacturers WHERE Container NOT IN (select entityid from core.Containers)
+DELETE FROM reagent.Reagents WHERE Container NOT IN (select entityid from core.Containers)
 DELETE FROM reagent.Labels WHERE Container NOT IN (select entityid from core.Containers)
 DELETE FROM reagent.Antigens WHERE Container NOT IN (select entityid from core.Containers)
-DELETE FROM reagent.Reagents WHERE Container NOT IN (select entityid from core.Containers)
 GO
 
 -- Add Container FKs
-ALTER TABLE reagent.Vials ADD CONSTRAINT FK_Vials_Container FOREIGN KEY (Container) REFERENCES core.Containers (EntityID)
 ALTER TABLE reagent.Titrations ADD CONSTRAINT FK_Titrations_Container FOREIGN KEY (Container) REFERENCES core.Containers (EntityID)
+ALTER TABLE reagent.Vials ADD CONSTRAINT FK_Vials_Container FOREIGN KEY (Container) REFERENCES core.Containers (EntityID)
 ALTER TABLE reagent.Lots ADD CONSTRAINT FK_Lots_Container FOREIGN KEY (Container) REFERENCES core.Containers (EntityID)
+ALTER TABLE reagent.Manufacturers ADD CONSTRAINT FK_Manufacturers_Container FOREIGN KEY (Container) REFERENCES core.Containers (EntityID)
 ALTER TABLE reagent.ReagentSpecies ADD CONSTRAINT FK_ReagentSpecies_Container FOREIGN KEY (Container) REFERENCES core.Containers (EntityID)
 ALTER TABLE reagent.Species ADD CONSTRAINT FK_Species_Container FOREIGN KEY (Container) REFERENCES core.Containers (EntityID)
-ALTER TABLE reagent.Manufacturers ADD CONSTRAINT FK_Manufacturers_Container FOREIGN KEY (Container) REFERENCES core.Containers (EntityID)
+ALTER TABLE reagent.Reagents ADD CONSTRAINT FK_Reagents_Container FOREIGN KEY (Container) REFERENCES core.Containers (EntityID)
 ALTER TABLE reagent.Labels ADD CONSTRAINT FK_Labels_Container FOREIGN KEY (Container) REFERENCES core.Containers (EntityID)
 ALTER TABLE reagent.Antigens ADD CONSTRAINT FK_Antigens_Container FOREIGN KEY (Container) REFERENCES core.Containers (EntityID)
-ALTER TABLE reagent.Reagents ADD CONSTRAINT FK_Reagents_Container FOREIGN KEY (Container) REFERENCES core.Containers (EntityID)
 GO
 
 -- Add LSID FKs
