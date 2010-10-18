@@ -274,6 +274,7 @@
       </ns:column>
       <ns:column columnName="Species" wrappedColumnName="RowId">
         <ns:nullable>true</ns:nullable>
+        <ns:isReadOnly>true</ns:isReadOnly>
         <ns:fk>
           <ns:fkDbSchema>reagent</ns:fkDbSchema>
           <ns:fkTable>ReagentSpecies</ns:fkTable>
