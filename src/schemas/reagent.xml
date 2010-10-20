@@ -222,6 +222,7 @@
         <ns:datatype>lsidtype</ns:datatype>
         <ns:isReadOnly>true</ns:isReadOnly>
         <ns:isHidden>true</ns:isHidden>
+        <ns:isUserEditable>false</ns:isUserEditable>
         <ns:isUnselectabe>true</ns:isUnselectabe>
         <ns:fk>
           <ns:fkColumnName>ObjectUri</ns:fkColumnName>
@@ -329,6 +330,7 @@
         <ns:datatype>lsidtype</ns:datatype>
         <ns:isReadOnly>true</ns:isReadOnly>
         <ns:isHidden>true</ns:isHidden>
+        <ns:isUserEditable>false</ns:isUserEditable>
         <ns:isUnselectabe>true</ns:isUnselectabe>
         <ns:fk>
           <ns:fkColumnName>ObjectUri</ns:fkColumnName>
@@ -432,6 +434,7 @@
         <ns:datatype>lsidtype</ns:datatype>
         <ns:isReadOnly>true</ns:isReadOnly>
         <ns:isHidden>true</ns:isHidden>
+        <ns:isUserEditable>false</ns:isUserEditable>
         <ns:isUnselectabe>true</ns:isUnselectabe>
         <ns:fk>
           <ns:fkColumnName>ObjectUri</ns:fkColumnName>
@@ -540,6 +543,7 @@
         <ns:datatype>lsidtype</ns:datatype>
         <ns:isReadOnly>true</ns:isReadOnly>
         <ns:isHidden>true</ns:isHidden>
+        <ns:isUserEditable>false</ns:isUserEditable>
         <ns:isUnselectabe>true</ns:isUnselectabe>
         <ns:fk>
           <ns:fkColumnName>ObjectUri</ns:fkColumnName>

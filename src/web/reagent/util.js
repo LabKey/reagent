@@ -8,10 +8,10 @@ var ColumnSets = {
     Labels: [ 'Name', 'Aliases', 'Description' ],
     Manufacturers: [ 'Name' ],
     Species: [ 'Name' ],
-    Reagents: [ 'AntigenId', 'LabelId', 'Clone', 'Species/RowId', 'Description' ],
-    Lots: [ 'ReagentId', 'ManufacturerId', 'CatalogNumber', 'LotNumber', 'Description' ],
-    Vials: [ 'LotId', 'OwnedBy', 'Location', 'Box', 'Row', 'Col', 'Used' ],
-    Titrations: [ 'LotId', 'PerformedBy', 'ExperimentId', 'Type', 'Result', 'Description' ],
+    Reagents: [ 'Antigen', 'Label', 'Clone', 'Species/RowId', 'Description' ],
+    Lots: [ 'Reagent', 'Manufacturer', 'CatalogNumber', 'LotNumber', 'Description' ],
+    Vials: [ 'Lot', 'OwnedBy', 'Location', 'Box', 'Row', 'Col', 'Used' ],
+    Titrations: [ 'Lot', 'PerformedBy', 'ExperimentId', 'Type', 'Result', 'Description' ],
 };
 
 var ExcludeColumnSets = {
@@ -450,7 +450,8 @@ function augmentTextCombo(field, queryName)
 
     field.xtype = 'combo';
     field.fieldLabel = field.name;
-    field.forceSelection = true;
+    // Don't restrict to values previously entered.
+    field.forceSelection = false;
     field.typeAhead = true;
     field.minChars = 0;
     field.mode = 'local';
@@ -504,7 +505,8 @@ function augmentUserCombo(field, queryName)
     
     field.xtype = 'combo';
     field.fieldLabel = field.name;
-    field.forceSelection = true;
+    // Don't restrict to values previously entered.
+    field.forceSelection = false;
     field.typeAhead = true;
     field.minChars = 0;
     field.mode = 'local';
