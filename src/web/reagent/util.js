@@ -7,10 +7,22 @@ var ColumnSets = {
     Antigens: [ 'Name', 'Aliases', 'Description' ],
     Labels: [ 'Name', 'Aliases', 'Description' ],
     Manufacturers: [ 'Name' ],
+    Species: [ 'Name' ],
     Reagents: [ 'AntigenId', 'LabelId', 'Clone', 'Species/RowId', 'Description' ],
     Lots: [ 'ReagentId', 'ManufacturerId', 'CatalogNumber', 'LotNumber', 'Description' ],
     Vials: [ 'LotId', 'OwnedBy', 'Location', 'Box', 'Row', 'Col', 'Used' ],
     Titrations: [ 'LotId', 'PerformedBy', 'ExperimentId', 'Type', 'Result', 'Description' ],
+};
+
+var ExcludeColumnSets = {
+    Antigens: [ 'Container' ],
+    Labels: [ 'Container' ],
+    Manufacturers: [ 'Container' ],
+    Species: [ 'Container' ],
+    Reagents: [ 'Species', 'Container', 'CreatedBy', 'Created', 'ModifiedBy', 'Modified', 'Lsid' ],
+    Lots: [ 'Container', 'CreatedBy', 'Created', 'ModifiedBy', 'Modified', 'Lsid' ],
+    Vials: [ 'Container', 'CreatedBy', 'Created', 'ModifiedBy', 'Modified', 'Lsid' ],
+    Titrations: [ 'Container', 'CreatedBy', 'Created', 'ModifiedBy', 'Modified', 'Lsid' ]
 };
 
 var srcURL = null;
@@ -169,6 +181,29 @@ function save(selected, updateRowId, schemaName, queryName, initialValues, value
     });
 }
 
+var ReagentFormPanel = Ext.extend(LABKEY.ext.FormPanel, {
+
+    // excludes some fields and any duplicates caused by adding '*' to the selected columns
+    initFieldDefaults : function (config) {
+        var allFields = ReagentFormPanel.superclass.initFieldDefaults.call(this, config);
+        var seen = {};
+        if (config.excludeItems)
+        {
+            var fields = [];
+            for (var i = 0; i < allFields.length; i++)
+            {
+                if (!(allFields[i].name in seen) && config.excludeItems.indexOf(allFields[i].name) == -1)
+                {
+                    seen[allFields[i].name] = true;
+                    fields.push(allFields[i]);
+                }
+            }
+            allFields = fields;
+        }
+        return allFields;
+    }
+});
+
 /**
  * Initializes the FormPanel.
  * @param selected {Boolean} true when updating multiple records that have been checked on the grid.
@@ -179,8 +214,6 @@ function save(selected, updateRowId, schemaName, queryName, initialValues, value
 function initForm(selected, updateRowId, schemaName, queryName)
 {
     initSrcURL(schemaName, queryName);
-
-    var columns = ColumnSets[queryName] || [];
 
     function createForm(data)
     {
@@ -245,13 +278,14 @@ function initForm(selected, updateRowId, schemaName, queryName)
             return c;
         }
 
-        var f = new LABKEY.ext.FormPanel({
+        var f = new ReagentFormPanel({
             id: 'reagentForm',
             border: false,
             bodyStyle:'padding:5px 5px',
             selectRowsResults: data,
             defaults: { width: 350 },
             //items: items,
+            excludeItems: ExcludeColumnSets[queryName] || [],
             addAllFields: true,
             lazyCreateStore: true,
             buttonAlign: 'left',
@@ -289,11 +323,14 @@ function initForm(selected, updateRowId, schemaName, queryName)
         filters.push(LABKEY.Filter.create('RowId', filterRowId));
     }
 
+    var columns = ColumnSets[queryName] || [];
+    columns.push("*");
+    
     LABKEY.Query.selectRows({
         requiredVersion: 9.1,
         schemaName: schemaName,
         queryName: queryName,
-        columns: columns.join(','),
+        columns: columns,
         filterArray: filters,
         showRows: selected ? "selected" : "all",
         successCallback: createForm,
