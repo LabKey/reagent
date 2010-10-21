@@ -166,7 +166,7 @@
     </ns:buttonBarOptions>
   </ns:table>
 
-  <ns:table tableName="ReagentSpecies" tableDbType="TABLE">
+  <ns:table tableName="ReagentSpecies" tableDbType="TABLE" hidden="true">
     <ns:columns>
       <ns:column columnName="Container">
         <ns:isUserEditable>false</ns:isUserEditable>
@@ -200,7 +200,7 @@
     </ns:columns>
   </ns:table>
 
-  <ns:table tableName="Reagents" tableDbType="TABLE">
+  <ns:table tableName="Reagents" tableDbType="TABLE" >
     <ns:pkColumnName>RowId</ns:pkColumnName>
     <ns:insertUrl>/reagent/insert.view?schemaName=reagent&amp;queryName=Reagents</ns:insertUrl>
     <ns:updateUrl>/reagent/update.view?schemaName=reagent&amp;queryName=Reagents&amp;RowId=${RowId}</ns:updateUrl>
