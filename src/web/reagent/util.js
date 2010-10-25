@@ -211,7 +211,7 @@ var ReagentFormPanel = Ext.extend(LABKEY.ext.FormPanel, {
  * @param schemaName
  * @param queryName
  */
-function initForm(selected, updateRowId, schemaName, queryName)
+function initForm(selected, updateRowId, schemaName, queryName, selectionKey)
 {
     initSrcURL(schemaName, queryName);
 
@@ -330,12 +330,14 @@ function initForm(selected, updateRowId, schemaName, queryName)
         requiredVersion: 9.1,
         schemaName: schemaName,
         queryName: queryName,
+        selectionKey: selectionKey,
         columns: columns,
         filterArray: filters,
         showRows: selected ? "selected" : "all",
         successCallback: createForm,
         errorCallback: function (errorInfo) {
-            alert(errorInfo);
+            var error = (errorInfo && errorInfo.exception) ? errorInfo.exception : "An error occurred";
+            Ext.fly("msgDiv").update("<span class='labkey-error'>" + Ext.util.Format.htmlEncode(error) + "</span>");
         }
     });
 }

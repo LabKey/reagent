@@ -54,7 +54,7 @@
     </ns:columns>
     <ns:buttonBarOptions includeStandardButtons="true">
       <ns:item text="Bulk Edit" requiresSelection="true" permission="UPDATE" insertAfter="Insert New">
-         <ns:target>/reagent/update.view?schemaName=reagent&amp;queryName=Antigens&amp;selected=true</ns:target>
+         <ns:target>/reagent/update.view?schemaName=reagent&amp;queryName=Antigens&amp;selected=true&amp;selectionKey=${selectionKey}</ns:target>
       </ns:item>
     </ns:buttonBarOptions>
   </ns:table>
@@ -95,7 +95,7 @@
     </ns:columns>
     <ns:buttonBarOptions includeStandardButtons="true">
       <ns:item text="Bulk Edit" requiresSelection="true" permission="UPDATE" insertAfter="Insert New">
-        <ns:target>/reagent/update.view?schemaName=reagent&amp;queryName=Labels&amp;selected=true</ns:target>
+        <ns:target>/reagent/update.view?schemaName=reagent&amp;queryName=Labels&amp;selected=true&amp;selectionKey=${selectionKey}</ns:target>
       </ns:item>
     </ns:buttonBarOptions>
   </ns:table>
@@ -128,7 +128,7 @@
     </ns:columns>
     <ns:buttonBarOptions includeStandardButtons="true">
       <ns:item text="Bulk Edit" requiresSelection="true" permission="UPDATE" insertAfter="Insert New">
-        <ns:target>/reagent/update.view?schemaName=reagent&amp;queryName=Manufacturers&amp;selected=true</ns:target>
+        <ns:target>/reagent/update.view?schemaName=reagent&amp;queryName=Manufacturers&amp;selected=true&amp;selectionKey=${selectionKey}</ns:target>
       </ns:item>
     </ns:buttonBarOptions>
   </ns:table>
@@ -161,7 +161,7 @@
     </ns:columns>
     <ns:buttonBarOptions includeStandardButtons="true">
       <ns:item text="Bulk Edit" requiresSelection="true" permission="UPDATE" insertAfter="Insert New">
-        <ns:target>/reagent/update.view?schemaName=reagent&amp;queryName=Manufacturers&amp;selected=true</ns:target>
+        <ns:target>/reagent/update.view?schemaName=reagent&amp;queryName=Manufacturers&amp;selected=true&amp;selectionKey=${selectionKey}</ns:target>
       </ns:item>
     </ns:buttonBarOptions>
   </ns:table>
@@ -296,7 +296,7 @@
     </ns:columns>
     <ns:buttonBarOptions includeStandardButtons="true">
       <ns:item text="Bulk Edit" requiresSelection="true" permission="UPDATE" insertAfter="Insert New">
-        <ns:target>/reagent/update.view?schemaName=reagent&amp;queryName=Reagents&amp;selected=true</ns:target>
+        <ns:target>/reagent/update.view?schemaName=reagent&amp;queryName=Reagents&amp;selected=true&amp;selectionKey=${selectionKey}</ns:target>
       </ns:item>
       <ns:item text="Edit Fields" permission="ADMIN" insertPosition="end">
         <ns:onClick>
@@ -403,7 +403,7 @@
     </ns:columns>
     <ns:buttonBarOptions includeStandardButtons="true">
       <ns:item text="Bulk Edit" requiresSelection="true" permission="UPDATE" insertAfter="Insert New">
-        <ns:target>/reagent/update.view?schemaName=reagent&amp;queryName=Lots&amp;selected=true</ns:target>
+        <ns:target>/reagent/update.view?schemaName=reagent&amp;queryName=Lots&amp;selected=true&amp;selectionKey=${selectionKey}</ns:target>
       </ns:item>
       <ns:item text="Edit Fields" permission="ADMIN" insertPosition="end">
         <ns:onClick>
@@ -513,7 +513,7 @@
     </ns:columns>
     <ns:buttonBarOptions includeStandardButtons="true">
       <ns:item text="Bulk Edit" requiresSelection="true" permission="UPDATE" insertAfter="Insert New">
-        <ns:target>/reagent/update.view?schemaName=reagent&amp;queryName=Vials&amp;selected=true</ns:target>
+        <ns:target>/reagent/update.view?schemaName=reagent&amp;queryName=Vials&amp;selected=true&amp;selectionKey=${selectionKey}</ns:target>
       </ns:item>
       <ns:item text="Edit Fields" permission="ADMIN" insertPosition="end">
         <ns:onClick>
@@ -619,7 +619,7 @@
     </ns:columns>
     <ns:buttonBarOptions includeStandardButtons="true">
       <ns:item text="Bulk Edit" requiresSelection="true" permission="UPDATE" insertAfter="Insert New">
-        <ns:target>/reagent/update.view?schemaName=reagent&amp;queryName=Titrations&amp;selected=true</ns:target>
+        <ns:target>/reagent/update.view?schemaName=reagent&amp;queryName=Titrations&amp;selected=true&amp;selectionKey=${selectionKey}</ns:target>
       </ns:item>
       <ns:item text="Edit Fields" permission="ADMIN" insertPosition="end">
         <ns:onClick>

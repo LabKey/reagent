@@ -10,6 +10,7 @@ LABKEY.requiresScript('reagent/util.js');
   var schemaName = LABKEY.ActionURL.getParameter('schemaName');
   var queryName = LABKEY.ActionURL.getParameter('queryName') || LABKEY.ActionURL.getParameter('query.queryName');
   var selected = LABKEY.ActionURL.getParameter('selected') == "true";
+  var selectionKey = selected ? LABKEY.ActionURL.getParameter('selectionKey') : undefined;
   var rowId = selected ? 0 : LABKEY.ActionURL.getParameter('RowId');
 
   if (queryName)
@@ -29,7 +30,7 @@ LABKEY.requiresScript('reagent/util.js');
     }
 
     Ext.onReady(function () {
-        initForm(selected, rowId, schemaName, queryName);
+        initForm(selected, rowId, schemaName, queryName, selectionKey);
     });
   }
 
