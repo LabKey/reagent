@@ -2,12 +2,12 @@
 /build.xml -text
 /module.properties -text
 /module.template.xml -text
-src/schemas/dbscripts/postgresql/reagent-0.00-0.10.sql -text
+src/schemas/dbscripts/postgresql/obsolete/reagent-0.00-0.10.sql -text
+src/schemas/dbscripts/postgresql/obsolete/reagent-0.10-0.20.sql -text
+src/schemas/dbscripts/postgresql/obsolete/reagent-0.20-0.30.sql -text
+src/schemas/dbscripts/postgresql/obsolete/reagent-0.30-0.40.sql -text
+src/schemas/dbscripts/postgresql/obsolete/reagent-0.40-0.50.sql -text
 src/schemas/dbscripts/postgresql/reagent-0.00-10.10.sql -text
-src/schemas/dbscripts/postgresql/reagent-0.10-0.20.sql -text
-src/schemas/dbscripts/postgresql/reagent-0.20-0.30.sql -text
-src/schemas/dbscripts/postgresql/reagent-0.30-0.40.sql -text
-src/schemas/dbscripts/postgresql/reagent-0.40-0.50.sql -text
 src/schemas/dbscripts/postgresql/reagent-10.20-10.21.sql -text
 src/schemas/dbscripts/postgresql/reagent-10.20-10.29.sql -text
 src/schemas/dbscripts/postgresql/reagent-10.22-10.23.sql -text
