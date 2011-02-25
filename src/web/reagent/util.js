@@ -11,7 +11,7 @@ var ColumnSets = {
     Reagents: [ 'Antigen', 'Label', 'Clone', 'Species/RowId', 'Description' ],
     Lots: [ 'Reagent', 'Manufacturer', 'CatalogNumber', 'LotNumber', 'Description' ],
     Vials: [ 'Lot', 'OwnedBy', 'Location', 'Box', 'Row', 'Col', 'Used' ],
-    Titrations: [ 'Lot', 'PerformedBy', 'ExperimentId', 'Type', 'Result', 'Description' ],
+    Titrations: [ 'Lot', 'PerformedBy', 'ExperimentId', 'Type', 'Result', 'Description' ]
 };
 
 var ExcludeColumnSets = {
