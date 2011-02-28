@@ -1,0 +1,69 @@
+Welcome to the reagent database.
+<h2>Setup:</h2>
+<p>
+The first time the module is installed and on every upgrade, you should run
+the <a href="initialize.view">initialize</a> script to populate the database.
+<p>
+After initializing, add or remove
+<a href="<%=contextPath%>/query<%=containerPath%>/executeQuery.view?schemaName=reagent&query.queryName=Manufacturers">Manufacturers</a>,
+<a href="<%=contextPath%>/query<%=containerPath%>/executeQuery.view?schemaName=reagent&query.queryName=Antigens">Antigens</a>,
+<a href="<%=contextPath%>/query<%=containerPath%>/executeQuery.view?schemaName=reagent&query.queryName=Labels">Labels</a>, and
+<a href="<%=contextPath%>/query<%=containerPath%>/executeQuery.view?schemaName=reagent&query.queryName=Species">Species</a>
+specific for your site.  Once you have added Manufactuers, Antigens, Labels, and Species, you can add new
+<a href="<%=contextPath%>/query<%=containerPath%>/executeQuery.view?schemaName=reagent&query.queryName=Reagents">Reagents</a>
+and
+<a href="<%=contextPath%>/query<%=containerPath%>/executeQuery.view?schemaName=reagent&query.queryName=Lots">Lots</a>.  After adding Lots,
+you may want to add a
+<a href="<%=contextPath%>/query<%=containerPath%>/executeQuery.view?schemaName=reagent&query.queryName=Titrations">Titration</a>
+experiment and
+<a href="<%=contextPath%>/query<%=containerPath%>/executeQuery.view?schemaName=reagent&query.queryName=Vials">Vials</a>
+to the Lot.
+
+<h2>Summary of tables:</h2>
+<p>
+<div id='reagent-queries'></div>
+
+<script type='text/javascript'>
+function renderQueries(info)
+{
+  var html = "";
+  if (!info || !info.queries)
+  {
+    html = "<span class='labkey-error'>Error getting the list of tables and descriptions.</span>";
+  }
+  else
+  {
+    html = "<dl>";
+    var queries = {};
+    for (var i = 0; i < info.queries.length; i++)
+    {
+      var query = info.queries[i];
+      queries[query.name] = query;
+    }
+
+    var names = [ "Lots", "Vials", "Titrations", "Reagents", "Manufacturers", "Antigens", "Labels", "Species" ];
+    for (var i = 0; i < names.length; i++)
+    {
+      var name = names[i];
+      var query = queries[name];
+      if (query && query.name && query.description)
+      {
+        html += "<dt><a href='<%=contextPath%>/query<%=containerPath%>/executeQuery.view?schemaName=reagent&query.queryName=" + query.name + "'>" + query.name + "</a></dt>";
+        html += "<dd>" + query.description + "</dd>";
+      }
+    }
+
+    html += "</dl>";
+  }
+  document.getElementById('reagent-queries').innerHTML = html;
+}
+
+Ext.onReady(function () {
+  LABKEY.Query.getQueries({
+    schemaName: 'reagent',
+    includeUserQueries: false,
+    includeColumns: false,
+    success: renderQueries
+  });
+});
+</script>

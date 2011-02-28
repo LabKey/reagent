@@ -19,6 +19,7 @@
 <ns:tables xsi:schemaLocation="http://cpas.fhcrc.org/data/xml ..\..\..\..\schemas\tableInfo.xsd" xmlns:ns="http://labkey.org/data/xml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
   <ns:table tableName="Antigens" tableDbType="TABLE">
+    <ns:description>Contains Antigens in this folder.</ns:description>
     <ns:pkColumnName>RowId</ns:pkColumnName>
     <ns:insertUrl>/reagent/insert.view?schemaName=reagent&amp;queryName=Antigens</ns:insertUrl>
     <ns:updateUrl>/reagent/update.view?schemaName=reagent&amp;queryName=Antigens&amp;RowId=${RowId}</ns:updateUrl>
@@ -60,6 +61,7 @@
   </ns:table>
 
   <ns:table tableName="Labels" tableDbType="TABLE">
+    <ns:description>Contains Labels in this folder.</ns:description>
     <ns:pkColumnName>RowId</ns:pkColumnName>
     <ns:insertUrl>/reagent/insert.view?schemaName=reagent&amp;queryName=Labels</ns:insertUrl>
     <ns:updateUrl>/reagent/update.view?schemaName=reagent&amp;queryName=Labels&amp;RowId=${RowId}</ns:updateUrl>
@@ -101,6 +103,7 @@
   </ns:table>
 
   <ns:table tableName="Manufacturers" tableDbType="TABLE">
+    <ns:description>Contains Manufacturers in this folder.</ns:description>
     <ns:pkColumnName>RowId</ns:pkColumnName>
     <ns:insertUrl>/reagent/insert.view?schemaName=reagent&amp;queryName=Manufacturers</ns:insertUrl>
     <ns:updateUrl>/reagent/update.view?schemaName=reagent&amp;queryName=Manufacturers&amp;RowId=${RowId}</ns:updateUrl>
@@ -134,6 +137,7 @@
   </ns:table>
 
   <ns:table tableName="Species" tableDbType="TABLE">
+    <ns:description>Contains Species names in this folder.</ns:description>
     <ns:pkColumnName>RowId</ns:pkColumnName>
     <ns:insertUrl>/reagent/insert.view?schemaName=reagent&amp;queryName=Species</ns:insertUrl>
     <ns:updateUrl>/reagent/update.view?schemaName=reagent&amp;queryName=Species&amp;RowId=${RowId}</ns:updateUrl>
@@ -201,6 +205,7 @@
   </ns:table>
 
   <ns:table tableName="Reagents" tableDbType="TABLE" >
+    <ns:description>Contains Reagents composed of Antigens, Labels, a clone number, and list of reactive Species.</ns:description>
     <ns:pkColumnName>RowId</ns:pkColumnName>
     <ns:insertUrl>/reagent/insert.view?schemaName=reagent&amp;queryName=Reagents</ns:insertUrl>
     <ns:updateUrl>/reagent/update.view?schemaName=reagent&amp;queryName=Reagents&amp;RowId=${RowId}</ns:updateUrl>
@@ -307,6 +312,7 @@
   </ns:table>
 
   <ns:table tableName="Lots" tableDbType="TABLE">
+    <ns:description>Contains Lots composed of a Reagent, Manufacturer, and other lot information.</ns:description>
     <ns:insertUrl>/reagent/insert.view?schemaName=reagent&amp;queryName=Lots</ns:insertUrl>
     <ns:updateUrl>/reagent/update.view?schemaName=reagent&amp;queryName=Lots&amp;RowId=${RowId}</ns:updateUrl>
     <!--<ns:tableUrl>/reagent/details.view?</ns:tableUrl>-->
@@ -414,6 +420,7 @@
   </ns:table>
 
   <ns:table tableName="Vials" tableDbType="TABLE">
+    <ns:description>Contains Vials associated with a Lot and storage location information.</ns:description>
     <ns:insertUrl>/reagent/insert.view?schemaName=reagent&amp;queryName=Vials</ns:insertUrl>
     <ns:updateUrl>/reagent/update.view?schemaName=reagent&amp;queryName=Vials&amp;RowId=${RowId}</ns:updateUrl>
     <ns:tableUrl>/reagent/vial.view?RowId=${RowId}</ns:tableUrl>
@@ -524,6 +531,7 @@
   </ns:table>
 
   <ns:table tableName="Titrations" tableDbType="TABLE">
+    <ns:description>Contains Titration experiment information associated with a Lot.</ns:description>
     <ns:insertUrl>/reagent/insert.view?schemaName=reagent&amp;queryName=Titrations</ns:insertUrl>
     <ns:updateUrl>/reagent/update.view?schemaName=reagent&amp;queryName=Titrations&amp;RowId=${RowId}</ns:updateUrl>
     <ns:pkColumnName>RowId</ns:pkColumnName>
