@@ -18,7 +18,7 @@
 
   <target name="module.properties" depends="init">
     <mkdir dir="${module.src.dir}/config"/>
-    <copy tofile="${module.src.dir}/config/module.properties" file="${project.root}/server/module.template.properties" overwrite="true">
+    <copy tofile="${module.src.dir}/config/module.xml" file="${basedir}/module.template.xml" overwrite="true">
       <filterset begintoken="@@" endtoken="@@">
         <filtersfile file="${basedir}/module.properties" />
         <filtersfile file="${project.root}/build/svn.properties"/>
