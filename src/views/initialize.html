@@ -1,4 +1,7 @@
-<div id='loading'>Loading initial data...</div>
+<div>Click the 'Initialize' button to populate the reagent database with some generic data and to configure some views.</div>
+<a class="labkey-button" onclick="initialize(); return false;" href="#"><span>Initialize</span></a>
+<br>
+<div id='loading'></div>
 <script type="text/javascript">
   var loadingDiv = Ext.get('loading');
 
@@ -391,7 +394,7 @@
           LABKEY.Query.insertRows({
             schemaName: 'reagent',
             queryName: tableName,
-            rowDataArray: rows,
+            rows: rows,
             successCallback: function (results, options) {
               _log('Inserted ' + tableName + ': ' + results.rowsAffected + ' rows');
               var rowMap = createLookupMap(results.rows);
@@ -401,7 +404,7 @@
                 insertReagents();
             },
             failureCallback: function (errorInfo, options) {
-              _err('Failed to insert ' + tableName + ': ' + exception);
+              _err('Failed to insert ' + tableName + ': ' + errorInfo.exception);
               queryCount--;
               errors++;
             }
@@ -435,7 +438,7 @@
             LABKEY.Query.updateRows({
               schemaName: 'reagent',
               queryName: tableName,
-              rowDataArray: modifiedRows,
+              rows: modifiedRows,
               successCallback: function (results, options) {
                 _log('Updated ' + tableName + ': ' + results.rowsAffected + ' rows');
                 var rowMap = createLookupMap(results.rows);
@@ -445,7 +448,7 @@
                   insertReagents();
               },
               failureCallback: function (errorInfo, options) {
-                _err('Failed to update ' + tableName + ': ' + exception);
+                _err('Failed to update ' + tableName + ': ' + errorInfo.exception);
                 queryCount--;
                 errors++;
               }
@@ -455,7 +458,7 @@
         }
       },
       failureCallback: function (errorInfo, options) {
-        _err('Failed to query ' + tableName +': ' + exception);
+        _err('Failed to query ' + tableName +': ' + errorInfo.exception);
         queryCount--;
         errors++;
       }
@@ -561,14 +564,17 @@
     );
   }
 
-  insertTable('Antigens', antigens, true, function (lookupMap) { antigenMap = lookupMap; });
-  insertTable('Labels', labels, true, function (lookupMap) { labelMap = lookupMap; });
-  insertTable('Manufacturers', manufacturers, true, function (lookupMap) { manufacturerMap = lookupMap; });
-  insertTable('Species', species, true, function (lookupMap) { speciesMap = lookupMap; });
+  function initialize()
+  {
+      insertTable('Antigens', antigens, true, function (lookupMap) { antigenMap = lookupMap; });
+      insertTable('Labels', labels, true, function (lookupMap) { labelMap = lookupMap; });
+      insertTable('Manufacturers', manufacturers, true, function (lookupMap) { manufacturerMap = lookupMap; });
+      insertTable('Species', species, true, function (lookupMap) { speciesMap = lookupMap; });
 
-  createCustomView('Lots', null, true, true, ['LotNumber', 'ManufacturerId', 'CatalogNumber', 'ReagentId/AntigenId', 'ReagentId/LabelId', 'ReagentId/Clone', 'Description'], null, true);
-  createCustomView('Vials', null, true, true, ['OwnedBy', 'Location', 'Box', 'Row', 'Col', 'Used', 'LotId/LotNumber', 'LotId/ManufacturerId', 'LotId/ReagentId/AntigenId', 'LotId/ReagentId/LabelId', 'LotId/ReagentId/Clone'], null, true);
-  createCustomView('Titrations', null, true, true, ['ExperimentId', 'PerformedBy', 'Type', 'Result', 'Description', 'LotId/LotNumber', 'LotId/ManufacturerId', 'LotId/ReagentId/AntigenId', 'LotId/ReagentId/LabelId', 'LotId/ReagentId/Clone'], null, true);
-  createCustomView('Reagents', null, true, true, ['AntigenId', 'LabelId', 'Clone', 'Species/Name', 'Description'], null, true);
-
+      createCustomView('Lots', null, true, true, ['LotNumber', 'ManufacturerId', 'CatalogNumber', 'ReagentId/AntigenId', 'ReagentId/LabelId', 'ReagentId/Clone', 'Description'], null, true);
+      createCustomView('Vials', null, true, true, ['OwnedBy', 'Location', 'Box', 'Row', 'Col', 'Used', 'LotId/LotNumber', 'LotId/ManufacturerId', 'LotId/ReagentId/AntigenId', 'LotId/ReagentId/LabelId', 'LotId/ReagentId/Clone'], null, true);
+      createCustomView('Titrations', null, true, true, ['ExperimentId', 'PerformedBy', 'Type', 'Result', 'Description', 'LotId/LotNumber', 'LotId/ManufacturerId', 'LotId/ReagentId/AntigenId', 'LotId/ReagentId/LabelId', 'LotId/ReagentId/Clone'], null, true);
+      createCustomView('Reagents', null, true, true, ['AntigenId', 'LabelId', 'Clone', 'Species/Name', 'Description'], null, true);
+  }
 </script>
+

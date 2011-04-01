@@ -21,6 +21,8 @@ src/views/begin.html -text
 src/views/initialize.html -text
 src/views/insert.html -text
 src/views/lot.html -text
+src/views/reagent.html -text
+src/views/titration.html -text
 src/views/update.html -text
 src/views/vial.html -text
 src/web/reagent/util.js -text

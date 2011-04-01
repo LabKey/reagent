@@ -15,16 +15,24 @@ if (nav && nav.dom)
         <td><span id="Reagent"></span></td>
     </tr>
     <tr>
-        <td class="labkey-form-label">Owned By:</td>
-        <td><span id="OwnedBy"></span></td>
+        <td class="labkey-form-label">Experiment Id:</td>
+        <td><span id="ExperimentId"></span></td>
     </tr>
     <tr>
-        <td class="labkey-form-label">Location:</td>
-        <td><span id="Location"></span></td>
+        <td class="labkey-form-label">Performed By:</td>
+        <td><span id="PerformedBy"></span></td>
     </tr>
     <tr>
-        <td class="labkey-form-label">Used:</td>
-        <td><span id="Used"></span></td>
+        <td class="labkey-form-label">Type:</td>
+        <td><span id="Type"></span></td>
+    </tr>
+    <tr>
+        <td class="labkey-form-label">Result:</td>
+        <td><span id="Result"></span></td>
+    </tr>
+    <tr>
+        <td class="labkey-form-label">Description:</td>
+        <td><span id="Description"></span></td>
     </tr>
 </table>
 <p>
@@ -34,20 +42,20 @@ if (nav && nav.dom)
 <a id="viewLot" class="labkey-button">View Lot</a>
 
 <p>
-<div id="vialTitrations"></div>
+<div id="titrationVials"></div>
 
 <script type="text/javascript">
     var rowId = LABKEY.ActionURL.getParameter('RowId');
 
     document.getElementById('edit').href = LABKEY.ActionURL.buildURL('reagent', 'update.view', LABKEY.ActionURL.getContainer(), {
         schemaName: 'reagent',
-        queryName: 'Vials',
+        queryName: 'Titrations',
         RowId: rowId
     });
 
     document.getElementById('viewGrid').href = LABKEY.ActionURL.buildURL('query', 'executeQuery.view', LABKEY.ActionURL.getContainer(), {
         schemaName: 'reagent',
-        "query.queryName": 'Vials'
+        "query.queryName": 'Titrations'
     });
 
     Ext.onReady(function () {
@@ -65,7 +73,7 @@ if (nav && nav.dom)
 
         LABKEY.Query.selectRows({
             schemaName: 'reagent',
-            queryName: 'Vials',
+            queryName: 'Titrations',
             filterArray: [ LABKEY.Filter.create("RowId", rowId) ],
             columns: [
                 "LotId",
@@ -73,7 +81,7 @@ if (nav && nav.dom)
                 "LotId/ReagentId",
                 "LotId/ReagentId/AntigenId/Name", "LotId/ReagentId/LabelId/Name", "LotId/ReagentId/Clone",
                 "LotId/ManufacturerId/Name",
-                "Location", "Box", "Row", "Col", "Used"
+                "ExperimentId", "PerformedBy", "Type", "Result", "Description"
             ].join(","),
             successCallback: function (data) {
                 if (data.rows.length == 1)
@@ -97,28 +105,20 @@ if (nav && nav.dom)
                     document.getElementById('viewReagent').href = reagentDetailsURL;
                     Ext.get('Reagent').update("<a href='" + reagentDetailsURL + "'>" + reagentText + "</a>");
 
-                    var loc = [ ];
-                    if (row['Location'])
-                        loc.push(row['Location']);
-                    if (row['Box'])
-                        loc.push("<span class='labkey-form-label'>Box:</span> " + row['Box']);
-                    if (row['Row'])
-                        loc.push("<span class='labkey-form-label'>Row:</span> " + row['Row']);
-                    if (row['Col'])
-                        loc.push("<span class='labkey-form-label'>Col:</span> " + row['Col']);
+                    Ext.get('ExperimentId').update(row['ExperimentId']);
+                    Ext.get('PerformedBy').update(row['PerformedBy']);
+                    Ext.get('Type').update(row['Type']);
+                    Ext.get('Result').update(row['Result']);
+                    Ext.get('Description').update(row['Description']);
 
-                    Ext.get('Location').update(loc.join("&nbsp;&nbsp;"));
-                    Ext.get('OwnedBy').update(row['OwnedBy']);
-                    Ext.get('Used').update(row['Used'] === 'true' ? "true" : "false");
-
-
-                    var titrationsGrid = new LABKEY.QueryWebPart({
-                        renderTo: 'vialTitrations',
+                    
+                    var vialsGrid = new LABKEY.QueryWebPart({
+                        renderTo: 'titrationVials',
                         schemaName: 'reagent',
-                        queryName: 'Titrations',
+                        queryName: 'Vials',
                         allowChooseQuery: false,
-                        columns: [ "ExperimentId", "PerformedBy", "Type", "Result", "Description" ].join(","),
-                        filters: [ LABKEY.Filter.create("LotId", row["LotId"]) ]
+                        columns: [ "Location", "Box", "Row", "Col", "Used" ].join(","),
+                        filters: [ LABKEY.Filter.create("LotId", row['LotId']) ]
                     });
                 }
             }

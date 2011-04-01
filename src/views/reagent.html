@@ -1,0 +1,73 @@
+<script type="text/javascript">
+    LABKEY.requiresScript('reagent/util.js');
+    var nav = Ext.get('labkey-nav-trail-current-page');
+    if (nav && nav.dom)
+        nav.dom.style["display"] = "none";
+</script>
+
+<table id="reagentDetails">
+    <tr>
+        <td class="labkey-form-label">Antigen:</td>
+        <td><span id="Antigen"></span></td>
+    </tr>
+    <tr>
+        <td class="labkey-form-label">Label:</td>
+        <td><span id="Label"></span></td>
+    </tr>
+    <tr>
+        <td class="labkey-form-label">Clone:</td>
+        <td><span id="Clone"></span></td>
+    </tr>
+</table>
+<p>
+<a id="edit" class="labkey-button">Edit</a>
+<a id="viewGrid" class="labkey-button">View Grid</a>
+
+<p>
+<div id="reagentLots"></div>
+
+<script type="text/javascript">
+    var rowId = LABKEY.ActionURL.getParameter('RowId');
+
+    document.getElementById('edit').href = LABKEY.ActionURL.buildURL('reagent', 'update.view', LABKEY.ActionURL.getContainer(), {
+        schemaName: 'reagent',
+        queryName: 'Reagents',
+        RowId: rowId
+    });
+
+    document.getElementById('viewGrid').href = LABKEY.ActionURL.buildURL('query', 'executeQuery.view', LABKEY.ActionURL.getContainer(), {
+        schemaName: 'reagent',
+        "query.queryName": 'Reagents'
+    });
+
+    Ext.onReady(function () {
+        LABKEY.Query.selectRows({
+            schemaName: 'reagent',
+            queryName: 'Reagents',
+            filterArray: [ LABKEY.Filter.create("RowId", rowId) ],
+            columns: [
+                "AntigenId/Name", "LabelId/Name", "Clone"
+            ].join(","),
+            successCallback: function (data) {
+                if (data.rows.length == 1)
+                {
+                    var row = data.rows[0];
+                    Ext.get('Antigen').update(row["AntigenId/Name"]);
+                    Ext.get('Label').update(row["LabelId/Name"]);
+                    Ext.get('Clone').update(row.Clone);
+                }
+            }
+        });
+
+
+        var lotsGrid = new LABKEY.QueryWebPart({
+            renderTo: 'reagentLots',
+            schemaName: 'reagent',
+            queryName: 'Lots',
+            allowChooseQuery: false,
+            columns: ["ManufacturerId/Name", "CatalogNumber", "LotNumber", "Description"].join(","),
+            filters: [ LABKEY.Filter.create("ReagentId", rowId) ]
+        });
+
+    });
+</script>

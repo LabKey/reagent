@@ -163,7 +163,7 @@ function save(selected, updateRowId, schemaName, queryName, initialValues, value
     fn({
         schemaName: schemaName,
         queryName: queryName,
-        rowDataArray: values,
+        rows: values,
         successCallback: function (data) {
             if (data.rows.length != values.length)
             {
@@ -229,6 +229,29 @@ function initForm(selected, updateRowId, schemaName, queryName, selectionKey)
         {
             // clear out any values if we're creating an empty insert form.
             data.rows = [];
+
+            // If there are any equals query filters on the URL, use them as initial values.
+            // When looking at the Lot details page and the user clicks "Insert New" to add Titration
+            // the parameter "query.LotId~eq=2" should be on the URL and can be used as a default value.
+            var params = LABKEY.ActionURL.getParameters();
+            for (var key in params)
+            {
+                // starts with "query." ends with "~eq"
+                if (key.indexOf("query.") == 0 && key.indexOf("~eq") == key.length - "~eq".length)
+                {
+                    var col = key.substring("query.".length, key.length - "~eq".length);
+                    var val = params[key];
+
+                    if (data.rows.length == 0)
+                    {
+                        // Add the dummy row
+                        data.rows[0] = {};
+                        data.rowCount = 1;
+                    }
+
+                    data.rows[0][col] = { value: val };
+                }
+            }
         }
 
         function augmentItem(c)
@@ -368,7 +391,7 @@ function augmentReagentCombo(field)
 function augmentLotCombo(field)
 {
     field.store.columns = ['RowId', 'LotNumber', 'CatalogNumber', 'ManufacturerId/Name', 'ReagentId/AntigenId/Name', 'ReagentId/LabelId/Name', 'ReagentId/Clone'].join(',');
-    field.store.sort = 'ReagentId/AntigenId/Name,ReagentId/LabelId/Name,ReagentId/Clone,ManufacturerId';
+    field.store.sort = 'LotNumber,ReagentId/AntigenId/Name,ReagentId/LabelId/Name,ReagentId/Clone,ManufacturerId';
     field.store.listeners = {
         load: function (store, records, options) {
             var len = records.length;

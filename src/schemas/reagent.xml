@@ -209,7 +209,7 @@
     <ns:pkColumnName>RowId</ns:pkColumnName>
     <ns:insertUrl>/reagent/insert.view?schemaName=reagent&amp;queryName=Reagents</ns:insertUrl>
     <ns:updateUrl>/reagent/update.view?schemaName=reagent&amp;queryName=Reagents&amp;RowId=${RowId}</ns:updateUrl>
-    <!--<ns:tableUrl>/reagent/reagent.view?RowId=${RowId}</ns:tableUrl>-->
+    <ns:tableUrl>/reagent/reagent.view?RowId=${RowId}</ns:tableUrl>
     <!-- so details link shows up on RowId column not LotNumber -->
     <ns:titleColumn>RowId</ns:titleColumn>
     <ns:columns>
@@ -315,7 +315,6 @@
     <ns:description>Contains Lots composed of a Reagent, Manufacturer, and other lot information.</ns:description>
     <ns:insertUrl>/reagent/insert.view?schemaName=reagent&amp;queryName=Lots</ns:insertUrl>
     <ns:updateUrl>/reagent/update.view?schemaName=reagent&amp;queryName=Lots&amp;RowId=${RowId}</ns:updateUrl>
-    <!--<ns:tableUrl>/reagent/details.view?</ns:tableUrl>-->
     <ns:tableUrl>/reagent/lot.view?RowId=${RowId}</ns:tableUrl>
     <ns:pkColumnName>RowId</ns:pkColumnName>
     <!-- so details link shows up on RowId column not LotNumber -->
@@ -534,6 +533,7 @@
     <ns:description>Contains Titration experiment information associated with a Lot.</ns:description>
     <ns:insertUrl>/reagent/insert.view?schemaName=reagent&amp;queryName=Titrations</ns:insertUrl>
     <ns:updateUrl>/reagent/update.view?schemaName=reagent&amp;queryName=Titrations&amp;RowId=${RowId}</ns:updateUrl>
+    <ns:tableUrl>/reagent/titration.view?RowId=${RowId}</ns:tableUrl>
     <ns:pkColumnName>RowId</ns:pkColumnName>
     <ns:titleColumn>RowId</ns:titleColumn>
     <ns:columns>
