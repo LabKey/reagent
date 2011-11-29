@@ -25,6 +25,8 @@ var ExcludeColumnSets = {
     Titrations: [ 'Container', 'CreatedBy', 'Created', 'ModifiedBy', 'Modified', 'Lsid' ]
 };
 
+Ext.QuickTips.init();
+
 var srcURL = null;
 
 function initSrcURL(schemaName, queryName)
@@ -306,7 +308,7 @@ function initForm(selected, updateRowId, schemaName, queryName, selectionKey)
             border: false,
             bodyStyle:'padding:5px 5px',
             selectRowsResults: data,
-            defaults: { width: 350 },
+            defaults: { width: 350, msgTarget: "qtip" },
             //items: items,
             excludeItems: ExcludeColumnSets[queryName] || [],
             addAllFields: true,
