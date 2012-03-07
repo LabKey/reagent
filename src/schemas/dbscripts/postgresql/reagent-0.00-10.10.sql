@@ -18,7 +18,8 @@
 
 CREATE SCHEMA reagent;
 
-CREATE TABLE reagent.Antigens (
+CREATE TABLE reagent.Antigens
+(
     RowId SERIAL NOT NULL,
     Container ENTITYID NOT NULL,
     Name VARCHAR(255) NOT NULL,
@@ -28,7 +29,8 @@ CREATE TABLE reagent.Antigens (
     CONSTRAINT UQ_Antigens UNIQUE (Container, Name)
 );
 
-CREATE TABLE reagent.Labels (
+CREATE TABLE reagent.Labels
+(
     RowId SERIAL NOT NULL,
     Container ENTITYID NOT NULL,
     Name VARCHAR(255) NOT NULL,
@@ -38,7 +40,8 @@ CREATE TABLE reagent.Labels (
     CONSTRAINT UQ_Labels UNIQUE (Container, Name)
 );
 
-CREATE TABLE reagent.Manufacturers (
+CREATE TABLE reagent.Manufacturers
+(
     RowId SERIAL NOT NULL,
     Container ENTITYID NOT NULL,
     Name VARCHAR(255) NOT NULL,
@@ -47,7 +50,8 @@ CREATE TABLE reagent.Manufacturers (
     CONSTRAINT UQ_Manufacturers UNIQUE (Container, Name)
 );
 
-CREATE TABLE reagent.Reagents (
+CREATE TABLE reagent.Reagents
+(
     RowId SERIAL NOT NULL,
     Container ENTITYID NOT NULL,
     CreatedBy USERID NOT NULL,
@@ -65,7 +69,8 @@ CREATE TABLE reagent.Reagents (
     CONSTRAINT UQ_Reagents UNIQUE (Container, AntigenId, LabelId, Clone)
 );
 
-CREATE TABLE reagent.Lots (
+CREATE TABLE reagent.Lots
+(
     RowId SERIAL NOT NULL,
     Container ENTITYID NOT NULL,
     CreatedBy USERID NOT NULL,
@@ -84,7 +89,8 @@ CREATE TABLE reagent.Lots (
     CONSTRAINT UQ_Lots UNIQUE (Container, ManufacturerId, LotNumber, CatalogNumber, ReagentId)
 );
 
-CREATE TABLE reagent.Vials (
+CREATE TABLE reagent.Vials
+(
     RowId SERIAL NOT NULL,
     Container ENTITYID NOT NULL,
     CreatedBy USERID NOT NULL,
@@ -124,7 +130,8 @@ ALTER TABLE reagent.Reagents ADD COLUMN Description TEXT null;
 ALTER TABLE reagent.Lots ADD COLUMN Expiration TIMESTAMP null;
 ALTER TABLE reagent.Lots ADD COLUMN Description TEXT null;
 
-CREATE TABLE reagent.Titrations (
+CREATE TABLE reagent.Titrations
+(
     RowId SERIAL NOT NULL,
     Container ENTITYID NOT NULL,
     CreatedBy USERID NOT NULL,

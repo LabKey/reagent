@@ -18,25 +18,25 @@
 
 CREATE TABLE reagent.Species
 (
-  RowId SERIAL NOT NULL,
-  Container ENTITYID NOT NULL,
-  Name VARCHAR(255) NOT NULL,
+    RowId SERIAL NOT NULL,
+    Container ENTITYID NOT NULL,
+    Name VARCHAR(255) NOT NULL,
 
-  CONSTRAINT PK_Species PRIMARY KEY (RowId),
-  CONSTRAINT UQ_Species UNIQUE (Container, Name)
+    CONSTRAINT PK_Species PRIMARY KEY (RowId),
+    CONSTRAINT UQ_Species UNIQUE (Container, Name)
 );
 
 
 CREATE TABLE reagent.ReagentSpecies
 (
-  ReagentId INT4 NOT NULL,
-  SpeciesId INT4 NOT NULL,
+    ReagentId INT4 NOT NULL,
+    SpeciesId INT4 NOT NULL,
 
-  CONSTRAINT PK_ReagentSpecies PRIMARY KEY (ReagentId, SpeciesId),
-  CONSTRAINT FK_ReagentSpecies_Reagent FOREIGN KEY (ReagentId)
-      REFERENCES reagent.reagents (rowid),
-  CONSTRAINT FK_ReagentSpecies_Species FOREIGN KEY (SpeciesId)
-      REFERENCES reagent.Species (RowId)
+    CONSTRAINT PK_ReagentSpecies PRIMARY KEY (ReagentId, SpeciesId),
+    CONSTRAINT FK_ReagentSpecies_Reagent FOREIGN KEY (ReagentId)
+        REFERENCES reagent.reagents (rowid),
+    CONSTRAINT FK_ReagentSpecies_Species FOREIGN KEY (SpeciesId)
+        REFERENCES reagent.Species (RowId)
 );
 
 CREATE INDEX IX_ReagentSpecies ON reagent.ReagentSpecies USING btree (ReagentId);

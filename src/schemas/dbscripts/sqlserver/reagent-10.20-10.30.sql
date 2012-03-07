@@ -14,164 +14,150 @@
  * limitations under the License.
  */
 
-/* reagent-10.21-10.22.sql */
+CREATE SCHEMA reagent;
+GO
 
-/*
- * This script, reagent-10.21-10.22.sql, is the same as reagent-0.00-10.21.sql.
- * The 0.00-10.21 script was checked in after the module version was already set to 10.21 so was never run on some machines.
- * This script should add the reagent schema to those machines.
- */
+CREATE TABLE reagent.Antigens
+(
+    RowId INT IDENTITY(1,1) NOT NULL,
+    Container EntityID NOT NULL,
+    Name VARCHAR(255) NOT NULL,
+    Description TEXT,
 
-/* reagent-0.00-0.10.sql */
+    CONSTRAINT PK_Antigens PRIMARY KEY (RowId),
+    CONSTRAINT UQ_Antigens UNIQUE (Container, Name)
+)
 
-IF NOT EXISTS (SELECT * from sysusers WHERE name = 'reagent')
-BEGIN
-  EXEC sp_addapprole 'reagent', 'password'
+CREATE TABLE reagent.Labels
+(
+    RowId INT IDENTITY(1,1) NOT NULL,
+    Container EntityID NOT NULL,
+    Name VARCHAR(255) NOT NULL,
+    Description TEXT,
 
-  CREATE TABLE reagent.Antigens (
-      RowId int IDENTITY(1,1) NOT NULL,
-      Container EntityID NOT NULL,
-      Name VARCHAR(255) NOT NULL,
-      Description TEXT,
+    CONSTRAINT PK_Labels PRIMARY KEY (RowId),
+    CONSTRAINT UQ_Labels UNIQUE (Container, Name)
+)
 
-      CONSTRAINT PK_Antigens PRIMARY KEY (RowId),
-      CONSTRAINT UQ_Antigens UNIQUE (Container, Name)
-  )
+CREATE TABLE reagent.Manufacturers
+(
+    RowId INT IDENTITY(1,1) NOT NULL,
+    Container EntityID NOT NULL,
+    Name VARCHAR(255) NOT NULL,
 
-  CREATE TABLE reagent.Labels (
-      RowId int IDENTITY(1,1) NOT NULL,
-      Container EntityID NOT NULL,
-      Name VARCHAR(255) NOT NULL,
-      Description TEXT,
+    CONSTRAINT PK_Manufacturers PRIMARY KEY (RowId),
+    CONSTRAINT UQ_Manufacturers UNIQUE (Container, Name)
+)
 
-      CONSTRAINT PK_Labels PRIMARY KEY (RowId),
-      CONSTRAINT UQ_Labels UNIQUE (Container, Name)
-  )
+CREATE TABLE reagent.Reagents
+(
+    RowId INT IDENTITY(1,1) NOT NULL,
+    Container EntityID NOT NULL,
+    CreatedBy USERID NOT NULL,
+    Created DATETIME NOT NULL,
+    ModifiedBy USERID NOT NULL,
+    Modified DATETIME NOT NULL,
 
-  CREATE TABLE reagent.Manufacturers (
-      RowId int IDENTITY(1,1) NOT NULL,
-      Container EntityID NOT NULL,
-      Name VARCHAR(255) NOT NULL,
+    AntigenId INT NOT NULL,
+    LabelId INT NOT NULL,
+    Clone VARCHAR(255),
 
-      CONSTRAINT PK_Manufacturers PRIMARY KEY (RowId),
-      CONSTRAINT UQ_Manufacturers UNIQUE (Container, Name)
-  )
+    CONSTRAINT PK_Reagents PRIMARY KEY (RowId),
+    CONSTRAINT FK_Reagents_Antigens FOREIGN KEY (AntigenId) REFERENCES reagent.Antigens(RowId),
+    CONSTRAINT FK_Reagents_Labels FOREIGN KEY (LabelId) REFERENCES reagent.Labels(RowId),
+    CONSTRAINT UQ_Reagents UNIQUE (Container, AntigenId, LabelId, Clone)
+)
 
-  CREATE TABLE reagent.Reagents (
-      RowId int IDENTITY(1,1) NOT NULL,
-      Container EntityID NOT NULL,
-      CreatedBy USERID NOT NULL,
-      Created DATETIME NOT NULL,
-      ModifiedBy USERID NOT NULL,
-      Modified DATETIME NOT NULL,
+CREATE TABLE reagent.Lots
+(
+    RowId INT IDENTITY(1,1) NOT NULL,
+    Container EntityID NOT NULL,
+    CreatedBy USERID NOT NULL,
+    Created DATETIME NOT NULL,
+    ModifiedBy USERID NOT NULL,
+    Modified DATETIME NOT NULL,
 
-      AntigenId INT NOT NULL,
-      LabelId INT NOT NULL,
-      Clone VARCHAR(255),
+    ReagentId INT NOT NULL,
+    ManufacturerId INT NOT NULL,
+    LotNumber VARCHAR(255) NOT NULL,
+    CatalogNumber VARCHAR(255),
 
-      CONSTRAINT PK_Reagents PRIMARY KEY (RowId),
-      CONSTRAINT FK_Reagents_Antigens FOREIGN KEY (AntigenId) REFERENCES reagent.Antigens(RowId),
-      CONSTRAINT FK_Reagents_Labels FOREIGN KEY (LabelId) REFERENCES reagent.Labels(RowId),
-      CONSTRAINT UQ_Reagents UNIQUE (Container, AntigenId, LabelId, Clone)
-  )
+    CONSTRAINT PK_Lots PRIMARY KEY (RowId),
+    CONSTRAINT FK_Lots_Reagents FOREIGN KEY (ReagentId) REFERENCES reagent.Reagents(RowId),
+    CONSTRAINT FK_Lots_Manufacturers FOREIGN KEY (ManufacturerId) REFERENCES reagent.Manufacturers(RowId),
+    CONSTRAINT UQ_Lots UNIQUE (Container, ManufacturerId, LotNumber, CatalogNumber, ReagentId)
+)
 
-  CREATE TABLE reagent.Lots (
-      RowId int IDENTITY(1,1) NOT NULL,
-      Container EntityID NOT NULL,
-      CreatedBy USERID NOT NULL,
-      Created DATETIME NOT NULL,
-      ModifiedBy USERID NOT NULL,
-      Modified DATETIME NOT NULL,
+CREATE TABLE reagent.Vials
+(
+    RowId INT IDENTITY(1,1) NOT NULL,
+    Container EntityID NOT NULL,
+    CreatedBy USERID NOT NULL,
+    Created DATETIME NOT NULL,
+    ModifiedBy USERID NOT NULL,
+    Modified DATETIME NOT NULL,
 
-      ReagentId INT NOT NULL,
-      ManufacturerId INT NOT NULL,
-      LotNumber VARCHAR(255) NOT NULL,
-      CatalogNumber VARCHAR(255),
+    LotId INT NOT NULL,
+    Freezer VARCHAR(255),
+    Box VARCHAR(30),
+    Row INT,
+    Col INT,
+    Used BIT NOT NULL,
 
-      CONSTRAINT PK_Lots PRIMARY KEY (RowId),
-      CONSTRAINT FK_Lots_Reagents FOREIGN KEY (ReagentId) REFERENCES reagent.Reagents(RowId),
-      CONSTRAINT FK_Lots_Manufacturers FOREIGN KEY (ManufacturerId) REFERENCES reagent.Manufacturers(RowId),
-      CONSTRAINT UQ_Lots UNIQUE (Container, ManufacturerId, LotNumber, CatalogNumber, ReagentId)
-  )
+    CONSTRAINT PK_Vials PRIMARY KEY (RowId),
+    CONSTRAINT FK_Vials_Lots FOREIGN KEY (LotId) REFERENCES reagent.Lots(RowId)
+)
 
-  CREATE TABLE reagent.Vials (
-      RowId int IDENTITY(1,1) NOT NULL,
-      Container EntityID NOT NULL,
-      CreatedBy USERID NOT NULL,
-      Created DATETIME NOT NULL,
-      ModifiedBy USERID NOT NULL,
-      Modified DATETIME NOT NULL,
+EXEC sp_rename 'reagent.Vials.Freezer', 'Location', 'COLUMN'
+ALTER TABLE reagent.Vials ALTER COLUMN [Row] VARCHAR(30)
+ALTER TABLE reagent.Vials ALTER COLUMN Col VARCHAR(30)
+ALTER TABLE reagent.Vials ADD Owner VARCHAR(30) NULL
 
-      LotId INT NOT NULL,
-      Freezer VARCHAR(255),
-      Box VARCHAR(30),
-      Row INT,
-      Col INT,
-      Used BIT NOT NULL,
+ALTER TABLE reagent.Antigens ADD Aliases VARCHAR(255) NULL
+ALTER TABLE reagent.Labels ADD Aliases VARCHAR(255) NULL
 
-      CONSTRAINT PK_Vials PRIMARY KEY (RowId),
-      CONSTRAINT FK_Vials_Lots FOREIGN KEY (LotId) REFERENCES reagent.Lots(RowId)
-  )
+ALTER TABLE Reagent.Reagents ADD Description TEXT NULL
 
-  /* reagent-0.10-0.20.sql */
+ALTER TABLE Reagent.Lots ADD Expiration DATETIME NULL
+ALTER TABLE Reagent.Lots ADD Description TEXT NULL
 
-  /* Empty */
+CREATE TABLE reagent.Titrations
+(
+    RowId INT IDENTITY(1,1) NOT NULL,
+    Container EntityID NOT NULL,
+    CreatedBy USERID NOT NULL,
+    Created DATETIME NOT NULL,
+    ModifiedBy USERID NOT NULL,
+    Modified DATETIME NOT NULL,
 
-  /* reagent-0.20-0.30.sql */
+    LotId INT NOT NULL,
+    ExperimentId VARCHAR(255),
+    Owner VARCHAR(30),
+    Type VARCHAR(30) NOT NULL, -- 'Surface', 'Intercellular', '0 Degree'
+    Result VARCHAR(30) NOT NULL,
+    Description TEXT,
 
-  EXEC sp_rename 'reagent.Vials.Freezer', 'Location', 'COLUMN'
-  ALTER TABLE reagent.Vials ALTER COLUMN [Row] VARCHAR(30)
-  ALTER TABLE reagent.Vials ALTER COLUMN Col VARCHAR(30)
-  ALTER TABLE reagent.Vials ADD Owner VARCHAR(30) NULL
+    CONSTRAINT PK_Titrations PRIMARY KEY (RowId),
+    CONSTRAINT FK_Titrations_Lots FOREIGN KEY (LotId) REFERENCES reagent.Lots(RowId)
+)
 
-  ALTER TABLE reagent.Antigens ADD Aliases VARCHAR(255) NULL
-  ALTER TABLE reagent.Labels ADD Aliases VARCHAR(255) NULL
+EXEC sp_rename 'reagent.Vials.Owner', 'OwnedBy', 'COLUMN'
+EXEC sp_rename 'reagent.Titrations.Owner', 'PerformedBy', 'COLUMN'
 
-  /* reagent-0.30-0.40.sql */
+/* reagent-10.20-10.21.sql */
 
-  ALTER TABLE Reagent.Reagents ADD Description TEXT NULL
-
-  ALTER TABLE Reagent.Lots ADD Expiration DATETIME NULL
-  ALTER TABLE Reagent.Lots ADD Description TEXT NULL
-
-  CREATE TABLE reagent.Titrations (
-      RowId int IDENTITY(1,1) NOT NULL,
-      Container EntityID NOT NULL,
-      CreatedBy USERID NOT NULL,
-      Created DATETIME NOT NULL,
-      ModifiedBy USERID NOT NULL,
-      Modified DATETIME NOT NULL,
-
-      LotId INT NOT NULL,
-      ExperimentId VARCHAR(255),
-      Owner VARCHAR(30),
-      Type VARCHAR(30) NOT NULL, -- 'Surface', 'Intercellular', '0 Degree'
-      Result VARCHAR(30) NOT NULL,
-      Description TEXT,
-
-      CONSTRAINT PK_Titrations PRIMARY KEY (RowId),
-      CONSTRAINT FK_Titrations_Lots FOREIGN KEY (LotId) REFERENCES reagent.Lots(RowId)
-  )
-
-  /* reagent-0.40-0.50.sql */
-
-  EXEC sp_rename 'reagent.Vials.Owner', 'OwnedBy', 'COLUMN'
-  EXEC sp_rename 'reagent.Titrations.Owner', 'PerformedBy', 'COLUMN'
-
-  /* reagent-10.20-10.21.sql */
-
-  CREATE TABLE reagent.Species
-  (
-    RowId int IDENTITY(1,1) NOT NULL,
+CREATE TABLE reagent.Species
+(
+    RowId INT IDENTITY(1,1) NOT NULL,
     Container EntityID NOT NULL,
     Name VARCHAR(255) NOT NULL,
 
     CONSTRAINT PK_Species PRIMARY KEY (RowId),
     CONSTRAINT UQ_Species UNIQUE (Container, Name)
-  )
+)
 
-  CREATE TABLE reagent.ReagentSpecies
-  (
+CREATE TABLE reagent.ReagentSpecies
+(
     ReagentId INT NOT NULL,
     SpeciesId INT NOT NULL,
 
@@ -180,11 +166,9 @@ BEGIN
         REFERENCES reagent.reagents (rowid),
     CONSTRAINT FK_ReagentSpecies_Species FOREIGN KEY (SpeciesId)
         REFERENCES reagent.Species (RowId)
-  )
+)
 
-  CREATE INDEX IX_ReagentSpecies ON reagent.ReagentSpecies (ReagentId)
-
-END
+CREATE INDEX IX_ReagentSpecies ON reagent.ReagentSpecies (ReagentId)
 
 /* reagent-10.22-10.23.sql */
 
