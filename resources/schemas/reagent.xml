@@ -228,7 +228,7 @@
         <ns:isReadOnly>true</ns:isReadOnly>
         <ns:isHidden>true</ns:isHidden>
         <ns:isUserEditable>false</ns:isUserEditable>
-        <ns:isUnselectabe>true</ns:isUnselectabe>
+        <ns:isUnselectable>true</ns:isUnselectable>
         <ns:fk>
           <ns:fkColumnName>ObjectUri</ns:fkColumnName>
           <ns:fkTable>Object</ns:fkTable>
@@ -336,7 +336,7 @@
         <ns:isReadOnly>true</ns:isReadOnly>
         <ns:isHidden>true</ns:isHidden>
         <ns:isUserEditable>false</ns:isUserEditable>
-        <ns:isUnselectabe>true</ns:isUnselectabe>
+        <ns:isUnselectable>true</ns:isUnselectable>
         <ns:fk>
           <ns:fkColumnName>ObjectUri</ns:fkColumnName>
           <ns:fkTable>Object</ns:fkTable>
@@ -441,7 +441,7 @@
         <ns:isReadOnly>true</ns:isReadOnly>
         <ns:isHidden>true</ns:isHidden>
         <ns:isUserEditable>false</ns:isUserEditable>
-        <ns:isUnselectabe>true</ns:isUnselectabe>
+        <ns:isUnselectable>true</ns:isUnselectable>
         <ns:fk>
           <ns:fkColumnName>ObjectUri</ns:fkColumnName>
           <ns:fkTable>Object</ns:fkTable>
@@ -552,7 +552,7 @@
         <ns:isReadOnly>true</ns:isReadOnly>
         <ns:isHidden>true</ns:isHidden>
         <ns:isUserEditable>false</ns:isUserEditable>
-        <ns:isUnselectabe>true</ns:isUnselectabe>
+        <ns:isUnselectable>true</ns:isUnselectable>
         <ns:fk>
           <ns:fkColumnName>ObjectUri</ns:fkColumnName>
           <ns:fkTable>Object</ns:fkTable>
