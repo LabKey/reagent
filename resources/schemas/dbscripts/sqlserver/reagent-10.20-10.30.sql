@@ -199,17 +199,6 @@ ALTER TABLE reagent.ReagentSpecies ADD CONSTRAINT
 	ON DELETE CASCADE
 GO
 
--- Clean up any data in a deleted Containers
-DELETE FROM reagent.Titrations WHERE Container NOT IN (select entityid from core.Containers)
-DELETE FROM reagent.Vials WHERE Container NOT IN (select entityid from core.Containers)
-DELETE FROM reagent.Lots WHERE Container NOT IN (select entityid from core.Containers)
-DELETE FROM reagent.Manufacturers WHERE Container NOT IN (select entityid from core.Containers)
-DELETE FROM reagent.ReagentSpecies WHERE Container NOT IN (select entityid from core.Containers)
-DELETE FROM reagent.Species WHERE Container NOT IN (select entityid from core.Containers)
-DELETE FROM reagent.Reagents WHERE Container NOT IN (select entityid from core.Containers)
-DELETE FROM reagent.Labels WHERE Container NOT IN (select entityid from core.Containers)
-DELETE FROM reagent.Antigens WHERE Container NOT IN (select entityid from core.Containers)
-GO
 
 -- Add Container FKs
 ALTER TABLE reagent.Titrations ADD CONSTRAINT FK_Titrations_Container FOREIGN KEY (Container) REFERENCES core.Containers (EntityID)
