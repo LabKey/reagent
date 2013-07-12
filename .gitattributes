@@ -13,13 +13,13 @@ resources/schemas/dbscripts/postgresql/obsolete/reagent-10.22-10.23.sql -text
 resources/schemas/dbscripts/postgresql/obsolete/reagent-10.23-10.24.sql -text
 resources/schemas/dbscripts/postgresql/reagent-0.00-10.30.sql -text
 resources/schemas/dbscripts/postgresql/reagent-12.30-13.10.sql -text
-resources/schemas/dbscripts/postgresql/reagent-13.10-13.11.sql -text
+resources/schemas/dbscripts/postgresql/reagent-13.10-13.20.sql -text
 resources/schemas/dbscripts/sqlserver/obsolete/reagent-10.21-10.22.sql -text
 resources/schemas/dbscripts/sqlserver/obsolete/reagent-10.22-10.23.sql -text
 resources/schemas/dbscripts/sqlserver/obsolete/reagent-10.23-10.24.sql -text
 resources/schemas/dbscripts/sqlserver/reagent-10.20-10.30.sql -text
 resources/schemas/dbscripts/sqlserver/reagent-12.30-13.10.sql -text
-resources/schemas/dbscripts/sqlserver/reagent-13.10-13.11.sql -text
+resources/schemas/dbscripts/sqlserver/reagent-13.10-13.20.sql -text
 resources/schemas/reagent.xml -text
 resources/views/begin.html -text
 resources/views/initialize.html -text
