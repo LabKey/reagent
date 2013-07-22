@@ -1,5 +1,4 @@
 * text=auto !eol
-/build.xml -text
 /module.properties -text
 resources/schemas/dbscripts/postgresql/obsolete/reagent-0.00-0.10.sql -text
 resources/schemas/dbscripts/postgresql/obsolete/reagent-0.00-10.10.sql -text
