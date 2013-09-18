@@ -35,6 +35,18 @@
         <ns:isKeyField>true</ns:isKeyField>
         <ns:isHidden>true</ns:isHidden>
       </ns:column>
+      <ns:column columnName="Lsid">
+        <ns:datatype>lsidtype</ns:datatype>
+        <ns:isReadOnly>true</ns:isReadOnly>
+        <ns:isHidden>true</ns:isHidden>
+        <ns:isUserEditable>false</ns:isUserEditable>
+        <ns:isUnselectable>true</ns:isUnselectable>
+        <ns:fk>
+          <ns:fkColumnName>ObjectUri</ns:fkColumnName>
+          <ns:fkTable>Object</ns:fkTable>
+          <ns:fkDbSchema>exp</ns:fkDbSchema>
+        </ns:fk>
+      </ns:column>
       <ns:column columnName="Container">
         <ns:isUserEditable>false</ns:isUserEditable>
         <ns:datatype>entityid</ns:datatype>
@@ -57,6 +69,11 @@
       <ns:item text="Bulk Edit" requiresSelection="true" permission="UPDATE" insertAfter="Insert New">
          <ns:target>/reagent/update.view?schemaName=reagent&amp;queryName=Antigens&amp;selected=true&amp;selectionKey=${selectionKey}</ns:target>
       </ns:item>
+      <ns:item text="Edit Fields" permission="ADMIN" insertPosition="end">
+        <ns:onClick>
+          LABKEY.requiresScript('/reagent/util.js', true, function () { editDomain('Antigens'); });
+        </ns:onClick>
+      </ns:item>
     </ns:buttonBarOptions>
   </ns:table>
 
@@ -76,6 +93,18 @@
         <ns:isReadOnly>true</ns:isReadOnly>
         <ns:isKeyField>true</ns:isKeyField>
         <ns:isHidden>true</ns:isHidden>
+      </ns:column>
+      <ns:column columnName="Lsid">
+        <ns:datatype>lsidtype</ns:datatype>
+        <ns:isReadOnly>true</ns:isReadOnly>
+        <ns:isHidden>true</ns:isHidden>
+        <ns:isUserEditable>false</ns:isUserEditable>
+        <ns:isUnselectable>true</ns:isUnselectable>
+        <ns:fk>
+          <ns:fkColumnName>ObjectUri</ns:fkColumnName>
+          <ns:fkTable>Object</ns:fkTable>
+          <ns:fkDbSchema>exp</ns:fkDbSchema>
+        </ns:fk>
       </ns:column>
       <ns:column columnName="Container">
         <ns:isUserEditable>false</ns:isUserEditable>
@@ -99,6 +128,11 @@
       <ns:item text="Bulk Edit" requiresSelection="true" permission="UPDATE" insertAfter="Insert New">
         <ns:target>/reagent/update.view?schemaName=reagent&amp;queryName=Labels&amp;selected=true&amp;selectionKey=${selectionKey}</ns:target>
       </ns:item>
+      <ns:item text="Edit Fields" permission="ADMIN" insertPosition="end">
+        <ns:onClick>
+          LABKEY.requiresScript('/reagent/util.js', true, function () { editDomain('Labels'); });
+        </ns:onClick>
+      </ns:item>
     </ns:buttonBarOptions>
   </ns:table>
 
@@ -119,6 +153,18 @@
         <ns:isKeyField>true</ns:isKeyField>
         <ns:isHidden>true</ns:isHidden>
       </ns:column>
+      <ns:column columnName="Lsid">
+        <ns:datatype>lsidtype</ns:datatype>
+        <ns:isReadOnly>true</ns:isReadOnly>
+        <ns:isHidden>true</ns:isHidden>
+        <ns:isUserEditable>false</ns:isUserEditable>
+        <ns:isUnselectable>true</ns:isUnselectable>
+        <ns:fk>
+          <ns:fkColumnName>ObjectUri</ns:fkColumnName>
+          <ns:fkTable>Object</ns:fkTable>
+          <ns:fkDbSchema>exp</ns:fkDbSchema>
+        </ns:fk>
+      </ns:column>
       <ns:column columnName="Container">
         <ns:isUserEditable>false</ns:isUserEditable>
         <ns:datatype>entityid</ns:datatype>
@@ -132,6 +178,11 @@
     <ns:buttonBarOptions includeStandardButtons="true">
       <ns:item text="Bulk Edit" requiresSelection="true" permission="UPDATE" insertAfter="Insert New">
         <ns:target>/reagent/update.view?schemaName=reagent&amp;queryName=Manufacturers&amp;selected=true&amp;selectionKey=${selectionKey}</ns:target>
+      </ns:item>
+      <ns:item text="Edit Fields" permission="ADMIN" insertPosition="end">
+        <ns:onClick>
+          LABKEY.requiresScript('/reagent/util.js', true, function () { editDomain('Manufacturers'); });
+        </ns:onClick>
       </ns:item>
     </ns:buttonBarOptions>
   </ns:table>
@@ -153,6 +204,18 @@
         <ns:isKeyField>true</ns:isKeyField>
         <ns:isHidden>true</ns:isHidden>
       </ns:column>
+      <ns:column columnName="Lsid">
+        <ns:datatype>lsidtype</ns:datatype>
+        <ns:isReadOnly>true</ns:isReadOnly>
+        <ns:isHidden>true</ns:isHidden>
+        <ns:isUserEditable>false</ns:isUserEditable>
+        <ns:isUnselectable>true</ns:isUnselectable>
+        <ns:fk>
+          <ns:fkColumnName>ObjectUri</ns:fkColumnName>
+          <ns:fkTable>Object</ns:fkTable>
+          <ns:fkDbSchema>exp</ns:fkDbSchema>
+        </ns:fk>
+      </ns:column>
       <ns:column columnName="Container">
         <ns:isUserEditable>false</ns:isUserEditable>
         <ns:datatype>entityid</ns:datatype>
@@ -166,6 +229,11 @@
     <ns:buttonBarOptions includeStandardButtons="true">
       <ns:item text="Bulk Edit" requiresSelection="true" permission="UPDATE" insertAfter="Insert New">
         <ns:target>/reagent/update.view?schemaName=reagent&amp;queryName=Manufacturers&amp;selected=true&amp;selectionKey=${selectionKey}</ns:target>
+      </ns:item>
+      <ns:item text="Edit Fields" permission="ADMIN" insertPosition="end">
+        <ns:onClick>
+          LABKEY.requiresScript('/reagent/util.js', true, function () { editDomain('Species'); });
+        </ns:onClick>
       </ns:item>
     </ns:buttonBarOptions>
   </ns:table>
