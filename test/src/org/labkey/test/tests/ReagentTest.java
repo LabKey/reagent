@@ -15,7 +15,6 @@
  */
 package org.labkey.test.tests;
 
-import org.junit.Assert;
 import org.junit.experimental.categories.Category;
 import org.labkey.test.BaseWebDriverTest;
 import org.labkey.test.Locator;
@@ -24,6 +23,8 @@ import org.labkey.test.categories.BVT;
 import org.labkey.test.util.PortalHelper;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.interactions.Actions;
+
+import static org.junit.Assert.*;
 
 /**
  * User: kevink
@@ -95,7 +96,7 @@ public class ReagentTest extends BaseWebDriverTest
         click(Locator.xpath("//input[@name='LabelId']/../img"));
         setFormElement(Locator.xpath("//input[@name='LabelId']/../input[contains(@class, 'x-form-field')]"), "Alexa");
         int alexaLabels = getElementCount(Locator.tag("div").withClass("x-combo-list-item").notHidden().containing("Alexa"));
-        Assert.assertEquals("Expected to find 5 Alexa labels", 5, alexaLabels);
+        assertEquals("Expected to find 5 Alexa labels", 5, alexaLabels);
 
         Actions builder = new Actions(getDriver());
         builder.sendKeys(Keys.ARROW_DOWN, Keys.ARROW_DOWN).build().perform();
