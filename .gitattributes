@@ -34,3 +34,4 @@ resources/views/update.html -text
 resources/views/vial.html -text
 resources/web/reagent/util.js -text
 test/src/org/labkey/test/tests/ReagentTest.java -text
+test/test_reagent.iml -text
