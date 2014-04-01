@@ -15,6 +15,7 @@
  */
 package org.labkey.test.tests;
 
+import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.labkey.test.BaseWebDriverTest;
 import org.labkey.test.Locator;
@@ -26,11 +27,6 @@ import org.openqa.selenium.interactions.Actions;
 
 import static org.junit.Assert.*;
 
-/**
- * User: kevink
- * Date: Sep 13, 2010
- * Time: 1:41:34 PM
- */
 @Category(BVT.class)
 public class ReagentTest extends BaseWebDriverTest
 {
@@ -55,8 +51,8 @@ public class ReagentTest extends BaseWebDriverTest
         deleteProject(getProjectName(), afterTest);
     }
 
-    @Override
-    protected void doTestSteps() throws Exception
+    @Test
+    public void testSteps()
     {
         createProject();
         _testInsert();
