@@ -25,6 +25,8 @@ import org.labkey.test.util.PortalHelper;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.interactions.Actions;
 
+import java.util.Arrays;
+
 import static org.junit.Assert.*;
 
 @Category(BVT.class)
@@ -34,9 +36,9 @@ public class ReagentTest extends BaseWebDriverTest
     protected static final String FOLDER_NAME = "ReagentFolder";
 
     @Override
-    public String getAssociatedModuleDirectory()
+    public java.util.List<String> getAssociatedModules()
     {
-        return "server/customModules/reagent";
+        return Arrays.asList("reagent");
     }
 
     @Override
