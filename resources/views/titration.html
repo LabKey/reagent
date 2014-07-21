@@ -1,10 +1,3 @@
-<script type="text/javascript">
-LABKEY.requiresScript('reagent/util.js');
-var nav = Ext.get('labkey-nav-trail-current-page');
-if (nav && nav.dom)
-    nav.dom.style["display"] = "none";
-</script>
-
 <table id="vialDetails">
     <tr>
         <td class="labkey-form-label">Lot:</td>
@@ -59,17 +52,10 @@ if (nav && nav.dom)
     });
 
     Ext.onReady(function () {
-        /*
-        var url = LABKEY.ActionURL.buildURL('query', 'detailsQueryRow', LABKEY.ActionURL.getContainer(), {
-            schemaName: 'reagent',
-            "query.queryName": "Vials",
-            RowId: rowId,
-            _print: true
-        });
-        Ext.get('vialDetails').getUpdater().update({
-            url: url
-        });
-        */
+
+        var nav = Ext.get('labkey-nav-trail-current-page');
+        if (nav && nav.dom)
+            nav.dom.style["display"] = "none";
 
         LABKEY.Query.selectRows({
             schemaName: 'reagent',

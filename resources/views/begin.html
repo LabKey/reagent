@@ -58,12 +58,10 @@ function renderQueries(info)
   document.getElementById('reagent-queries').innerHTML = html;
 }
 
-Ext.onReady(function () {
   LABKEY.Query.getQueries({
     schemaName: 'reagent',
     includeUserQueries: false,
     includeColumns: false,
     success: renderQueries
   });
-});
 </script>

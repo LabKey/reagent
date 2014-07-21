@@ -3,8 +3,6 @@
 <br>
 <div id='loading'></div>
 <script type="text/javascript">
-  var loadingDiv = Ext.get('loading');
-
   var antigenMap = null;
   var antigens = [
     { name: 'AVDLSHFLK' },
@@ -298,7 +296,7 @@
       for (var p in props)
       {
         var synonyms = props[p];
-        if (!Ext.isArray(synonyms))
+        if (!Ext4.isArray(synonyms))
           synonyms = [synonyms];
 
         var value = row[p];
@@ -317,7 +315,7 @@
     return map;
   }
 
-  // Like Ext.applyIf() but returns true if the object has changed.
+  // Like Ext4.applyIf() but returns true if the object has changed.
   function applyIf(o, c)
   {
     var modified = false;
@@ -334,12 +332,12 @@
 
   function _log(msg)
   {
-    loadingDiv.insertHtml('beforeEnd', '<br><span>' + msg + '</span>');
+      Ext4.get('loading').insertHtml('beforeEnd', '<br><span>' + msg + '</span>');
   }
 
   function _err(msg)
   {
-    loadingDiv.insertHtml('beforeEnd', '<br><span class="labkey-error">' + msg + '</span>');
+      Ext4.get('loading').insertHtml('beforeEnd', '<br><span class="labkey-error">' + msg + '</span>');
   }
 
   function insertReagents() {
@@ -495,7 +493,7 @@
     if (viewName)
       params.viewName = viewName;
 
-    Ext.Ajax.request({
+    Ext4.Ajax.request({
       url: LABKEY.ActionURL.buildURL('query', 'deleteView'),
       method: 'POST',
       params: params,
@@ -564,17 +562,18 @@
     );
   }
 
-  function initialize()
-  {
-      insertTable('Antigens', antigens, true, function (lookupMap) { antigenMap = lookupMap; });
-      insertTable('Labels', labels, true, function (lookupMap) { labelMap = lookupMap; });
-      insertTable('Manufacturers', manufacturers, true, function (lookupMap) { manufacturerMap = lookupMap; });
-      insertTable('Species', species, true, function (lookupMap) { speciesMap = lookupMap; });
+  var initialize = function() {
+      Ext4.onReady(function() {
+          insertTable('Antigens', antigens, true, function (lookupMap) { antigenMap = lookupMap; });
+          insertTable('Labels', labels, true, function (lookupMap) { labelMap = lookupMap; });
+          insertTable('Manufacturers', manufacturers, true, function (lookupMap) { manufacturerMap = lookupMap; });
+          insertTable('Species', species, true, function (lookupMap) { speciesMap = lookupMap; });
 
-      createCustomView('Lots', null, true, true, ['LotNumber', 'ManufacturerId', 'CatalogNumber', 'ReagentId/AntigenId', 'ReagentId/LabelId', 'ReagentId/Clone', 'Description'], null, true);
-      createCustomView('Vials', null, true, true, ['OwnedBy', 'Location', 'Box', 'Row', 'Col', 'Used', 'LotId/LotNumber', 'LotId/ManufacturerId', 'LotId/ReagentId/AntigenId', 'LotId/ReagentId/LabelId', 'LotId/ReagentId/Clone'], null, true);
-      createCustomView('Titrations', null, true, true, ['ExperimentId', 'PerformedBy', 'Type', 'Result', 'Description', 'LotId/LotNumber', 'LotId/ManufacturerId', 'LotId/ReagentId/AntigenId', 'LotId/ReagentId/LabelId', 'LotId/ReagentId/Clone'], null, true);
-      createCustomView('Reagents', null, true, true, ['AntigenId', 'LabelId', 'Clone', 'Species', 'Description'], null, true);
-  }
+          createCustomView('Lots', null, true, true, ['LotNumber', 'ManufacturerId', 'CatalogNumber', 'ReagentId/AntigenId', 'ReagentId/LabelId', 'ReagentId/Clone', 'Description'], null, true);
+          createCustomView('Vials', null, true, true, ['OwnedBy', 'Location', 'Box', 'Row', 'Col', 'Used', 'LotId/LotNumber', 'LotId/ManufacturerId', 'LotId/ReagentId/AntigenId', 'LotId/ReagentId/LabelId', 'LotId/ReagentId/Clone'], null, true);
+          createCustomView('Titrations', null, true, true, ['ExperimentId', 'PerformedBy', 'Type', 'Result', 'Description', 'LotId/LotNumber', 'LotId/ManufacturerId', 'LotId/ReagentId/AntigenId', 'LotId/ReagentId/LabelId', 'LotId/ReagentId/Clone'], null, true);
+          createCustomView('Reagents', null, true, true, ['AntigenId', 'LabelId', 'Clone', 'Species', 'Description'], null, true);
+      });
+  };
 </script>
 

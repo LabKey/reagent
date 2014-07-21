@@ -1,0 +1,8 @@
+<view xmlns="http://labkey.org/data/xml/view">
+    <dependencies>
+        <dependency path="clientapi/ext3" />
+        <dependency path="Ext.ux.form.LovCombo.css" />
+        <dependency path="Ext.ux.form.LovCombo.js" />
+        <dependency path="reagent/util.js" />
+    </dependencies>
+</view>
