@@ -67,7 +67,7 @@ public class ReagentTest extends BaseWebDriverTest
     {
         log("** Create Project");
         _containerHelper.createProject(PROJECT_NAME, null);
-        _containerHelper.createSubfolder(PROJECT_NAME, FOLDER_NAME, null);
+        _containerHelper.createSubfolder(PROJECT_NAME, FOLDER_NAME);
         _containerHelper.enableModule("reagent");
 
         PortalHelper portalHelper = new PortalHelper(this);
