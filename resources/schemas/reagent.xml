@@ -71,7 +71,7 @@
       </ns:item>
       <ns:item text="Edit Fields" permission="ADMIN" insertPosition="end">
         <ns:onClick>
-          LABKEY.requiresScript('/reagent/util.js', true, function () { editDomain('Antigens'); });
+          LABKEY.requiresScript('/reagent/util.js', function () { editDomain('Antigens'); });
         </ns:onClick>
       </ns:item>
     </ns:buttonBarOptions>
@@ -130,7 +130,7 @@
       </ns:item>
       <ns:item text="Edit Fields" permission="ADMIN" insertPosition="end">
         <ns:onClick>
-          LABKEY.requiresScript('/reagent/util.js', true, function () { editDomain('Labels'); });
+          LABKEY.requiresScript('/reagent/util.js', function () { editDomain('Labels'); });
         </ns:onClick>
       </ns:item>
     </ns:buttonBarOptions>
@@ -181,7 +181,7 @@
       </ns:item>
       <ns:item text="Edit Fields" permission="ADMIN" insertPosition="end">
         <ns:onClick>
-          LABKEY.requiresScript('/reagent/util.js', true, function () { editDomain('Manufacturers'); });
+          LABKEY.requiresScript('/reagent/util.js', function () { editDomain('Manufacturers'); });
         </ns:onClick>
       </ns:item>
     </ns:buttonBarOptions>
@@ -232,7 +232,7 @@
       </ns:item>
       <ns:item text="Edit Fields" permission="ADMIN" insertPosition="end">
         <ns:onClick>
-          LABKEY.requiresScript('/reagent/util.js', true, function () { editDomain('Species'); });
+          LABKEY.requiresScript('/reagent/util.js', function () { editDomain('Species'); });
         </ns:onClick>
       </ns:item>
     </ns:buttonBarOptions>
@@ -375,7 +375,7 @@
       </ns:item>
       <ns:item text="Edit Fields" permission="ADMIN" insertPosition="end">
         <ns:onClick>
-            LABKEY.requiresScript('/reagent/util.js', true, function () { editDomain('Reagents'); });
+            LABKEY.requiresScript('/reagent/util.js', function () { editDomain('Reagents'); });
         </ns:onClick>
       </ns:item>
     </ns:buttonBarOptions>
@@ -482,7 +482,7 @@
       </ns:item>
       <ns:item text="Edit Fields" permission="ADMIN" insertPosition="end">
         <ns:onClick>
-          LABKEY.requiresScript('/reagent/util.js', true, function () { editDomain('Lots'); });
+          LABKEY.requiresScript('/reagent/util.js', function () { editDomain('Lots'); });
         </ns:onClick>
       </ns:item>
     </ns:buttonBarOptions>
@@ -593,7 +593,7 @@
       </ns:item>
       <ns:item text="Edit Fields" permission="ADMIN" insertPosition="end">
         <ns:onClick>
-          LABKEY.requiresScript('/reagent/util.js', true, function () { editDomain('Vials'); });
+          LABKEY.requiresScript('/reagent/util.js', function () { editDomain('Vials'); });
         </ns:onClick>
       </ns:item>
     </ns:buttonBarOptions>
@@ -701,7 +701,7 @@
       </ns:item>
       <ns:item text="Edit Fields" permission="ADMIN" insertPosition="end">
         <ns:onClick>
-          LABKEY.requiresScript('/reagent/util.js', true, function () { editDomain('Titrations'); });
+          LABKEY.requiresScript('/reagent/util.js', function () { editDomain('Titrations'); });
         </ns:onClick>
       </ns:item>
     </ns:buttonBarOptions>
