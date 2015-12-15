@@ -21,6 +21,7 @@ import org.labkey.test.BaseWebDriverTest;
 import org.labkey.test.Locator;
 import org.labkey.test.TestTimeoutException;
 import org.labkey.test.categories.BVT;
+import org.labkey.test.categories.DailyA;
 import org.labkey.test.util.PortalHelper;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.interactions.Actions;
@@ -30,7 +31,7 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 
-@Category(BVT.class)
+@Category({DailyA.class})
 public class ReagentTest extends BaseWebDriverTest
 {
     protected static final String PROJECT_NAME = "ReagentProject";
@@ -51,7 +52,7 @@ public class ReagentTest extends BaseWebDriverTest
     @Override
     protected void doCleanup(boolean afterTest) throws TestTimeoutException
     {
-        deleteProject(getProjectName(), afterTest);
+        _containerHelper.deleteProject(getProjectName(), afterTest);
     }
 
     @Test
