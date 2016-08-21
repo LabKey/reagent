@@ -459,7 +459,7 @@ function augmentSpeciesCombo(field)
         autoLoad: true,
         listeners: {
             metachange: function (store, meta) {
-                // Add a 'checked' field for the LovCombo to store it's state.
+                // Add a 'checked' field for the LovCombo to store its state.
                 meta.fields.push({name: "checked", type: "boolean", mvEnabled: false});
                 var rtype = Ext.data.Record.create(meta.fields);
                 store.fields = rtype.prototype.fields;
