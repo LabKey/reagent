@@ -83,7 +83,7 @@ public class ReagentTest extends BaseWebDriverTest
     {
         log("** Inserting new Reagent");
         beginAt("query/" + PROJECT_NAME + "/" + FOLDER_NAME + "/executeQuery.view?schemaName=reagent&query.queryName=Reagents");
-        _extHelper.clickMenuButton("Insert", "Insert New");
+        _extHelper.clickMenuButton("Insert", "Insert New Row");
 
         waitForElement(Locator.extButton("Cancel"), WAIT_FOR_JAVASCRIPT);
 
