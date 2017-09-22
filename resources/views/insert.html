@@ -1,21 +1,16 @@
 <div id="msgDiv"></div>
-<div id='formDiv'></div>
+<div id="formDiv"></div>
 <script type="text/javascript">
   var schemaName = LABKEY.ActionURL.getParameter('schemaName');
   var queryName = LABKEY.ActionURL.getParameter('queryName') || LABKEY.ActionURL.getParameter('query.queryName');
 
-  if (queryName)
-  {
-    if (queryName.charAt(queryName.length-1) == 's')
-    {
-      var navTrailEl = document.getElementById('labkey-nav-trail-current-page');
-      var tableTitle = queryName.substring(0, queryName.length-1);
-      navTrailEl.innerHTML = "Insert New " + tableTitle;
-    }
+  if (schemaName && queryName) {
+      if (queryName.charAt(queryName.length - 1) === 's') {
+          LABKEY.NavTrail.setTrail('Insert New ' + queryName.substring(0, queryName.length - 1));
+      }
 
-    Ext.onReady(function () {
-        initForm(false, 0, schemaName, queryName);
-    });
+      Ext.onReady(function() {
+          initForm(false, 0, schemaName, queryName);
+      });
   }
-
 </script>

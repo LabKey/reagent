@@ -20,7 +20,6 @@ import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.labkey.test.BaseWebDriverTest;
 import org.labkey.test.Locator;
-import org.labkey.test.TestTimeoutException;
 import org.labkey.test.categories.DailyA;
 import org.labkey.test.pages.ImportDataPage;
 import org.labkey.test.util.DataRegionTable;
@@ -37,6 +36,7 @@ import static org.junit.Assert.assertEquals;
 @Category({DailyA.class})
 public class ReagentTest extends BaseWebDriverTest
 {
+    {setIsBootstrapWhitelisted(true);}
     protected static final String PROJECT_NAME = "ReagentProject";
     protected static final String FOLDER_NAME = "ReagentFolder";
 
@@ -50,12 +50,6 @@ public class ReagentTest extends BaseWebDriverTest
     protected String getProjectName()
     {
         return PROJECT_NAME;
-    }
-
-    @Override
-    protected void doCleanup(boolean afterTest) throws TestTimeoutException
-    {
-        _containerHelper.deleteProject(getProjectName(), afterTest);
     }
 
     @BeforeClass
@@ -90,7 +84,8 @@ public class ReagentTest extends BaseWebDriverTest
     {
         log("** Inserting new Reagent");
         beginAt("query/" + PROJECT_NAME + "/" + FOLDER_NAME + "/executeQuery.view?schemaName=reagent&query.queryName=Reagents");
-        _extHelper.clickInsertNewRow();
+        DataRegionTable table = new DataRegionTable("query", this);
+        table.clickInsertNewRow();
 
         waitForElement(Locator.extButton("Cancel"), WAIT_FOR_JAVASCRIPT);
 
@@ -118,7 +113,7 @@ public class ReagentTest extends BaseWebDriverTest
         beginAt("query/" + PROJECT_NAME + "/" + FOLDER_NAME + "/executeQuery.view?schemaName=reagent&query.queryName=Reagents");
 
         DataRegionTable table = new DataRegionTable("query", this);
-        table.clickImportBulkDataDropdown();
+        table.clickImportBulkData();
 
         String antigen = "CD28/CD49d";
         String label = "PE-Texas Red";
@@ -143,5 +138,4 @@ public class ReagentTest extends BaseWebDriverTest
         assertEquals(clone, table.getDataAsText(0, "Clone"));
         assertEquals(description, table.getDataAsText(0, "Description"));
     }
-
 }
