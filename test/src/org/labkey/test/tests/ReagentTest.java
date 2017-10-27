@@ -36,7 +36,6 @@ import static org.junit.Assert.assertEquals;
 @Category({DailyA.class})
 public class ReagentTest extends BaseWebDriverTest
 {
-    {setIsBootstrapWhitelisted(true);}
     protected static final String PROJECT_NAME = "ReagentProject";
     protected static final String FOLDER_NAME = "ReagentFolder";
 
