@@ -384,11 +384,9 @@
       schemaName: 'reagent',
       queryName: tableName,
       successCallback: function (results, options) {
-        queryCount--;
         if (results.rows.length == 0)
         {
           _log('No rows found. Inserting ' + tableName + '...');
-          queryCount++;
           LABKEY.Query.insertRows({
             schemaName: 'reagent',
             queryName: tableName,
@@ -410,6 +408,7 @@
         }
         else
         {
+          queryCount--;
           var rowMap = createLookupMap(results.rows);
 
           // update description and aliases

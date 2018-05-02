@@ -20,6 +20,7 @@ import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.labkey.test.BaseWebDriverTest;
 import org.labkey.test.Locator;
+import org.labkey.test.Locators;
 import org.labkey.test.categories.DailyA;
 import org.labkey.test.pages.ImportDataPage;
 import org.labkey.test.util.DataRegionTable;
@@ -75,7 +76,9 @@ public class ReagentTest extends BaseWebDriverTest
 
         beginAt("reagent/" + PROJECT_NAME + "/" + FOLDER_NAME + "/initialize.view");
         clickButton("Initialize", 0);
-        waitForElement(Locator.name("webpart").containing("Done."), 2 * WAIT_FOR_JAVASCRIPT);
+        waitForElement(Locator.tag("span").withText("Done."), 2 * WAIT_FOR_JAVASCRIPT);
+        waitForText("Inserted Manufacturers:", "Inserted Labels:", "Inserted Species:", "Inserted Reagents:");
+        assertElementNotPresent(Locators.labkeyError);
     }
 
     @Test
