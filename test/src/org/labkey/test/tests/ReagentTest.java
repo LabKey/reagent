@@ -35,6 +35,7 @@ import java.util.Random;
 import static org.junit.Assert.assertEquals;
 
 @Category({DailyA.class})
+@BaseWebDriverTest.ClassTimeout(minutes = 4)
 public class ReagentTest extends BaseWebDriverTest
 {
     protected static final String PROJECT_NAME = "ReagentProject";
