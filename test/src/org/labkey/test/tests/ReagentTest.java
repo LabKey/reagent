@@ -18,7 +18,6 @@ package org.labkey.test.tests;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
-import org.labkey.api.util.StringUtilsLabKey;
 import org.labkey.test.BaseWebDriverTest;
 import org.labkey.test.Locator;
 import org.labkey.test.Locators;
@@ -31,6 +30,7 @@ import org.openqa.selenium.interactions.Actions;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 
 import static org.junit.Assert.assertEquals;
 
@@ -120,7 +120,7 @@ public class ReagentTest extends BaseWebDriverTest
 
         String antigen = "CD28/CD49d";
         String label = "PE-Texas Red";
-        String clone = "clone" + StringUtilsLabKey.getPaddedUniquifier(4);
+        String clone = "clone" + new Random().nextInt(10000);
         String description = "covfefe";
         String tsv =
                 "antigenId\tlabelId\tclone\tdescription\tspecies\n" +
