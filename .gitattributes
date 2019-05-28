@@ -1,35 +1,47 @@
-* text=auto !eol
-/module.properties -text
-resources/schemas/dbscripts/postgresql/obsolete/reagent-0.00-10.10.sql -text
-resources/schemas/dbscripts/postgresql/obsolete/reagent-0.00-10.30.sql -text
-resources/schemas/dbscripts/postgresql/obsolete/reagent-0.00-13.10.sql -text
-resources/schemas/dbscripts/postgresql/obsolete/reagent-0.00-13.20.sql -text
-resources/schemas/dbscripts/postgresql/obsolete/reagent-12.30-13.10.sql -text
-resources/schemas/dbscripts/postgresql/obsolete/reagent-13.10-13.20.sql -text
-resources/schemas/dbscripts/postgresql/obsolete/reagent-13.20-13.30.sql -text
-resources/schemas/dbscripts/postgresql/reagent-0.00-13.30.sql -text
-resources/schemas/dbscripts/sqlserver/obsolete/reagent-0.00-13.10.sql -text
-resources/schemas/dbscripts/sqlserver/obsolete/reagent-0.00-13.20.sql -text
-resources/schemas/dbscripts/sqlserver/obsolete/reagent-10.20-10.30.sql -text
-resources/schemas/dbscripts/sqlserver/obsolete/reagent-12.30-13.10.sql -text
-resources/schemas/dbscripts/sqlserver/obsolete/reagent-13.10-13.20.sql -text
-resources/schemas/dbscripts/sqlserver/obsolete/reagent-13.20-13.30.sql -text
-resources/schemas/dbscripts/sqlserver/reagent-0.00-13.30.sql -text
-resources/schemas/reagent.xml -text
-resources/views/begin.html -text
-resources/views/initialize.html -text
-resources/views/initialize.view.xml -text
-resources/views/insert.html -text
-resources/views/insert.view.xml -text
-resources/views/lot.html -text
-resources/views/lot.view.xml -text
-resources/views/reagent.html -text
-resources/views/reagent.view.xml -text
-resources/views/titration.html -text
-resources/views/titration.view.xml -text
-resources/views/update.html -text
-resources/views/update.view.xml -text
-resources/views/vial.html -text
-resources/views/vial.view.xml -text
-resources/web/reagent/util.js -text
-test/src/org/labkey/test/tests/ReagentTest.java -text
+# Convert text files to OS line-endings on checkout, and LF on check-in
+*               text=auto !eol
+
+# Text files to convert
+*.css           text diff=css
+*.htm           text diff=html
+*.html          text diff=html
+*.java          text diff=java
+*.js            text
+*.json          text
+*.jsp           text
+*.jspf          text
+*.jspx          text
+*.properties    text
+*.py            text diff=python
+*.sql           text
+*.tld           text
+*.ts            text
+*.txt           text
+*.xml           text
+*.yml           text
+
+# Keep unix endings
+*.bash          text eol=lf
+*.sh            text eol=lf
+
+# Keep Windows endings
+*.bat           text eol=crlf
+*.cmd           text eol=crlf
+
+# Known binary files -- Don't change (binary is a macro for -text -diff)
+*.bin           binary
+*.class         binary
+*.dll           binary
+*.ear           binary
+*.exe           binary
+*.gif           binary
+*.gz            binary
+*.ico           binary
+*.jar           binary
+*.jpg           binary
+*.jpeg          binary
+*.png           binary
+*.so            binary
+*.tar           binary
+*.war           binary
+*.zip           binary
