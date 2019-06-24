@@ -21,7 +21,7 @@ import org.junit.experimental.categories.Category;
 import org.labkey.test.BaseWebDriverTest;
 import org.labkey.test.Locator;
 import org.labkey.test.Locators;
-import org.labkey.test.categories.DailyA;
+import org.labkey.test.categories.CustomModules;
 import org.labkey.test.pages.ImportDataPage;
 import org.labkey.test.util.DataRegionTable;
 import org.labkey.test.util.PortalHelper;
@@ -34,7 +34,7 @@ import java.util.Random;
 
 import static org.junit.Assert.assertEquals;
 
-@Category({DailyA.class})
+@Category({CustomModules.class})
 @BaseWebDriverTest.ClassTimeout(minutes = 4)
 public class ReagentTest extends BaseWebDriverTest
 {
