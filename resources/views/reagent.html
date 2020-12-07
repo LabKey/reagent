@@ -35,10 +35,6 @@
 
     Ext.onReady(function () {
 
-        var nav = Ext.get('labkey-nav-trail-current-page');
-        if (nav && nav.dom)
-            nav.dom.style["display"] = "none";
-
         LABKEY.Query.selectRows({
             schemaName: 'reagent',
             queryName: 'Reagents',
