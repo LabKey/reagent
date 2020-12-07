@@ -24,15 +24,23 @@ import org.labkey.test.Locators;
 import org.labkey.test.categories.CustomModules;
 import org.labkey.test.pages.ImportDataPage;
 import org.labkey.test.util.DataRegionTable;
+import org.labkey.test.util.ExtHelper;
+import org.labkey.test.util.LogMethod;
+import org.labkey.test.util.LoggedParam;
 import org.labkey.test.util.PortalHelper;
 import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
+import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 
 @Category({CustomModules.class})
 @BaseWebDriverTest.ClassTimeout(minutes = 4)
@@ -75,7 +83,7 @@ public class ReagentTest extends BaseWebDriverTest
         PortalHelper portalHelper = new PortalHelper(this);
         portalHelper.addQueryWebPart("reagent");
 
-        beginAt("reagent/" + PROJECT_NAME + "/" + FOLDER_NAME + "/initialize.view");
+        beginAt(PROJECT_NAME + "/" + FOLDER_NAME + "/reagent-initialize.view");
         clickButton("Initialize", 0);
         waitForElement(Locator.tag("span").withText("Done."), 2 * WAIT_FOR_JAVASCRIPT);
         waitForText("Inserted Manufacturers:", "Inserted Labels:", "Inserted Species:", "Inserted Reagents:");
@@ -86,11 +94,14 @@ public class ReagentTest extends BaseWebDriverTest
     public void testInsert()
     {
         log("** Inserting new Reagent");
-        beginAt("query/" + PROJECT_NAME + "/" + FOLDER_NAME + "/executeQuery.view?schemaName=reagent&query.queryName=Reagents");
+        beginAt(PROJECT_NAME + "/" + FOLDER_NAME + "/query-executeQuery.view?schemaName=reagent&query.queryName=Reagents");
         DataRegionTable table = new DataRegionTable("query", this);
         table.clickInsertNewRow();
 
         waitForElement(Locator.extButton("Cancel"), WAIT_FOR_JAVASCRIPT);
+
+        WebElement el = Locator.tagWithClass("span", "labkey-wp-title-text").findElement(getDriver());
+        assertEquals("Insert New Reagent", el.getText());
 
         log("** Selecting AntigenId from ComboBox list");
         // click on ComboBox trigger image
@@ -108,12 +119,149 @@ public class ReagentTest extends BaseWebDriverTest
 
         waitAndClick(Locator.tag("div").withClass("x-combo-selected").withText("Alexa 680").notHidden());
         assertFormElementEquals(Locator.xpath("//input[@name='LabelId']/../input[contains(@class, 'x-form-field')]"), "Alexa 680");
+
+        String clone = "jimmy " + Math.random();
+        setComboBoxInput("Clone:", clone);
+
+        _extHelper.clickExtButton("Save");
+        table = new DataRegionTable("query", this);
+        table.setFilter("Clone", "Equals", clone);
+        assertEquals(1, table.getDataRowCount());
+
+        Map<String, String> rowMap = table.getRowDataAsMap(0);
+        assertEquals(clone, rowMap.get("Clone"));
+        assertEquals("AVDLSHFLK", rowMap.get("AntigenId"));
+        assertEquals("Alexa 680", rowMap.get("LabelId"));
+    }
+
+    @Test
+    public void testUpdate()
+    {
+        log("** Navigate to Reagents and filter to clone='8D4-8'");
+        beginAt(PROJECT_NAME + "/" + FOLDER_NAME + "/query-executeQuery.view?schemaName=reagent&query.queryName=Reagents&query.Clone~eq=8D4-8");
+
+        log("** Update existing Reagent");
+        DataRegionTable table = new DataRegionTable("query", this);
+        table.clickEditRow(0);
+        waitForElement(Locator.extButton("Cancel"), WAIT_FOR_JAVASCRIPT);
+
+        WebElement el = Locator.tagWithClass("span", "labkey-wp-title-text").findElement(getDriver());
+        assertEquals("Update Reagent", el.getText());
+
+        String description = "update " + Math.random();
+        _extHelper.setExtFormElementByLabel("Description:", description);
+
+        _extHelper.clickExtButton("Save");
+        table = new DataRegionTable("query", this);
+        table.setFilter("Description", "Equals", description);
+        assertEquals(1, table.getDataRowCount());
+    }
+
+    @Test
+    public void testBulkUpdate()
+    {
+        log("** Navigate to Reagents and filter to Label='Alexa 405'");
+        beginAt(PROJECT_NAME + "/" + FOLDER_NAME + "/query-executeQuery.view?schemaName=reagent&query.queryName=Reagents&query.LabelId%2FName~eq=Alexa%20405");
+
+        DataRegionTable table = new DataRegionTable("query", this);
+        assertEquals(4, table.getDataRowCount());
+
+        WebElement bulkEditEl = table.getHeaderButton("Bulk Edit");
+        assertThat(bulkEditEl.getAttribute("class"), containsString("labkey-disabled-button"));
+
+        table.checkAllOnPage();
+        assertThat(bulkEditEl.getAttribute("class"), not(containsString("labkey-disabled-button")));
+        bulkEditEl.click();
+        waitForElement(Locator.extButton("Cancel"), WAIT_FOR_JAVASCRIPT);
+
+        WebElement el = Locator.tagWithClass("span", "labkey-wp-title-text").findElement(getDriver());
+        assertEquals("Bulk Update Selected Reagents", el.getText());
+
+        assertEquals("Selected rows have different values for this field.", getComboBoxInput("Antigen:"));
+
+        assertEquals("Alexa 405", getComboBoxInput("Label:"));
+
+        assertEquals("Selected rows have different values for this field.", getComboBoxInput("Clone:"));
+
+        _extHelper.selectComboBoxItem("Antigen:", "Via-Probe");
+
+        _extHelper.clickExtButton("Save");
+
+        beginAt(PROJECT_NAME + "/" + FOLDER_NAME + "/query-executeQuery.view?schemaName=reagent&query.queryName=Reagents&query.LabelId%2FName~eq=Alexa%20405");
+
+        table = new DataRegionTable("query", this);
+        assertEquals(4, table.getDataRowCount());
+        for (int i = 0; i < table.getDataRowCount(); i++)
+        {
+            var row = table.getRowDataAsMap(i);
+            assertEquals("Via-Probe", row.get("AntigenId"));
+            assertEquals("Alexa 405", row.get("LabelId"));
+        }
+    }
+
+    @Test
+    public void testInsertLotAndTiter()
+    {
+        String antigenName = "CCR7";
+        String labelName = "PE-Cy7";
+        String clone = "3D12";
+        String reagentName = antigenName + ", " + labelName + " (" + clone + ")";
+
+        log("** Navigate to Reagents and filter to Clone='" + clone + "'");
+        beginAt(PROJECT_NAME + "/" + FOLDER_NAME + "/query-executeQuery.view?schemaName=reagent&query.queryName=Reagents&query.Clone~eq=" + clone);
+
+        DataRegionTable table = new DataRegionTable("query", this);
+        assertEquals(1, table.getDataRowCount());
+
+        assertEquals(antigenName, table.getDataAsText(0, "AntigenId"));
+        assertEquals(labelName, table.getDataAsText(0, "LabelId"));
+        assertEquals(clone, table.getDataAsText(0, "Clone"));
+
+        log("** Navigate to Reagent details");
+        table.clickRowDetails(0);
+
+        // wait for nested Lots grid
+        waitForElement(Locator.id("reagentLots").descendant(Locator.tagWithAttribute("h3", "title", "Lots")), WAIT_FOR_JAVASCRIPT);
+
+        DataRegionTable lotsTable = new DataRegionTable("aqwp101", getDriver());
+        assertEquals(0, lotsTable.getDataRowCount());
+
+        log("** Insert new Lot");
+        lotsTable.clickInsertNewRow();
+        waitForElement(Locator.extButton("Cancel"), WAIT_FOR_JAVASCRIPT);
+
+        WebElement el = Locator.tagWithClass("span", "labkey-wp-title-text").findElement(getDriver());
+        assertEquals("Insert New Lot", el.getText());
+
+        String lotNumber = "lot-" + Math.random();
+
+        // reagent combo should pre-select the reagent we started with
+        assertEquals(reagentName, getComboBoxInput("Reagent:"));
+        _extHelper.selectComboBoxItem("Manufacturer:", "Immunotech");
+        _extHelper.setExtFormElementByLabel("Lot Number:", lotNumber);
+        setComboBoxInput("CatalogNumber:", "IM2712X");
+        //_extHelper.setExtFormElementByLabel("Expiration:", "2050-12-07");
+
+        _extHelper.clickExtButton("Save");
+
+        table = new DataRegionTable("query", this);
+        table.setFilter("LotNumber", "Equals", lotNumber);
+        assertEquals(1, table.getDataRowCount());
+
+        log("** Navigate to Lot details");
+        table.clickRowDetails(0);
+
+        // wait for nested Vials grid
+        waitForElement(Locator.id("lotVials").descendant(Locator.tagWithAttribute("h3", "title", "Vials")), WAIT_FOR_JAVASCRIPT);
+
+        // wait for nested Titrations grid
+        waitForElement(Locator.id("lotTitrations").descendant(Locator.tagWithAttribute("h3", "title", "Titrations")), WAIT_FOR_JAVASCRIPT);
     }
 
     @Test
     public void testImportLookupByAlternateKey()
     {
-        beginAt("query/" + PROJECT_NAME + "/" + FOLDER_NAME + "/executeQuery.view?schemaName=reagent&query.queryName=Reagents");
+        beginAt(PROJECT_NAME + "/" + FOLDER_NAME + "/query-executeQuery.view?schemaName=reagent&query.queryName=Reagents");
 
         DataRegionTable table = new DataRegionTable("query", this);
         table.clickImportBulkData();
@@ -141,4 +289,28 @@ public class ReagentTest extends BaseWebDriverTest
         assertEquals(clone, table.getDataAsText(0, "Clone"));
         assertEquals(description, table.getDataAsText(0, "Description"));
     }
+
+
+    @LogMethod(quiet = true)
+    public void setComboBoxInput(@LoggedParam String label, @LoggedParam String text)
+    {
+        Locator comboLoc = ExtHelper.Locators.formItemWithLabel(label).notHidden();
+        WebElement comboEl = comboLoc.findElement(getDriver());
+
+        Locator inputLoc = Locator.xpath("//input[contains(@class, 'x-form-field')]");
+        WebElement inputEl = inputLoc.findElement(comboEl);
+        setFormElement(inputEl, text);
+    }
+
+    @LogMethod(quiet = true)
+    public String getComboBoxInput(@LoggedParam String label)
+    {
+        Locator comboLoc = ExtHelper.Locators.formItemWithLabel(label).notHidden();
+        WebElement comboEl = comboLoc.findElement(getDriver());
+
+        Locator inputLoc = Locator.xpath("//input[contains(@class, 'x-form-field')]");
+        WebElement inputEl = inputLoc.findElement(comboEl);
+        return getFormElement(inputEl);
+    }
+
 }
