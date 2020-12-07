@@ -1,32 +1,37 @@
 <div id="msgDiv"></div>
 <div id='formDiv'></div>
 <script type="text/javascript">
-  var schemaName = LABKEY.ActionURL.getParameter('schemaName');
-  var queryName = LABKEY.ActionURL.getParameter('queryName') || LABKEY.ActionURL.getParameter('query.queryName');
-  var selected = LABKEY.ActionURL.getParameter('selected') == "true";
-  var selectionKey = selected ? LABKEY.ActionURL.getParameter('selectionKey') : undefined;
-  var rowId = selected ? 0 : LABKEY.ActionURL.getParameter('RowId');
+    // webpartContext replacement is in it's own script block to avoid syntax errors in IntelliJ
+    let webpartContext = <%=webpartContext%>;
+</script>
+<script type="text/javascript">
+    let schemaName = LABKEY.ActionURL.getParameter('schemaName');
+    let queryName = LABKEY.ActionURL.getParameter('queryName') || LABKEY.ActionURL.getParameter('query.queryName');
+    let selected = LABKEY.ActionURL.getParameter('selected') === "true";
+    let selectionKey = selected ? LABKEY.ActionURL.getParameter('selectionKey') : undefined;
+    let rowId = selected ? 0 : LABKEY.ActionURL.getParameter('RowId');
 
-  if (queryName)
-  {
-    if (queryName.charAt(queryName.length-1) == 's')
-    {
-      var navTrailEl = document.getElementById('labkey-nav-trail-current-page');
-      if (selected)
-      {
-        navTrailEl.innerHTML = "Bulk Update Selected " + queryName;
-      }
-      else
-      {
-        var tableTitle = queryName.substring(0, queryName.length-1);
-        navTrailEl.innerHTML = "Update " + tableTitle;
-      }
+    if (queryName) {
+        if (queryName.charAt(queryName.length-1) === 's') {
+            // Find and update the web part title.
+            // NOTE: We can't use LABKEY.NavTrail.setTrail() since the required 'lk-body-title' div isn't rendered if the page has no initial nav trail.
+            let panelTitleEl = webPartTitleEl(webpartContext.wrapperDivId);
+            if (panelTitleEl) {
+                if (selected) {
+                    panelTitleEl.innerText = "Bulk Update Selected " + queryName;
+                }
+                else {
+                    let tableTitle = queryName.substring(0, queryName.length-1);
+                    panelTitleEl.innerText = "Update " + tableTitle;
+                }
+            }
+        }
+
+        Ext.onReady(function () {
+            initForm(selected, rowId, schemaName, queryName, selectionKey);
+        });
     }
 
-    Ext.onReady(function () {
-        initForm(selected, rowId, schemaName, queryName, selectionKey);
-    });
-  }
-
 </script>
+
 

@@ -117,15 +117,17 @@ function saveReagentSpecies(schemaName, queryName, initialValues, updatedRows, m
         commands.push(insertCommand);
 
     // nothing to delete or insert
-    if (commands.length == 0)
+    if (commands.length === 0) {
         successCb();
-
-    LABKEY.Query.saveRows({
-        commands: commands,
-        successCallback: successCb,
-        errorCallback: errorCb,
-        transacted: true
-    })
+    }
+    else {
+        LABKEY.Query.saveRows({
+            commands: commands,
+            successCallback: successCb,
+            errorCallback: errorCb,
+            transacted: true
+        });
+    }
 }
 
 function save(selected, updateRowId, schemaName, queryName, initialValues, values)
@@ -553,3 +555,49 @@ function augmentUserCombo(field, queryName)
         autoLoad: true
     };
 }
+
+// Get the parent <div class="panel panel-portal"> element from FrameType.PORTAL generated DOM.
+// Example rendered DOM for a webpart panel:
+/*
+<div class="panel panel-portal">
+    <div class="panel-heading">
+        <h3 class="panel-title pull-left" title="Update">
+            <a name="Update" class="labkey-anchor-disabled">
+                <span class="labkey-wp-title-text">Update</span>
+            </a>
+        </h3>&nbsp;
+        <div class="clearfix"></div>
+    </div>
+    <div id="WebPartView989572377" class=" panel-body">
+        <div id="ModuleHtmlView_231">
+            ... rest of content
+        </div>
+    </div>
+</div>
+*/
+function portalEl(webpartContentId) {
+    if (!webpartContentId) {
+        return null;
+    }
+
+    let contentEl = document.getElementById(webpartContentId);
+    if (contentEl) {
+        let portalBodyEl = contentEl.parentElement;
+        if (portalBodyEl) {
+            return portalBodyEl.parentElement;
+        }
+    }
+
+    return null;
+}
+
+// get the <span class="labkey-wp-title-text"> element
+function webPartTitleEl(webpartContentId) {
+    let panelEl = portalEl(webpartContentId);
+    if (panelEl) {
+        return panelEl.querySelector('span.labkey-wp-title-text');
+    }
+
+    return null;
+}
+

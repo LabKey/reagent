@@ -1,12 +1,21 @@
 <div id="msgDiv"></div>
 <div id="formDiv"></div>
 <script type="text/javascript">
+    // webpartContext replacement is in it's own script block to avoid syntax errors in IntelliJ
+    let webpartContext = <%=webpartContext%>;
+</script>
+<script type="text/javascript">
   var schemaName = LABKEY.ActionURL.getParameter('schemaName');
   var queryName = LABKEY.ActionURL.getParameter('queryName') || LABKEY.ActionURL.getParameter('query.queryName');
 
   if (schemaName && queryName) {
       if (queryName.charAt(queryName.length - 1) === 's') {
-          LABKEY.NavTrail.setTrail('Insert New ' + queryName.substring(0, queryName.length - 1));
+          // Find and update the web part title.
+          // NOTE: We can't use LABKEY.NavTrail.setTrail() since the required 'lk-body-title' div isn't rendered if the page has no initial nav trail.
+          let panelTitleEl = webPartTitleEl(webpartContext.wrapperDivId);
+          if (panelTitleEl) {
+              panelTitleEl.innerText = 'Insert New ' + queryName.substring(0, queryName.length - 1);
+          }
       }
 
       Ext.onReady(function() {
