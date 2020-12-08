@@ -369,6 +369,8 @@
         return;
       }
 
+      delete row.antigen;
+      delete row.label;
       row.antigenid = antigenRow.rowid;
       row.labelid = labelRow.rowid;
     }
