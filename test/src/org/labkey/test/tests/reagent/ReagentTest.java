@@ -236,7 +236,8 @@ public class ReagentTest extends BaseWebDriverTest
         String lotNumber = "lot-" + Math.random();
 
         // reagent combo should pre-select the reagent we started with
-        assertEquals(reagentName, getComboBoxInput("Reagent:"));
+        waitFor(()-> reagentName.equals(getComboBoxInput("Reagent:")),
+                "reagent combo should pre-select the reagent we started with", WAIT_FOR_JAVASCRIPT);
         _extHelper.selectComboBoxItem("Manufacturer:", "Immunotech");
         _extHelper.setExtFormElementByLabel("Lot Number:", lotNumber);
         setComboBoxInput("CatalogNumber:", "IM2712X");
