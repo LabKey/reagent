@@ -25,7 +25,8 @@
     document.getElementById('edit').href = LABKEY.ActionURL.buildURL('reagent', 'update.view', LABKEY.ActionURL.getContainer(), {
         schemaName: 'reagent',
         queryName: 'Reagents',
-        RowId: rowId
+        RowId: rowId,
+        returnUrl: window.location.href
     });
 
     document.getElementById('viewGrid').href = LABKEY.ActionURL.buildURL('query', 'executeQuery.view', LABKEY.ActionURL.getContainer(), {

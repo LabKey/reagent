@@ -244,18 +244,28 @@ public class ReagentTest extends BaseWebDriverTest
 
         _extHelper.clickExtButton("Save");
 
-        table = new DataRegionTable("query", this);
-        table.setFilter("LotNumber", "Equals", lotNumber);
-        assertEquals(1, table.getDataRowCount());
+        // wait for nested Lots grid
+        waitForElement(Locator.id("reagentLots").descendant(Locator.tagWithAttribute("h3", "title", "Lots")), WAIT_FOR_JAVASCRIPT);
+
+        lotsTable = new DataRegionTable("aqwp101", getDriver());
+        assertEquals(1, lotsTable.getDataRowCount());
 
         log("** Navigate to Lot details");
-        table.clickRowDetails(0);
+        lotsTable.clickRowDetails(0);
 
         // wait for nested Vials grid
         waitForElement(Locator.id("lotVials").descendant(Locator.tagWithAttribute("h3", "title", "Vials")), WAIT_FOR_JAVASCRIPT);
 
         // wait for nested Titrations grid
         waitForElement(Locator.id("lotTitrations").descendant(Locator.tagWithAttribute("h3", "title", "Titrations")), WAIT_FOR_JAVASCRIPT);
+
+        log("** Navigate to Lots grid");
+        clickButton("View Grid");
+
+        table = new DataRegionTable("query", this);
+        table.setFilter("LotNumber", "Equals", lotNumber);
+        assertEquals(1, table.getDataRowCount());
+
     }
 
     @Test

@@ -27,22 +27,22 @@ var ExcludeColumnSets = {
 
 Ext.QuickTips.init();
 
-var srcURL = null;
+var returnUrl = null;
 
-function initSrcURL(schemaName, queryName)
+function initReturnUrl(schemaName, queryName)
 {
-    srcURL = LABKEY.ActionURL.getParameter('srcURL');
-    if (!srcURL) {
-        srcURL = LABKEY.ActionURL.buildURL('query', 'executeQuery.view', null, {
+    returnUrl = LABKEY.ActionURL.getReturnUrl();
+    if (!returnUrl) {
+        returnUrl = LABKEY.ActionURL.buildURL('query', 'executeQuery.view', null, {
             schemaName: schemaName,
             'query.queryName': queryName
         });
     }
 }
 
-function navSrcURL()
+function navReturnUrl()
 {
-    window.location = srcURL;
+    window.location = returnUrl;
 }
 
 function editDomain(queryName)
@@ -154,7 +154,7 @@ function save(selected, updateRowId, schemaName, queryName, initialValues, value
     function successCallback() {
         Ext.MessageBox.updateProgress(1, "Saved.");
         Ext.MessageBox.hide();
-        navSrcURL();
+        navReturnUrl();
     }
     
     function errorCallback(errorInfo) {
@@ -217,7 +217,7 @@ var ReagentFormPanel = Ext.extend(LABKEY.ext.FormPanel, {
  */
 function initForm(selected, updateRowId, schemaName, queryName, selectionKey)
 {
-    initSrcURL(schemaName, queryName);
+    initReturnUrl(schemaName, queryName);
 
     function createForm(data)
     {
@@ -330,7 +330,7 @@ function initForm(selected, updateRowId, schemaName, queryName, selectionKey)
                 }
             },{
                 text: 'Cancel',
-                handler: navSrcURL
+                handler: navReturnUrl
             }],
             listeners : {
                 applydefaults: function (fp, c) {
