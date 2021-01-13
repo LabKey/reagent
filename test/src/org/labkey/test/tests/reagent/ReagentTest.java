@@ -321,6 +321,12 @@ public class ReagentTest extends BaseWebDriverTest
 
         Locator inputLoc = Locator.xpath("//input[contains(@class, 'x-form-field')]");
         WebElement inputEl = inputLoc.findElement(comboEl);
+        WebElement hiddenImput = Locator.xpath(".").precedingSibling("input").findElement(inputEl);
+        String hiddenValue = hiddenImput.getAttribute("value");
+        if (!hiddenValue.isBlank())
+        {
+            waitFor(() -> !getFormElement(inputEl).equals(hiddenValue), "Display values did not load", 1000);
+        }
         return getFormElement(inputEl);
     }
 
