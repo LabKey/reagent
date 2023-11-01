@@ -315,7 +315,6 @@
       </column>
       <column columnName="Created">
         <isUserEditable>false</isUserEditable>
-        <datatype>timestamp</datatype>
         <isReadOnly>true</isReadOnly>
       </column>
       <column columnName="ModifiedBy">
@@ -325,7 +324,6 @@
       </column>
       <column columnName="Modified">
         <isUserEditable>false</isUserEditable>
-        <datatype>timestamp</datatype>
         <isReadOnly>true</isReadOnly>
       </column>
       <column columnName="AntigenId">
@@ -425,7 +423,6 @@
       </column>
       <column columnName="Created">
         <isUserEditable>false</isUserEditable>
-        <datatype>timestamp</datatype>
         <isReadOnly>true</isReadOnly>
       </column>
       <column columnName="ModifiedBy">
@@ -435,7 +432,6 @@
       </column>
       <column columnName="Modified">
         <isUserEditable>false</isUserEditable>
-        <datatype>timestamp</datatype>
         <isReadOnly>true</isReadOnly>
       </column>
       <column columnName="ReagentId">
@@ -469,7 +465,6 @@
       </column>
       <column columnName="Expiration">
         <nullable>true</nullable>
-        <datatype>timestamp</datatype>
       </column>
       <column columnName="Description">
         <nullable>true</nullable>
@@ -530,7 +525,6 @@
       </column>
       <column columnName="Created">
         <isUserEditable>false</isUserEditable>
-        <datatype>timestamp</datatype>
         <isReadOnly>true</isReadOnly>
       </column>
       <column columnName="ModifiedBy">
@@ -540,7 +534,6 @@
       </column>
       <column columnName="Modified">
         <isUserEditable>false</isUserEditable>
-        <datatype>timestamp</datatype>
         <isReadOnly>true</isReadOnly>
       </column>
       <column columnName="LotId">
@@ -641,7 +634,6 @@
       </column>
       <column columnName="Created">
         <isUserEditable>false</isUserEditable>
-        <datatype>timestamp</datatype>
         <isReadOnly>true</isReadOnly>
       </column>
       <column columnName="ModifiedBy">
@@ -651,7 +643,6 @@
       </column>
       <column columnName="Modified">
         <isUserEditable>false</isUserEditable>
-        <datatype>timestamp</datatype>
         <isReadOnly>true</isReadOnly>
       </column>
       <column columnName="LotId">
