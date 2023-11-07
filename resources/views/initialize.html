@@ -1,8 +1,12 @@
 <div>Click the 'Initialize' button to populate the reagent database with some generic data and to configure some views.</div>
-<a class="labkey-button" onclick="initialize(); return false;" href="#"><span>Initialize</span></a>
+<a class="labkey-button" id="initialize" href="#"><span>Initialize</span></a>
 <br>
 <div id='loading'></div>
-<script type="text/javascript">
+<script type="text/javascript" nonce="<%=scriptNonce%>">
+    LABKEY.Utils.onReady(function(){
+        document.getElementById("initialize").addEventListener('click', initialize)
+    });
+
   var antigenMap = null;
   var antigens = [
     { name: 'AVDLSHFLK' },
@@ -564,17 +568,15 @@
   }
 
   var initialize = function() {
-      Ext4.onReady(function() {
-          insertTable('Antigens', antigens, true, function (lookupMap) { antigenMap = lookupMap; });
-          insertTable('Labels', labels, true, function (lookupMap) { labelMap = lookupMap; });
-          insertTable('Manufacturers', manufacturers, true, function (lookupMap) { manufacturerMap = lookupMap; });
-          insertTable('Species', species, true, function (lookupMap) { speciesMap = lookupMap; });
+      insertTable('Antigens', antigens, true, function (lookupMap) { antigenMap = lookupMap; });
+      insertTable('Labels', labels, true, function (lookupMap) { labelMap = lookupMap; });
+      insertTable('Manufacturers', manufacturers, true, function (lookupMap) { manufacturerMap = lookupMap; });
+      insertTable('Species', species, true, function (lookupMap) { speciesMap = lookupMap; });
 
-          createCustomView('Lots', null, true, true, ['LotNumber', 'ManufacturerId', 'CatalogNumber', 'ReagentId/AntigenId', 'ReagentId/LabelId', 'ReagentId/Clone', 'Description'], null, true);
-          createCustomView('Vials', null, true, true, ['OwnedBy', 'Location', 'Box', 'Row', 'Col', 'Used', 'LotId/LotNumber', 'LotId/ManufacturerId', 'LotId/ReagentId/AntigenId', 'LotId/ReagentId/LabelId', 'LotId/ReagentId/Clone'], null, true);
-          createCustomView('Titrations', null, true, true, ['ExperimentId', 'PerformedBy', 'Type', 'Result', 'Description', 'LotId/LotNumber', 'LotId/ManufacturerId', 'LotId/ReagentId/AntigenId', 'LotId/ReagentId/LabelId', 'LotId/ReagentId/Clone'], null, true);
-          createCustomView('Reagents', null, true, true, ['AntigenId', 'LabelId', 'Clone', 'Species', 'Description'], null, true);
-      });
+      createCustomView('Lots', null, true, true, ['LotNumber', 'ManufacturerId', 'CatalogNumber', 'ReagentId/AntigenId', 'ReagentId/LabelId', 'ReagentId/Clone', 'Description'], null, true);
+      createCustomView('Vials', null, true, true, ['OwnedBy', 'Location', 'Box', 'Row', 'Col', 'Used', 'LotId/LotNumber', 'LotId/ManufacturerId', 'LotId/ReagentId/AntigenId', 'LotId/ReagentId/LabelId', 'LotId/ReagentId/Clone'], null, true);
+      createCustomView('Titrations', null, true, true, ['ExperimentId', 'PerformedBy', 'Type', 'Result', 'Description', 'LotId/LotNumber', 'LotId/ManufacturerId', 'LotId/ReagentId/AntigenId', 'LotId/ReagentId/LabelId', 'LotId/ReagentId/Clone'], null, true);
+      createCustomView('Reagents', null, true, true, ['AntigenId', 'LabelId', 'Clone', 'Species', 'Description'], null, true);
   };
 </script>
 

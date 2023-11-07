@@ -1,10 +1,10 @@
 <div id="msgDiv"></div>
 <div id='formDiv'></div>
-<script type="text/javascript">
+<script type="text/javascript" nonce="<%=scriptNonce%>">
     // webpartContext replacement is in it's own script block to avoid syntax errors in IntelliJ
     let webpartContext = <%=webpartContext%>;
 </script>
-<script type="text/javascript">
+<script type="text/javascript" nonce="<%=scriptNonce%>">
     let schemaName = LABKEY.ActionURL.getParameter('schemaName');
     let queryName = LABKEY.ActionURL.getParameter('queryName') || LABKEY.ActionURL.getParameter('query.queryName');
     let selected = LABKEY.ActionURL.getParameter('selected') === "true";

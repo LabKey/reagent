@@ -37,7 +37,7 @@
 <p>
 <div id="titrationVials"></div>
 
-<script type="text/javascript">
+<script type="text/javascript" nonce="<%=scriptNonce%>">
     var rowId = LABKEY.ActionURL.getParameter('RowId');
 
     document.getElementById('edit').href = LABKEY.ActionURL.buildURL('reagent', 'update.view', LABKEY.ActionURL.getContainer(), {
