@@ -5,18 +5,18 @@ The first time the module is installed and on every upgrade, you should run
 the <a href="reagent-initialize.view">initialize</a> script to populate the database.
 <p>
 After initializing, add or remove
-<a href="<%=contextPath%>/query<%=containerPath%>/executeQuery.view?schemaName=reagent&query.queryName=Manufacturers">Manufacturers</a>,
-<a href="<%=contextPath%>/query<%=containerPath%>/executeQuery.view?schemaName=reagent&query.queryName=Antigens">Antigens</a>,
-<a href="<%=contextPath%>/query<%=containerPath%>/executeQuery.view?schemaName=reagent&query.queryName=Labels">Labels</a>, and
-<a href="<%=contextPath%>/query<%=containerPath%>/executeQuery.view?schemaName=reagent&query.queryName=Species">Species</a>
+<a href="<%=contextPath%><%=containerPath%>/query-executeQuery.view?schemaName=reagent&query.queryName=Manufacturers">Manufacturers</a>,
+<a href="<%=contextPath%><%=containerPath%>/query-executeQuery.view?schemaName=reagent&query.queryName=Antigens">Antigens</a>,
+<a href="<%=contextPath%><%=containerPath%>/query-executeQuery.view?schemaName=reagent&query.queryName=Labels">Labels</a>, and
+<a href="<%=contextPath%><%=containerPath%>/query-executeQuery.view?schemaName=reagent&query.queryName=Species">Species</a>
 specific for your site.  Once you have added Manufactuers, Antigens, Labels, and Species, you can add new
-<a href="<%=contextPath%>/query<%=containerPath%>/executeQuery.view?schemaName=reagent&query.queryName=Reagents">Reagents</a>
+<a href="<%=contextPath%><%=containerPath%>/query-executeQuery.view?schemaName=reagent&query.queryName=Reagents">Reagents</a>
 and
-<a href="<%=contextPath%>/query<%=containerPath%>/executeQuery.view?schemaName=reagent&query.queryName=Lots">Lots</a>.  After adding Lots,
+<a href="<%=contextPath%><%=containerPath%>/query-executeQuery.view?schemaName=reagent&query.queryName=Lots">Lots</a>.  After adding Lots,
 you may want to add a
-<a href="<%=contextPath%>/query<%=containerPath%>/executeQuery.view?schemaName=reagent&query.queryName=Titrations">Titration</a>
+<a href="<%=contextPath%><%=containerPath%>/query-executeQuery.view?schemaName=reagent&query.queryName=Titrations">Titration</a>
 experiment and
-<a href="<%=contextPath%>/query<%=containerPath%>/executeQuery.view?schemaName=reagent&query.queryName=Vials">Vials</a>
+<a href="<%=contextPath%><%=containerPath%>/query-executeQuery.view?schemaName=reagent&query.queryName=Vials">Vials</a>
 to the Lot.
 
 <h2>Summary of tables:</h2>
@@ -48,7 +48,7 @@ function renderQueries(info)
       var query = queries[name];
       if (query && query.name && query.description)
       {
-        html += "<dt><a href='<%=contextPath%>/query<%=containerPath%>/executeQuery.view?schemaName=reagent&query.queryName=" + query.name + "'>" + query.name + "</a></dt>";
+        html += "<dt><a href='<%=contextPath%><%=containerPath%>/query-executeQuery.view?schemaName=reagent&query.queryName=" + query.name + "'>" + query.name + "</a></dt>";
         html += "<dd>" + query.description + "</dd>";
       }
     }
