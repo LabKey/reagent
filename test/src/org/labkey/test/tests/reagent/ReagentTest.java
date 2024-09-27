@@ -15,6 +15,7 @@
  */
 package org.labkey.test.tests.reagent;
 
+import org.awaitility.Awaitility;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
@@ -32,6 +33,7 @@ import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 
+import java.time.Duration;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -111,8 +113,10 @@ public class ReagentTest extends BaseWebDriverTest
 
         click(Locator.xpath("//input[@name='LabelId']/../img"));
         setFormElement(Locator.xpath("//input[@name='LabelId']/../input[contains(@class, 'x-form-field')]"), "Alexa");
-        int alexaLabels = getElementCount(Locator.tag("div").withClass("x-combo-list-item").notHidden().containing("Alexa"));
-        assertEquals("Expected to find 5 Alexa labels", 5, alexaLabels);
+        Locator locator = Locator.tag("div").withClass("x-combo-list-item").notHidden().containing("Alexa");
+        // Wait for combo box to be filtered
+        Awaitility.await().atMost(Duration.ofSeconds(2)).untilAsserted(() ->
+                assertEquals("Expected to find 5 Alexa labels", 5, locator.findElements(getDriver()).size()));
 
         Actions builder = new Actions(getDriver());
         builder.sendKeys(Keys.ARROW_DOWN, Keys.ARROW_DOWN).build().perform();
