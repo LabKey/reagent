@@ -29,6 +29,7 @@ import org.labkey.test.util.ExtHelper;
 import org.labkey.test.util.LogMethod;
 import org.labkey.test.util.LoggedParam;
 import org.labkey.test.util.PortalHelper;
+import org.labkey.test.util.PostgresOnlyTest;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
@@ -46,7 +47,7 @@ import static org.junit.Assert.assertThat;
 
 @Category({CustomModules.class})
 @BaseWebDriverTest.ClassTimeout(minutes = 4)
-public class ReagentTest extends BaseWebDriverTest
+public class ReagentTest extends BaseWebDriverTest implements PostgresOnlyTest
 {
     protected static final String PROJECT_NAME = "ReagentProject";
     protected static final String FOLDER_NAME = "ReagentFolder";
